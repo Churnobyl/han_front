@@ -1,5 +1,21 @@
 import { BACK_BASE_URL, FRONT_BASE_URL } from "./conf.js";
 
-const response = await fetch("https://webdoli.tistory.com/592");
+// 회원가입 api
+export async function signupApi(data) {
+  const response = await fetch(`${BACK_BASE_URL}/users/`, {
+    method: "POST",
+    body: data,
+  });
+  const responseJson = await response.json();
+  console.log(responseJson);
+}
 
-export { response };
+// 로그인 api
+export async function loginApi(data) {
+  const response = await fetch(`${BACK_BASE_URL}/users/`, {
+    method: "POST",
+    body: data,
+  });
+  const responseJson = await response.json();
+  console.log(responseJson);
+}
