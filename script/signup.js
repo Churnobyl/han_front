@@ -1,7 +1,7 @@
 import { signupApi } from "./api.js";
 
-// 회원가입
 document.getElementById("btnSignup").addEventListener("click", () => {
+  // 회원가입
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
   const password2 = document.getElementById("password2").value;
