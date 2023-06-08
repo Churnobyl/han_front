@@ -26,6 +26,11 @@ li > a {
   font-weight: lighter;
 }
 
+img {
+  width: 100%;
+  height: auto;
+}
+
 .main {
   margin-top: 5vw;
 }
@@ -43,6 +48,7 @@ li > a {
 }
 
 .nav {
+  z-index: 999;
   overflow: hidden;
   top: 0;
   width: 100%;
@@ -101,7 +107,7 @@ li > a {
 }
 
 .main {
-  /* height: 2000px; */
+  height: 2000px;
 }
 
 .footer {
