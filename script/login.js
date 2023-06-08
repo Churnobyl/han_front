@@ -5,14 +5,16 @@ document.getElementById("btnLogin").addEventListener("click", () => {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  const formData = new FormData();
-  formData.append("email", email);
-  formData.append("password", password);
+  const loginData = {
+    "email": email,
+    "password": password
+  };
 
   try {
-    const response = loginApi(formData);
+    const response = loginApi(loginData);
     console.log(response);
   } catch (error) {
     console.log(error);
   }
-});
+}
+);
