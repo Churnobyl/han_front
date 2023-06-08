@@ -1,0 +1,166 @@
+.page1 {
+  z-index: 5;
+  background: rgb(223, 218, 214);
+  background: linear-gradient(
+    180deg,
+    rgba(223, 218, 214, 1) 0%,
+    rgba(238, 236, 234, 0.5382528011204482) 48%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.nav {
+  background-color: transparent;
+}
+
+.page1-wrap {
+  width: 60%;
+  z-index: 1;
+  position: absolute;
+  top: 25%;
+  left: 15%;
+}
+
+.page1-text-area {
+  z-index: 50;
+  float: left;
+}
+
+.page1-image-area {
+  position: absolute;
+  width: 400px;
+  overflow: hidden;
+  right: 0;
+  z-index: 2;
+}
+
+.page1-image-area img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.page2 {
+  background-color: #ceb58e;
+  width: 100%;
+  height: 100%;
+}
+
+.page2-wrap {
+  z-index: 1;
+  height: 100%;
+}
+
+.page2-image-area {
+  overflow: hidden;
+  float: left;
+  height: 100%;
+}
+
+.page2-image-area img {
+  object-fit: contain;
+  height: 100%;
+}
+
+.page2-text-area {
+  margin-top: 100px;
+  margin-left: 400px;
+  z-index: 50;
+  float: left;
+}
+
+.page2-text-area p {
+  color: #383838;
+  margin-left: 40px;
+  margin-top: 10px;
+  font-size: 30px;
+}
+
+.page3 {
+  width: 100%;
+  height: 100%;
+  background-image: url("/img/page3-img.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.page3-wrap {
+  z-index: 1;
+  height: 100%;
+  position: relative;
+}
+
+.page3-text-area {
+  position: absolute;
+  left: 2%;
+  top: 13%;
+  width: 500px;
+}
+
+.page4 {
+  width: 100%;
+  height: 100%;
+  background-image: url("/img/page4-img.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.page4-wrap {
+  z-index: 1;
+  height: 100%;
+  position: relative;
+}
+
+.page4-text-area {
+  position: absolute;
+  left: 45%;
+  top: 10%;
+  width: 700px;
+}
+
+.main-footer {
+  width: 100%;
+  height: 100%;
+  bottom: 0;
+}
+
+.main-footer-bg {
+  height: 20%;
+  background-color: #ceb58e;
+}
+
+.page5 {
+  background-color: #ceb58e;
+  width: 100%;
+  height: 85%;
+}
+
+.page5-wrap {
+  z-index: 1;
+  height: 100%;
+  text-align: center;
+}
+
+.page5-text-area {
+  margin: 0 auto;
+  width: 500px;
+  z-index: 50;
+}
+
+.page5-text-area img {
+  margin-top: 200px;
+}
+
+.btn.start.main-start {
+  line-height: 70px;
+  text-align: center;
+  margin: 0 auto;
+  font-size: 35px;
+  height: 70px;
+  width: 200px;
+}
