@@ -28,17 +28,17 @@ window.onload = () => {
     document.getElementById("mainStart").addEventListener("click", goQuiz);
     document.getElementById("menuLogin").addEventListener("click", goLogin);
     document.querySelector(".logo").addEventListener("click", goHome);
-  }, 1000);
+  }, 500);
 };
 
 function goQuiz() {
-  window.location.assign("/html/quiz.html");
+  window.location.href = "/html/quiz.html";
 }
 
 function goLogin() {
-  window.location.assign("/html/login.html");
+  window.location.href = "/html/login.html";
 }
 
 function goHome() {
-  window.location.assign("/html/index.html");
+  window.location.href = "/html/";
 }
