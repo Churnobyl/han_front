@@ -10,9 +10,35 @@ async function injectMainPage() {
 injectMainPage();
 
 new Pageable("#scrollableContainer", {
+  // 페이지 plugin
   pips: true,
   animation: 800,
   delay: 500,
+  onBeforeStart: () => {
+    document.querySelector(".nav").classList.add("nav-transparent");
+  },
 });
 
-// document.querySelector(".nav").style.setProperty("background-color", null);
+window.onload = () => {
+  /**
+   * 슬라이드 로딩 지연으로 setTimeout설정
+   */
+  setTimeout(() => {
+    document.getElementById("menuStart").addEventListener("click", goQuiz);
+    document.getElementById("mainStart").addEventListener("click", goQuiz);
+    document.getElementById("menuLogin").addEventListener("click", goLogin);
+    document.querySelector(".logo").addEventListener("click", goHome);
+  }, 1000);
+};
+
+function goQuiz() {
+  window.location.assign("/html/quiz.html");
+}
+
+function goLogin() {
+  window.location.assign("/html/login.html");
+}
+
+function goHome() {
+  window.location.assign("/html/index.html");
+}
