@@ -15,3 +15,11 @@ async function injectFooter() {
 }
 
 injectFooter();
+
+setTimeout(() => {
+  // nav바 로딩 지연으로 setTimeout설정
+  document.querySelector(".logo").addEventListener("click", goHome);
+}, 1000);
+function goHome() {
+  window.location.assign("/html/");
+}

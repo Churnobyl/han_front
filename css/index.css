@@ -12,12 +12,26 @@
   position: relative;
 }
 
-.nav {
+.nav-transparent {
   background-color: transparent;
+  animation-name: transparent-slowly;
+  animation-duration: 1.5s;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes transparent-slowly {
+  from {
+    background-color: rgba(223, 218, 214, 1);
+  }
+
+  to {
+    background-color: rgba(223, 218, 214, 0);
+  }
 }
 
 .page1-wrap {
-  width: 60%;
+  height: 600px;
+  width: 1200px;
   z-index: 1;
   position: absolute;
   top: 25%;
@@ -52,6 +66,7 @@
 .page2-wrap {
   z-index: 1;
   height: 100%;
+  width: 1920px;
 }
 
 .page2-image-area {
@@ -66,9 +81,11 @@
 }
 
 .page2-text-area {
+  width: 400px;
+  height: 500px;
   margin-top: 100px;
   margin-left: 400px;
-  z-index: 50;
+  /* z-index: 50; */
   float: left;
 }
 
@@ -157,6 +174,7 @@
 }
 
 .btn.start.main-start {
+  cursor: pointer;
   line-height: 70px;
   text-align: center;
   margin: 0 auto;

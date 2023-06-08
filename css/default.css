@@ -89,6 +89,7 @@ img {
 }
 
 .nav-menu > .btn {
+  cursor: pointer;
   margin-right: 20px;
 }
 
