@@ -90,3 +90,7 @@ h2 {
   height: 32px;
   width: calc(9.9% * 3);
 }
+
+.selected {
+  font-style: italic;
+}

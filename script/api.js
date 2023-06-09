@@ -25,3 +25,11 @@ export async function loginApi(data) {
   const responseJson = await response.json();
   console.log(responseJson);
 }
+
+export async function getQuizApi(data) {
+  // 퀴즈 가져오기 api
+  const response = await fetch(`${BACK_BASE_URL}`)
+  const responseJson = await response.json();
+  
+  return responseJson
+}
