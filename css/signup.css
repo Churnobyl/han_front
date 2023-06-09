@@ -10,6 +10,29 @@ h2 {
 }
 
 .signup-ec {
+  margin-top: 8px;
+  display: flex;
+  justify-content: end;
+  margin-right: 200px;
+}
+
+.custom-label {
+  margin-right: 15px;
+  align-content: center;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.signup-btnbox {
+  margin-top: 16px;
+}
+
+.signup-btnbox a {
+  margin: 0 6px;
+}
+
+.signup-btnbox a:hover {
+  cursor: pointer;
 }
 
 input {

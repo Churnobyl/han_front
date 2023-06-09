@@ -42,18 +42,20 @@
                     <label for="username" class="custom-label">닉네임</label>
                     <input type="text" id="username" placeholder="닉네임">
                   </div>
-                  <a id="btnSignup">회원가입</a>
-                  <a href="/html/index.html">돌아가기</a>
+                  <div class="signup-btnbox">
+                    <a id="btnSignup">회원가입</a>
+                    <a href="/html/index.html">돌아가기</a>
+                  </div>
                 </form>
             </div>
             
             <!-- 소셜로그인 버튼 -->
             <div class="social-signup">
-              <h3>소셜 회원가입</h3>
+              <h3>소셜로 시작하기</h3>
               <div class="social-signup-btn">
-                <a href=""><img src="/img/google.svg" alt="google"></a>
-                <a href=""><img src="/img/kakao.svg" alt="kakao"></a>
-                <a href=""><img src="/img/facebook.svg" alt="facebook"></a>
+                <a href="http://127.0.0.1:8000/users/google/login/" id="googleSingup"><img src="/img/google.svg" alt="google"></a>
+                <a href="http://127.0.0.1:8000/users/kakao/login/"><img src="/img/kakao.svg" alt="kakao"></a>
+                <a href="http://127.0.0.1:8000/users/naver/login/"><img src="/img/naver.png" alt="naver"></a>
               </div>
             </div>
           </div>

@@ -1,7 +1,7 @@
 import { loginApi } from "./api.js";
 
-// 로그인
 document.getElementById("btnLogin").addEventListener("click", () => {
+  // 로그인
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 

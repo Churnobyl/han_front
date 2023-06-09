@@ -8,7 +8,7 @@
     - The "symbol *" part is to solve Firefox SVG sprite bug
  */
 * {
-  outline: 1px solid #ec3434;
+  /* outline: 1px solid #ec3434; */
 }
 
 *:where(
