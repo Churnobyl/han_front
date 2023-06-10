@@ -1,5 +1,15 @@
 import { signupApi } from "./api.js";
-import { googleApi } from "./api.js";
+import { FRONT_BASE_URL } from "./conf.js";
+// import { googleApi } from "./api.js";
+
+/* 로그인한 유저 메인화면으로 이동 */
+const payload = localStorage.getItem("payload");
+const payloadParse = JSON.parse(payload);
+
+if (payloadParse != null) {
+  window.location.href = `${FRONT_BASE_URL}/html/index.html`;
+}
+/* 로그인한 유저 메인화면으로 이동 end */
 
 document.getElementById("btnSignup").addEventListener("click", () => {
   // 회원가입
@@ -12,16 +22,20 @@ document.getElementById("btnSignup").addEventListener("click", () => {
     alert("비밀번호가 일치하지 않습니다.");
   } else {
     const signupData = {
-      "email": email,
-      "password": password,
-      "username": username
+      email: email,
+      password: password,
+      username: username,
     };
 
-    try {
-      const response = signupApi(signupData);
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-    }
+    signupApi(signupData).then(({ response, responseJson }) => {
+      if (response.status === 201) {
+        alert(responseJson.message);
+        window.location.href = "/html/index.html";
+      } else if (response.status === 400) {
+        alert("이미 가입된 이메일 계정이 있습니다.");
+      } else {
+        alert(responseJson.message);
+      }
+    });
   }
 });

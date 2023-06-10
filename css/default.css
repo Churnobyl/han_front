@@ -82,6 +82,10 @@ img {
   background-position: center;
 }
 
+.username {
+  margin-right: 20px;
+}
+
 .nav-menu {
   align-items: center;
   display: flex;
@@ -108,7 +112,7 @@ img {
 }
 
 .main {
-  height: 2000px;
+  /* height: 2000px; */
 }
 
 .footer {
