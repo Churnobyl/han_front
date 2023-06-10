@@ -1,5 +1,15 @@
 import { signupApi } from "./api.js";
+import { FRONT_BASE_URL } from "./conf.js";
 // import { googleApi } from "./api.js";
+
+/* 로그인한 유저 메인화면으로 이동 */
+const payload = localStorage.getItem("payload");
+const payloadParse = JSON.parse(payload);
+
+if (payloadParse != null) {
+  window.location.href = `${FRONT_BASE_URL}/html/index.html`;
+}
+/* 로그인한 유저 메인화면으로 이동 end */
 
 document.getElementById("btnSignup").addEventListener("click", () => {
   // 회원가입

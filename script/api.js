@@ -15,7 +15,7 @@ export async function signupApi(data) {
 }
 
 export async function loginApi(data) {
-  console.log(data);
+  // 로그인 api
   const response = await fetch(`${BACK_BASE_URL}/users/login/`, {
     headers: {
       "content-type": "application/json",
@@ -23,8 +23,32 @@ export async function loginApi(data) {
     method: "POST",
     body: JSON.stringify(data),
   });
-  const responseJson = await response.json();
-  return responseJson;
+
+  if (response.status === 200) {
+    const responseJson = await response.json();
+    console.log(responseJson);
+    localStorage.setItem("access", responseJson.access);
+    localStorage.setItem("refresh", responseJson.refresh);
+
+    // payload 저장
+    const base64Url = responseJson.access.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map(function (c) {
+          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+        .join("")
+    );
+    localStorage.setItem("payload", jsonPayload);
+    window.location.href = `${FRONT_BASE_URL}/html/index.html`;
+  } else {
+    document.getElementById("password").value = "";
+    alert("회원정보가 일치하지 않습니다.");
+  }
+
+  return { response, responseJson };
 }
 
 export async function getQuizApi(data) {
