@@ -7,6 +7,7 @@ async function injectNavbar() {
 
   const forUser = document.getElementById("navBarForUser");
   const forAnonymous = document.getElementById("navBarForAnonymous");
+  const forSign = document.getElementById("navBarForSign");
 
   const access = localStorage.getItem("access");
 
@@ -14,6 +15,7 @@ async function injectNavbar() {
   if (access) {
     forUser.style.display = "block";
     forAnonymous.style.display = "none";
+    forSign.style.display = "none";
     const base64Url = access.split(".")[1];
     const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
     const jsonPayloadString = decodeURIComponent(
@@ -29,8 +31,16 @@ async function injectNavbar() {
     document.getElementById("navUserName").innerText = getUsername;
   } else {
     // 로그인 되어 있지 않다면 forAnonymous를 보여주기
-    forUser.style.display = "none";
-    forAnonymous.style.display = "block";
+    const nowPath = window.location.pathname;
+    if (nowPath === "/html/login.html" || nowPath === "/html/signup.html") {
+      forUser.style.display = "none";
+      forAnonymous.style.display = "none";
+      forSign.style.display = "block";
+    } else {
+      forUser.style.display = "none";
+      forAnonymous.style.display = "block";
+      forSign.style.display = "none";
+    }
   }
 }
 
@@ -52,12 +62,14 @@ setTimeout(() => {
 }, 1000);
 
 function goHome() {
+  // 홈으로
   window.location.assign("/html/");
 }
 
 function goLogout() {
+  // 로그아웃
   localStorage.removeItem("access");
   localStorage.removeItem("refresh");
   localStorage.removeItem("payload");
-  window.location.href = "/html/index.html";
+  window.location.href = "/html/home.html";
 }

@@ -28,19 +28,23 @@
                 <form class="signup">
                   <div class="signup-ec">
                     <label for="email" class="custom-label">이메일</label>
-                    <input type="text" id="email" placeholder="이메일">
+                    <input type="text" id="email" placeholder="han@gmail.com" onfocus="this.placeholder=''"
+                      onblur="this.placeholder='han@gmail.com'">
                   </div>
                   <div class="signup-ec">
                     <label for="password" class="custom-label">비밀번호</label>
-                    <input type="password" id="password" placeholder="비밀번호">
+                    <input type="password" id="password" placeholder="비밀번호" onfocus="this.placeholder=''"
+                      onblur="this.placeholder='비밀번호'">
                   </div>
                   <div class="signup-ec">
                     <label for="password2" class="custom-label">비밀번호 확인</label>
-                    <input type="password" id="password2" placeholder="비밀번호 확인">
+                    <input type="password" id="password2" placeholder="비밀번호 확인" onfocus="this.placeholder=''"
+                      onblur="this.placeholder='비밀번호 확인'">
                   </div>
                   <div class="signup-ec">
                     <label for="username" class="custom-label">닉네임</label>
-                    <input type="text" id="username" placeholder="닉네임">
+                    <input type="text" id="username" placeholder="닉네임" onfocus="this.placeholder=''"
+                      onblur="this.placeholder='닉네임'">
                   </div>
                   <div class="signup-btnbox">
                     <a id="btnSignup">회원가입</a>
@@ -48,12 +52,13 @@
                   </div>
                 </form>
             </div>
-            
+
             <!-- 소셜로그인 버튼 -->
             <div class="social-signup">
               <h3>소셜로 시작하기</h3>
               <div class="social-signup-btn">
-                <a href="http://127.0.0.1:8000/users/google/login/" id="googleSingup"><img src="/img/google.svg" alt="google"></a>
+                <a href="http://127.0.0.1:8000/users/google/login/" id="googleSingup"><img src="/img/google.svg"
+                    alt="google"></a>
                 <a href="http://127.0.0.1:8000/users/kakao/login/"><img src="/img/kakao.svg" alt="kakao"></a>
                 <a href="http://127.0.0.1:8000/users/naver/login/"><img src="/img/naver.png" alt="naver"></a>
               </div>

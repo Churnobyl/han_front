@@ -3,7 +3,7 @@ h2 {
 }
 
 .signup-wrap {
-  margin: 100px auto;
+  margin: 250px auto 100px;
   width: 700px;
   height: 500px;
   text-align: center;
@@ -38,13 +38,40 @@ h2 {
 input {
   width: 300px;
   height: 35px;
-  border: 2px solid black;
+  border: 2px solid #383838;
   border-radius: 3px;
+}
+
+.signup-ec input {
+  background-size: 24px;
+  background-repeat: no-repeat;
+  background-position: 10px;
+  opacity: 0.5;
+}
+
+.signup-ec input:focus {
+  opacity: 1;
+}
+
+#email {
+  background-image: url("/img/email.svg");
+}
+
+#password {
+  background-image: url("/img/password.svg");
+}
+
+#password2 {
+  background-image: url("/img/password.svg");
+}
+
+#username {
+  background-image: url("/img/username.svg");
 }
 
 .social-signup {
   margin-top: 24px;
-  border-top: 2px solid rgba(0,0,0,0.2);
+  border-top: 2px solid rgba(0, 0, 0, 0.2);
   padding-top: 16px;
 }
 

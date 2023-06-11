@@ -7,11 +7,24 @@ const payload = localStorage.getItem("payload");
 const payloadParse = JSON.parse(payload);
 
 if (payloadParse != null) {
-  window.location.href = `${FRONT_BASE_URL}/html/index.html`;
+  window.location.href = `${FRONT_BASE_URL}/html/home.html`;
 }
 /* 로그인한 유저 메인화면으로 이동 end */
 
-document.getElementById("btnSignup").addEventListener("click", () => {
+// 엔터했을 때 회원가입 함수 동작
+const inputs = document.querySelectorAll("input");
+for (let input of inputs) {
+  input.addEventListener("keyup", (e) => {
+    if (e.key === 13 || e.key === "Enter") {
+      handleSignup();
+    }
+  });
+}
+
+// 클릭했을 때 회원가입 함수 동작
+document.getElementById("btnSignup").addEventListener("click", handleSignup);
+
+function handleSignup() {
   // 회원가입
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
@@ -30,7 +43,7 @@ document.getElementById("btnSignup").addEventListener("click", () => {
     signupApi(signupData).then(({ response, responseJson }) => {
       if (response.status === 201) {
         alert(responseJson.message);
-        window.location.href = "/html/index.html";
+        window.location.href = "/html/login.html";
       } else if (response.status === 400) {
         alert("이미 가입된 이메일 계정이 있습니다.");
       } else {
@@ -38,4 +51,4 @@ document.getElementById("btnSignup").addEventListener("click", () => {
       }
     });
   }
-});
+}

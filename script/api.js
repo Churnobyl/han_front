@@ -2,6 +2,7 @@ import { BACK_BASE_URL, FRONT_BASE_URL } from "./conf.js";
 
 export async function signupApi(data) {
   // 회원가입 api
+  console.log(data);
   const response = await fetch(`${BACK_BASE_URL}/users/`, {
     headers: {
       "content-type": "application/json",
@@ -26,7 +27,6 @@ export async function loginApi(data) {
 
   if (response.status === 200) {
     const responseJson = await response.json();
-    console.log(responseJson);
     localStorage.setItem("access", responseJson.access);
     localStorage.setItem("refresh", responseJson.refresh);
 
@@ -42,7 +42,7 @@ export async function loginApi(data) {
         .join("")
     );
     localStorage.setItem("payload", jsonPayload);
-    window.location.href = `${FRONT_BASE_URL}/html/index.html`;
+    window.location.href = `${FRONT_BASE_URL}/html/home.html`;
   } else {
     document.getElementById("password").value = "";
     alert("회원정보가 일치하지 않습니다.");

@@ -26,11 +26,13 @@
                 <form class="login">
                   <div class="login-ec">
                     <label for="email" class="custom-label">이메일</label>
-                    <input type="text" id="email" placeholder="이메일">
+                    <input type="text" id="email" placeholder="이메일" onfocus="this.placeholder=''"
+                      onblur="this.placeholder='han@gmail.com'">
                   </div>
                   <div class="login-ec">
                     <label for="password" class="custom-label">비밀번호</label>
-                    <input type="password" id="password" placeholder="비밀번호">
+                    <input type="password" id="password" placeholder="비밀번호" onfocus="this.placeholder=''"
+                      onblur="this.placeholder='비밀번호'">
                   </div>
                   <div class="login-btnbox">
                     <a id="btnLogin">로그인</a>
@@ -42,7 +44,8 @@
                 <div class="social-signup">
                   <h3>소셜로 시작하기</h3>
                   <div class="social-signup-btn">
-                    <a href="http://127.0.0.1:8000/users/google/login/" id="googleSingup"><img src="/img/google.svg" alt="google"></a>
+                    <a href="http://127.0.0.1:8000/users/google/login/" id="googleSingup"><img src="/img/google.svg"
+                        alt="google"></a>
                     <a href="http://127.0.0.1:8000/users/kakao/login/"><img src="/img/kakao.svg" alt="kakao"></a>
                     <a href="http://127.0.0.1:8000/users/naver/login/"><img src="/img/naver.png" alt="naver"></a>
                   </div>
