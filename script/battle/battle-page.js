@@ -2,8 +2,22 @@ import { BACK_WEBSOCKET_URL } from "/script/conf.js";
 
 const urlParams = new URLSearchParams(window.location.search);
 const roomName = urlParams.get("room");
+const access = localStorage.getItem("access");
+const base64Url = access.split(".")[1];
+const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+const jsonPayloadString = decodeURIComponent(
+  atob(base64)
+    .split("")
+    .map(function (c) {
+      return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+    })
+    .join("")
+);
+const jsonPayload = JSON.parse(jsonPayloadString);
+const getUsername = jsonPayload.username;
 const roomData = {
-  host: "김철수",
+  host: getUsername,
+  roomName: roomName,
 };
 
 const chatSocket = new WebSocket(
@@ -13,6 +27,15 @@ const chatSocket = new WebSocket(
 chatSocket.onmessage = function (e) {
   const data = JSON.parse(e.data);
   document.getElementById("chat-log").value += data.message + "\n";
+};
+
+chatSocket.onopen = () => {
+  chatSocket.send(
+    JSON.stringify({
+      roomData: roomData,
+      message: "Connected",
+    })
+  );
 };
 
 chatSocket.onclose = function (e) {
