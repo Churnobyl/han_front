@@ -2,7 +2,6 @@ import { BACK_BASE_URL, FRONT_BASE_URL } from "./conf.js";
 
 export async function signupApi(data) {
   // 회원가입 api
-  console.log(data);
   const response = await fetch(`${BACK_BASE_URL}/users/`, {
     headers: {
       "content-type": "application/json",
@@ -41,7 +40,7 @@ export async function loginApi(data) {
         })
         .join("")
     );
-    localStorage.setItem("payload", jsonPayload);
+    // localStorage.setItem("payload", jsonPayload);
     window.location.href = `${FRONT_BASE_URL}/html/home.html`;
   } else {
     document.getElementById("password").value = "";
