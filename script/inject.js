@@ -58,12 +58,34 @@ injectFooter();
 setTimeout(() => {
   // nav바 로딩 지연으로 setTimeout설정
   document.getElementById("btnLogout").addEventListener("click", goLogout);
-  document.querySelector(".logo").addEventListener("click", goHome);
-}, 1000);
+  const logos = document.querySelectorAll(".logo");
+  for (let logo of logos) {
+    logo.addEventListener("click", goHome);
+  }
+  document.getElementById("menuStart").addEventListener("click", goQuiz);
+  document.getElementById("menuLogin").addEventListener("click", goLogin);
+}, 500);
 
 function goHome() {
   // 홈으로
-  window.location.assign("/html/");
+  if (
+    window.location.pathname === "/html/" ||
+    window.location.pathname === "/html/index.html"
+  ) {
+    window.location.href = "/html/";
+  } else {
+    window.location.href = "/html/home.html";
+  }
+}
+
+function goLogin() {
+  // 로그인
+  window.location.href = "/html/login.html";
+}
+
+function goQuiz() {
+  // 시작 퀴즈
+  window.location.href = "/html/quiz.html";
 }
 
 function goLogout() {

@@ -28,7 +28,7 @@ window.onload = () => {
     document.getElementById("mainStart").addEventListener("click", goQuiz);
     document.getElementById("menuLogin").addEventListener("click", goLogin);
     document.querySelector(".logo").addEventListener("click", goHome);
-  }, 500);
+  }, 300);
 };
 
 function goQuiz() {
@@ -40,5 +40,12 @@ function goLogin() {
 }
 
 function goHome() {
-  window.location.href = "/html/home.html";
+  if (
+    window.location.pathname === "/html/" ||
+    window.location.pathname === "/html/index.html"
+  ) {
+    window.location.href = "/html/";
+  } else {
+    window.location.href = "/html/home.html";
+  }
 }
