@@ -7,29 +7,51 @@ async function injectMainPage() {
   }
 }
 
-injectMainPage();
+function showSpinner() {
+  const loader = document.getElementById("spinner");
+  loader.style.display = "grid";
+}
 
-new Pageable("#scrollableContainer", {
-  // 페이지 plugin
-  pips: true,
-  animation: 800,
-  delay: 500,
-  onBeforeStart: () => {
-    document.querySelector(".nav").classList.add("nav-transparent");
-  },
-});
+function hideSpinner() {
+  const loader = document.getElementById("spinner");
+  loader.style.display = "none";
+}
 
-window.onload = () => {
-  /**
-   * 슬라이드 로딩 지연으로 setTimeout설정
-   */
-  setTimeout(() => {
-    document.getElementById("menuStart").addEventListener("click", goQuiz);
-    document.getElementById("mainStart").addEventListener("click", goQuiz);
-    document.getElementById("menuLogin").addEventListener("click", goLogin);
-    document.querySelector(".logo").addEventListener("click", goHome);
-  }, 300);
-};
+async function loadSteps() {
+  showSpinner();
+  injectMainPage()
+    .then(() => slidingPage())
+    .then(() => {
+      loadClickComponent();
+      hideSpinner();
+    })
+    .catch((error) => {
+      hideSpinner();
+      console.error(error);
+    });
+}
+
+loadSteps();
+
+function slidingPage() {
+  new Pageable("#scrollableContainer", {
+    // 페이지 plugin
+    pips: true,
+    animation: 800,
+    delay: 500,
+    onBeforeStart: () => {
+      document.querySelector(".nav").classList.add("nav-transparent");
+    },
+  });
+}
+
+function loadClickComponent() {
+  // 컴포넌트 클릭 이벤트 부여
+  document.getElementById("menuStart").addEventListener("click", goQuiz);
+  document.getElementById("mainStart").addEventListener("click", goQuiz);
+  document.getElementById("menuLogin").addEventListener("click", goLogin);
+  document.querySelector(".logo").addEventListener("click", goHome);
+}
 
 function goQuiz() {
   window.location.href = "/html/quiz.html";

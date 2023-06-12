@@ -44,8 +44,6 @@ async function injectNavbar() {
   }
 }
 
-injectNavbar();
-
 async function injectFooter() {
   // 푸터 삽입
   const footerHtml = await fetch("/html/footer.html");
@@ -53,10 +51,11 @@ async function injectFooter() {
   document.querySelector(".footer").innerHTML = data;
 }
 
-injectFooter();
+// 네비바, 푸터 전부 불러온 다음에 이벤트리스너 부착
+Promise.all([injectNavbar(), injectFooter()]).then(() => loadComponent());
 
-setTimeout(() => {
-  // nav바 로딩 지연으로 setTimeout설정
+function loadComponent() {
+  // 각 컴포넌트에 이벤트리스너 부착
   document.getElementById("btnLogout").addEventListener("click", goLogout);
   const logos = document.querySelectorAll(".logo");
   for (let logo of logos) {
@@ -64,7 +63,7 @@ setTimeout(() => {
   }
   document.getElementById("menuStart").addEventListener("click", goQuiz);
   document.getElementById("menuLogin").addEventListener("click", goLogin);
-}, 500);
+}
 
 function goHome() {
   // 홈으로
