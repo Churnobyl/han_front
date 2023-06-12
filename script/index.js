@@ -51,6 +51,7 @@ function loadClickComponent() {
   document.getElementById("mainStart").addEventListener("click", goQuiz);
   document.getElementById("menuLogin").addEventListener("click", goLogin);
   document.querySelector(".logo").addEventListener("click", goHome);
+  document.getElementById("btnLogout").addEventListener("click", goLogout);
 }
 
 function goQuiz() {
@@ -70,4 +71,12 @@ function goHome() {
   } else {
     window.location.href = "/html/home.html";
   }
+}
+
+function goLogout() {
+  // 로그아웃
+  localStorage.removeItem("access");
+  localStorage.removeItem("refresh");
+  localStorage.removeItem("payload");
+  window.location.href = "/html/home.html";
 }
