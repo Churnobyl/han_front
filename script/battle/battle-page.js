@@ -33,7 +33,7 @@ chatSocket.onopen = () => {
   chatSocket.send(
     JSON.stringify({
       roomData: roomData,
-      message: "Connected",
+      message: "접속했습니다.",
     })
   );
 };

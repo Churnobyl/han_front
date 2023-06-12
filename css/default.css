@@ -86,6 +86,16 @@ img {
   margin-right: 20px;
 }
 
+.component-wrap {
+  margin-right: 30px;
+  display: flex;
+}
+
+.component-wrap > img {
+  margin-right: 15px;
+  height: 24px;
+}
+
 .nav-menu {
   align-items: center;
   display: flex;
