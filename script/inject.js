@@ -13,22 +13,25 @@ async function injectNavbar() {
 
   // 로그인 되어 있다면 forUser를 보여주기
   if (access) {
+    const payload = localStorage.getItem("payload")
+    const userId = payload.split(':')[5].slice(0, -1);
+
+    const response = await fetch(`http://127.0.0.1:8000/users/${userId}/`, {
+      method:"GET",
+    })
+    const responseJson = await response.json()
+    console.log(responseJson)
+
     forUser.style.display = "block";
     forAnonymous.style.display = "none";
     forSign.style.display = "none";
-    const base64Url = access.split(".")[1];
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-    const jsonPayloadString = decodeURIComponent(
-      atob(base64)
-        .split("")
-        .map(function (c) {
-          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-        })
-        .join("")
-    );
-    const jsonPayload = JSON.parse(jsonPayloadString);
-    const getUsername = jsonPayload.username;
-    document.getElementById("navUserName").innerText = getUsername;
+    console.log(responseJson["유저"]["username"]==="")
+    if (responseJson["유저"]["username"]==="") {
+      document.getElementById("navUserName").innerText = responseJson["유저"]["email"];
+    }
+    else {
+      document.getElementById("navUserName").innerText = responseJson["유저"]["username"];
+    }
   } else {
     // 로그인 되어 있지 않다면 forAnonymous를 보여주기
     const nowPath = window.location.pathname;
@@ -74,7 +77,7 @@ function goHome() {
   ) {
     window.location.href = "/html/";
   } else {
-    window.location.href = "/html/home.html";
+    window.location.href = "/html/index.html";
   }
 }
 
@@ -93,5 +96,5 @@ function goLogout() {
   localStorage.removeItem("access");
   localStorage.removeItem("refresh");
   localStorage.removeItem("payload");
-  window.location.href = "/html/home.html";
+  window.location.href = "/html/index.html";
 }

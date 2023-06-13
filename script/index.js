@@ -1,3 +1,5 @@
+import { googleLogin, kakaoLogin, naverLogin } from "./api.js";
+
 async function injectMainPage() {
   // 메인페이지 삽입
   for (let i = 1; i < 6; i++) {
@@ -28,8 +30,33 @@ window.onload = () => {
     document.getElementById("mainStart").addEventListener("click", goQuiz);
     document.getElementById("menuLogin").addEventListener("click", goLogin);
     document.querySelector(".logo").addEventListener("click", goHome);
-  }, 300);
+  }, 500);
+
+  const search = window.location.search
+  console.log(search)
+  if (search.includes("google")) {
+    googleLoginSend(search)
+  }
+  else if (search.includes("state")) {
+    console.log("naver")
+    naverLoginSend(search)
+  }
+  else {
+    kakaoLoginSend(search)
+  }
 };
+
+async function googleLoginSend(search) {
+  const response = await googleLogin(search)
+}
+
+async function kakaoLoginSend(search) {
+  const response = await kakaoLogin(search)
+}
+
+async function naverLoginSend(search) {
+  const response = await naverLogin(search)
+}
 
 function goQuiz() {
   window.location.href = "/html/quiz.html";
@@ -40,12 +67,5 @@ function goLogin() {
 }
 
 function goHome() {
-  if (
-    window.location.pathname === "/html/" ||
-    window.location.pathname === "/html/index.html"
-  ) {
-    window.location.href = "/html/";
-  } else {
-    window.location.href = "/html/home.html";
-  }
+  window.location.href = "/html/";
 }

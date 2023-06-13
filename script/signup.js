@@ -52,3 +52,13 @@ function handleSignup() {
     });
   }
 }
+
+document.getElementById("btnGoogleSignup").addEventListener("click", async function() {
+  const response = await fetch("http://127.0.0.1:8000/users/google/login/", {
+    method:"POST"
+  })
+  const responseJson = await response.json()
+  
+  console.log(responseJson)
+
+});
