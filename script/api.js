@@ -168,3 +168,9 @@ export async function naverLogin(search) {
   }
   return { response, responseJson };
 }
+export async function getRoomApi() {
+  // 배틀 가져오기 api
+  const response = await fetch(`${BACK_BASE_URL}/battle/game/`);
+  const responseJson = await response.json();
+  return { responseJson };
+}
