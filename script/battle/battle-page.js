@@ -21,9 +21,9 @@ const roomData = {
   host: getUsername,
   roomName: roomName,
 };
-
+//  + "/?token=" + access
 const chatSocket = new WebSocket(
-  "ws://" + BACK_WEBSOCKET_URL + "/ws/battle/" + roomName + "/?token=" + access
+  "ws://" + BACK_WEBSOCKET_URL + "/ws/battle/" + roomName
 );
 
 chatSocket.onmessage = function (e) {
@@ -32,7 +32,6 @@ chatSocket.onmessage = function (e) {
 };
 
 chatSocket.onopen = () => {
-  chatSocket.setRequestHeader("Authorization", `Bearer ${access}`);
   chatSocket.send(
     JSON.stringify({
       roomData: roomData,
