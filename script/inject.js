@@ -29,8 +29,11 @@ async function injectNavbar() {
     const jsonPayload = JSON.parse(jsonPayloadString);
     const getUsername = jsonPayload.username;
     document.getElementById("navUserName").innerText = getUsername;
-    if (window.location.pathname === "/html/home.html") {
-      document.getElementById("menuHome").style.display = "none";
+    if (
+      window.location.pathname === "/html/" ||
+      window.location.pathname === "/html/index.html"
+    ) {
+      document.getElementById("menuHome").style.display = "block";
     }
   } else {
     // 로그인 되어 있지 않다면 forAnonymous를 보여주기
