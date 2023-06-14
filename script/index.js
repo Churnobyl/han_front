@@ -53,33 +53,32 @@ function loadClickComponent() {
   document.getElementById("mainStart").addEventListener("click", goQuiz);
   document.getElementById("menuLogin").addEventListener("click", goLogin);
   document.querySelector(".logo").addEventListener("click", goHome);
+  document.getElementById("menuHome").addEventListener("click", goHomePage);
   document.getElementById("btnLogout").addEventListener("click", goLogout);
 }
 window.onload = () => {
-  const search = window.location.search
-  console.log(search)
+  const search = window.location.search;
+  console.log(search);
   if (search.includes("google")) {
-    googleLoginSend(search)
-  }
-  else if (search.includes("state")) {
-    console.log("naver")
-    naverLoginSend(search)
-  }
-  else {
-    kakaoLoginSend(search)
+    googleLoginSend(search);
+  } else if (search.includes("state")) {
+    console.log("naver");
+    naverLoginSend(search);
+  } else {
+    kakaoLoginSend(search);
   }
 };
 
 async function googleLoginSend(search) {
-  const response = await googleLogin(search)
+  const response = await googleLogin(search);
 }
 
 async function kakaoLoginSend(search) {
-  const response = await kakaoLogin(search)
+  const response = await kakaoLogin(search);
 }
 
 async function naverLoginSend(search) {
-  const response = await naverLogin(search)
+  const response = await naverLogin(search);
 }
 
 function goQuiz() {
@@ -92,6 +91,10 @@ function goLogin() {
 
 function goHome() {
   window.location.href = "/html/";
+}
+
+function goHomePage() {
+  window.location.href = "/html/home.html";
 }
 
 function goLogout() {
