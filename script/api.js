@@ -62,5 +62,12 @@ export async function getRoomApi() {
   // 배틀 가져오기 api
   const response = await fetch(`${BACK_BASE_URL}/battle/game/`);
   const responseJson = await response.json();
-  return { responseJson };
+  return { response, responseJson };
+}
+
+export async function getRoomDetailApi(data) {
+  // 방 상세정보 가져오기 api
+  const response = await fetch(`${BACK_BASE_URL}/battle/game/${data}/`);
+  const responseJson = await response.json();
+  return { response, responseJson };
 }

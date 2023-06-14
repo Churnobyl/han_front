@@ -1,5 +1,7 @@
+import { getRoomDetailApi } from "/script/api.js";
 import { BACK_WEBSOCKET_URL } from "/script/conf.js";
 
+/* 웹소켓 관련 */
 const urlParams = new URLSearchParams(window.location.search);
 const roomName = urlParams.get("room");
 const access = localStorage.getItem("access");
@@ -21,7 +23,7 @@ const roomData = {
 };
 
 const chatSocket = new WebSocket(
-  "ws://" + BACK_WEBSOCKET_URL + "/ws/battle/" + roomName + "/"
+  "ws://" + BACK_WEBSOCKET_URL + "/ws/battle/" + roomName + "/?token=" + access
 );
 
 chatSocket.onmessage = function (e) {
@@ -30,6 +32,7 @@ chatSocket.onmessage = function (e) {
 };
 
 chatSocket.onopen = () => {
+  chatSocket.setRequestHeader("Authorization", `Bearer ${access}`);
   chatSocket.send(
     JSON.stringify({
       roomData: roomData,
@@ -63,3 +66,14 @@ function sendMessage() {
   );
   messageInputDom.value = "";
 }
+
+/* 웹소켓 관련 end */
+
+// 방 정보 가져오기
+getRoomDetailApi(roomName).then(({ response, responseJson }) => {
+  if (response.status === 200) {
+    console.log(responseJson);
+  } else {
+    alert("웹소켓 연결에 실패했습니다.");
+  }
+});
