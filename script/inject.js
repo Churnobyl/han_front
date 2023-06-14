@@ -92,5 +92,7 @@ function goLogout() {
   localStorage.removeItem("access");
   localStorage.removeItem("refresh");
   localStorage.removeItem("payload");
-  window.location.href = "/html/index.html";
+  document.cookie =
+    "access_token=; expires=Thu, 01 Jan 1999 00:00:10 GMT; path=/; Secure";
+  window.location.href = "/html/home.html";
 }
