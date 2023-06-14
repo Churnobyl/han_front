@@ -73,7 +73,7 @@ function goHome() {
   ) {
     window.location.href = "/html/";
   } else {
-    window.location.href = "/html/home.html";
+    window.location.href = "/html/index.html";
   }
 }
 
@@ -92,5 +92,5 @@ function goLogout() {
   localStorage.removeItem("access");
   localStorage.removeItem("refresh");
   localStorage.removeItem("payload");
-  window.location.href = "/html/home.html";
+  window.location.href = "/html/index.html";
 }
