@@ -29,6 +29,9 @@ async function injectNavbar() {
     const jsonPayload = JSON.parse(jsonPayloadString);
     const getUsername = jsonPayload.username;
     document.getElementById("navUserName").innerText = getUsername;
+    if (window.location.pathname === "/html/home.html") {
+      document.getElementById("menuHome").style.display = "none";
+    }
   } else {
     // 로그인 되어 있지 않다면 forAnonymous를 보여주기
     const nowPath = window.location.pathname;
@@ -67,13 +70,10 @@ function loadComponent() {
 
 function goHome() {
   // 홈으로
-  if (
-    window.location.pathname === "/html/" ||
-    window.location.pathname === "/html/index.html"
-  ) {
+  if (window.location.pathname === "/html/") {
     window.location.href = "/html/";
   } else {
-    window.location.href = "/html/index.html";
+    window.location.href = "/html/home.html";
   }
 }
 
