@@ -59,6 +59,7 @@ h1 {
 }
 
 .quiz {
+  cursor: pointer;
   margin: 20px auto;
 }
 
@@ -88,7 +89,7 @@ h2 {
   margin-left: 2px;
   background-color: #383838;
   height: 32px;
-  width: calc(9.9% * 3);
+  width: calc(9.9% * 0);
 }
 
 .selected {

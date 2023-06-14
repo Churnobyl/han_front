@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="/css/reset.css" />
+        <link rel="stylesheet" href="/css/default.css" />
+        <link rel="stylesheet" href="/css/quiz_result.css" />
+        <title>한 | 한글 퀴즈 서비스</title>
+        <link rel="icon" href="/img/favicon.ico" />
+    </head>
+
+    <body>
+        <div class="wrap">
+            <div class="container">
+                <div class="nav" role="header">
+                    <!-- 네비게이션 삽입 위치 -->
+                </div>
+                <div class="main" role="main">
+                    <div class="container">
+                        <div>당신은 한글의 수호자</div>
+                        <div id="quiz-result"></div>
+                        <div class="xp-content">
+                            <div class="xp-text" id="xp-text"></div>
+                            <div class="xp-bar">
+                                <div class="xp-bar-now" id="xp-bar-now"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer" role="footer">
+                    <!-- 푸터 삽입 위치 -->
+                </div>
+            </div>
+        </div>
+
+        <script src="/script/inject.js"></script>
+        <script type="module" src="/script/quiz_result.js"></script>
+    </body>
+</html>

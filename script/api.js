@@ -51,12 +51,25 @@ export async function loginApi(data) {
   return { response, responseJson };
 }
 
-export async function getQuizApi(data) {
+export async function getQuizApi() {
   // 퀴즈 가져오기 api
   const response = await fetch(`${BACK_BASE_URL}`);
   const responseJson = await response.json();
 
   return responseJson;
+}
+
+export async function sendQuizResultApi(data) {
+  // 퀴즈 결과보내기 api
+  const token = localStorage.getItem('access')
+  const response = await fetch(`${BACK_BASE_URL}`, {
+    headers: {
+      "Authorization" : `Bearer ${token}`,
+      "content-type": "application/json",
+    },
+    method: "POST",
+    body: JSON.stringify(data),
+  });
 }
 
 export async function getRoomApi() {

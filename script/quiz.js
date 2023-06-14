@@ -1,10 +1,12 @@
 import { getQuizApi } from "./api.js";
+import { sendQuizResultApi } from "./api.js";
 
-const answerButton = document.getElementById("answer-button")
-answerButton.addEventListener("click", confirmQuiz)
+document.getElementById("answer-button").addEventListener("click", confirmQuiz)
+document.getElementById("result-button").addEventListener("click", goResult)
 
 let quizzes
 let quizIndex=0
+let correctCount=0
 
 async function getQuiz(){
   quizzes = await getQuizApi()
@@ -52,8 +54,11 @@ function confirmQuiz(){
   }
   if (quiz.options[options[0].id].is_answer) {
     alert("정답입니다"+"\n해설:"+quiz.explain)
+    correctCount++
+    quiz["solved"] = true
   } else {
     alert("오답입니다"+"\n해설:"+quiz.explain)
+    quiz["solved"] = false
   }
   nextStep()
 }
@@ -65,14 +70,26 @@ function nextStep(){
   });
 
   quizIndex++
+
+  const xpBar = document.getElementById("xp-bar-now")
+  const xpText = document.getElementById("xp-text")
+  xpBar.setAttribute("style", `width: calc(9.9% * ${quizIndex})`)
+  xpText.innerText = (`${quizIndex} / 10`)
+
   if (quizIndex==quizzes.length){
     finishQuiz()
+  } else {
+    showQuiz()
   }
-  showQuiz()
 }
 
-function finishQuiz(){
-  alert("다풀었습니다. 결과화면으로 넘어가기")
+async function finishQuiz(){
+  await sendQuizResultApi(quizzes)
+  localStorage.setItem("correctCount", correctCount);
+}
+
+function goResult() {
+  window.location.href = "/html/quiz_result.html";
 }
 
 window.onload = async function(){

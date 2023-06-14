@@ -1,0 +1,21 @@
+.xp-content {
+  margin: 50px auto;
+  width: 400px;
+}
+
+.xp-text {
+  text-align: right;
+}
+
+.xp-bar {
+  height: 40px;
+  border: 2px solid #383838;
+}
+
+.xp-bar-now {
+  margin-top: 2px;
+  margin-left: 2px;
+  background-color: #383838;
+  height: 32px;
+  width: calc(9.9% * 0);
+}
