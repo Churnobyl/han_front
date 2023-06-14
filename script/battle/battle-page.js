@@ -23,7 +23,7 @@ const roomData = {
 };
 //  + "/?token=" + access
 const chatSocket = new WebSocket(
-  "ws://" + BACK_WEBSOCKET_URL + "/ws/battle/" + roomName
+  "ws://" + BACK_WEBSOCKET_URL + "/ws/battle/" + roomName + "/"
 );
 
 chatSocket.onmessage = function (e) {

@@ -73,7 +73,7 @@ function goHome() {
   ) {
     window.location.href = "/html/";
   } else {
-    window.location.href = "/html/home.html";
+    window.location.href = "/html/index.html";
   }
 }
 
@@ -93,6 +93,6 @@ function goLogout() {
   localStorage.removeItem("refresh");
   localStorage.removeItem("payload");
   document.cookie =
-    "access_token" + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+    "access_token=; expires=Thu, 01 Jan 1999 00:00:10 GMT; path=/; Secure";
   window.location.href = "/html/home.html";
 }
