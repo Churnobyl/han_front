@@ -264,3 +264,23 @@ export async function naverLogin(search) {
   }
   return { response, responseJson };
 }
+
+export async function sendSuggestApi(data) {
+  const token = localStorage.getItem("access");
+  const response = await fetch(`${BACK_BASE_URL}/suggest/`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "content-type": "application/json",
+    },
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+  if (response.status == 201) {
+    alert(
+      "퀴즈 제출에 성공했습니다.\n\n퀴즈는 관리자의 검토를 거친 뒤 적용됩니다."
+    );
+    window.location.reload();
+  } else {
+    alert("퀴즈 제출에 실패했습니다.");
+  }
+}
