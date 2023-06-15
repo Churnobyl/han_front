@@ -1,0 +1,130 @@
+.profile-container {
+    background-color: rgb(246, 246, 246);
+    padding: 5%;
+    margin-top: 10%;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 3px solid rgb(44, 44, 44);
+}
+
+.user-profile {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.user-profile img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.user-profile p {
+    margin: 40px 0;
+    font-size: 1.5rem;
+}
+
+.user-edit a {
+    font-size: 1.5rem;
+}
+
+.user-edit a:hover {
+    cursor: pointer;
+}
+
+.user-level {
+    display: flex;
+    flex-direction: column;
+    margin-top: 35px;
+}
+
+.user-level label {
+    font-size: 1.5rem;
+}
+
+.experience {
+    margin-top: 17px;
+    appearance: none;
+    padding: 12px;
+}
+  
+.experience::-webkit-progress-bar {
+    background: #dfdad6;
+    border-radius: 4px;
+    height: 35px;
+    box-sizing: content-box;
+    padding: 5px;
+}
+
+.experience::-webkit-progress-value {
+    background: #88ffb5;
+    border-radius: 4px;
+    height: 28px;
+    width: 48px;
+}
+
+.achieve-container {
+    background-color: aqua;
+    padding: 20px;
+    border: 3px solid rgb(44, 44, 44);
+    border-radius: 12px;
+    background-color: rgb(246, 246, 246);
+    margin-bottom: 16px;
+}
+
+.achieve-box {
+    display: flex;
+    margin-left: 15%;
+}
+
+.achieve-box p {
+    font-size: 1.3rem;
+    display : flex;
+    justify-content : center;
+    align-items : center;
+}
+
+.user-achieve {
+    margin-right: 50px;
+}
+
+.achieve-title {
+    width: 250px;
+    padding: 8px;
+    border: 2px solid rgb(44, 44, 44);
+    border-radius: 12px;
+    background-color: rgb(246, 246, 246);
+    font-size: 1.3rem;
+}
+
+.achieve-wear { 
+    width: 250px;
+    padding: 8px;
+    border: 2px solid rgb(44, 44, 44);
+    border-radius: 12px;
+    background-color: rgb(113, 255, 146);
+    font-size: 1.3rem;
+}
+
+.have-achieve {
+    font-size: 1.3rem;
+    text-align: center;
+}
+
+.all-achievement {
+    margin-top: 20px;
+}
+
+.achievement {
+    display: flex;
+    align-items: center;
+    margin: 6px;
+}
+
+.achievement p {
+    text-align: center;
+    display: inline-block;
+    margin-left: 25px;
+    font-size: 1.2rem;
+}

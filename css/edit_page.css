@@ -1,0 +1,40 @@
+.user-info input {
+    border: 2px solid rgb(44, 44, 44);
+    border-radius: 6px;
+    padding: 4px;
+    background-color: rgb(233, 233, 233);
+}
+
+.achieve-radio input[type="radio"] {
+    display: none;
+}
+
+.achieve-radio input[type="radio"] + span {
+    display: inline-block;
+    width: 250px;
+    padding: 8px;
+    border: 2px solid rgb(44, 44, 44);
+    border-radius: 12px;
+    background-color: rgb(246, 246, 246);
+    text-align: center;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.achieve-radio input[type="radio"]:checked + span {
+    background-color: #058331;
+    color: #ffffff;
+}
+
+.achieve-show {
+    display: flex;
+    align-items: center;
+    margin: 6px;
+}
+
+.achieve-show p {
+    text-align: center;
+    display: inline-block;
+    margin-left: 25px;
+    font-size: 1.2rem;
+}

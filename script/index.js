@@ -60,12 +60,13 @@ window.onload = () => {
   const search = window.location.search;
   console.log(search);
   if (search.includes("google")) {
-    googleLoginSend(search);
-  } else if (search.includes("state")) {
-    console.log("naver");
-    naverLoginSend(search);
-  } else {
-    kakaoLoginSend(search);
+    googleLoginSend(search)
+  }
+  else if (search.includes("state")) {
+    naverLoginSend(search)
+  }
+  else if (search.includes("code")) {
+    kakaoLoginSend(search)
   }
 };
 
