@@ -1,0 +1,121 @@
+label {
+  margin-top: 10px;
+  display: block;
+  font-size: 18px;
+}
+
+input {
+  font-size: 16px;
+  border: 2px solid #383838;
+}
+
+select {
+  padding: 5px;
+  font-size: 14px;
+  border: 2px solid #383838;
+}
+
+.select-roll {
+  width: 150px;
+  height: 28px;
+  background-size: 20px;
+  padding: 5px 30px 5px 10px;
+  border-radius: 4px;
+  outline: 0 none;
+}
+
+.select-roll option {
+  background: black;
+  color: #fff;
+  padding: 3px 0;
+}
+
+.create-room-container {
+  margin-top: 80px;
+}
+
+.create-room-title {
+  background-image: url("/img/title-paper.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 30% 100%;
+  padding-right: 15px;
+  height: 100px;
+  position: relative;
+}
+
+.title-cover {
+  margin: 0 auto;
+  padding-top: 34px;
+  display: block;
+}
+
+.title-cover > h1 {
+  font-size: 32px;
+  text-align: center;
+}
+
+.room-form {
+  margin: 0 auto;
+  padding: 20px;
+  width: 50%;
+}
+
+.write-content {
+  border: 4px solid #383838;
+  border-radius: 20px;
+  margin: 5px auto 30px;
+  width: 600px;
+  height: 500px;
+  overflow: auto;
+}
+
+#roomPassword:disabled {
+  opacity: 0.3;
+}
+
+.toggleSwitch {
+  width: 50px;
+  margin: 5px;
+  height: 20px;
+  display: block;
+  border: #383838 2px solid;
+  position: relative;
+  border-radius: 30px;
+  background-color: #fff;
+  box-shadow: 0 0 16px 3px rgba(0 0 0 / 15%);
+  cursor: pointer;
+}
+
+.toggleSwitch .toggleButton {
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  top: 50%;
+  left: 0px;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  background: #383838;
+}
+
+.toggleSwitch.active {
+  background: #383838;
+}
+
+.toggleSwitch.active .toggleButton {
+  left: calc(100% - 22px);
+  background: #f03d3d !important;
+}
+
+.toggleSwitch,
+.toggleButton {
+  transition: all 0.2s ease-in;
+}
+
+.toggleSwitch.blue.active {
+  background: #5151e5;
+}
+
+.toggleSwitch.blue .toggleButton {
+  background: #5151e5;
+}

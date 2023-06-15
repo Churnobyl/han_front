@@ -27,7 +27,17 @@ window.onload = () => {
 
       return responseJson;
     })
-    .then((data) => handleRoomClick(data));
+    .then((data) => {
+      handleRoomClick(data);
+    })
+    .then(() => {
+      document
+        .getElementById("writeButton")
+        .addEventListener(
+          "click",
+          () => (window.location.href = "/html/battle/create-room.html")
+        );
+    });
 };
 
 function handleRoomClick(data) {
@@ -78,6 +88,7 @@ function handlePasswordModal(roomNum, password) {
   });
 
   btnPassword.addEventListener("click", () => {
+    // 비공개방 체크
     if (Number(inputPassword.value) === password) {
       enterTheRoom(roomNum);
     } else if (inputPassword.value.length > 8) {

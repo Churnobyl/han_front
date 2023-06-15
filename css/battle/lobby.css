@@ -17,6 +17,7 @@ input {
   background-size: 30% 100%;
   padding-right: 15px;
   height: 100px;
+  position: relative;
 }
 
 .title-cover {
@@ -109,6 +110,10 @@ input {
   border: #383838 solid 2px;
 }
 
+button {
+  cursor: pointer;
+}
+
 #close-modal {
   margin-top: 10px;
 }
@@ -122,5 +127,23 @@ input {
 .close:focus {
   color: black;
   text-decoration: none;
+  cursor: pointer;
+}
+
+.write-container {
+  margin: 0 auto 5px;
+  width: 900px;
+  align-items: right;
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: row;
+}
+
+#writeButton {
+  font-size: 14px;
+  background-color: #383838;
+  border-radius: 10rem;
+  padding: 4px 10px;
+  color: #ebebeb;
   cursor: pointer;
 }

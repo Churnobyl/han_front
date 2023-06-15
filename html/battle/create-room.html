@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/reset.css">
+  <link rel="stylesheet" href="/css/default.css">
+  <link rel="stylesheet" href="/css/battle/create-room.css">
+  <title>한 | 한글 퀴즈 서비스</title>
+  <link rel="icon" href="/img/favicon.ico">
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="container">
+      <div class="nav" role="header">
+        <!-- 네비게이션 삽입 위치 -->
+      </div>
+      <div class="main" role="main">
+        <div class="container">
+          <div class="create-room-container">
+            <div class="create-room-title">
+              <div class="title-cover">
+                <h1>방 만들기</h1>
+              </div>
+            </div>
+            <div class="write-content">
+              <div class="room-form">
+                <form class="room">
+                  <label for="title" class="custom-label">방 제</label>
+                  <input type="text" id="title" placeholder="방 제목을 입력하세요" onfocus="this.placeholder=''"
+                    onblur="this.placeholder='1:1초보만'">
+                  <label for="category" class="custom-label">시합방식</label>
+                  <select class="select-roll" id="category">
+                    <option value="">-- 선택 --</option>
+                    <option value="A">종합</option>
+                    <option value="C">십자말풀이</option>
+                    <option value="D">단어맞추기</option>
+                  </select>
+                  <label for="maxUser" class="custom-label">최대인원</label>
+                  <select class="select-roll" id="maxUser">
+                    <option value="">-- 선택 --</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                  </select>
+                  <label for="isPrivate" class="custom-label">비공개</label>
+                  <label for="toggle" class="toggleSwitch">
+                    <span class="toggleButton"></span>
+                  </label>
+                  <label for="title" class="custom-label">비밀번호</label>
+                  <input type="text" id="roomPassword" onfocus="this.placeholder=''" disabled>
+
+                  <div class="room-btnbox">
+                    <a id="btnCreateRoom">만들기</a>
+                    <a onclick="history.go(-1)">돌아가기</a>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- What chat room would you like to enter?<br>
+          <input id="room-name-input" type="text" size="100"><br>
+          <input id="room-name-submit" type="button" value="Enter"> -->
+        </div>
+      </div>
+      <div class="footer" role="footer">
+        <!-- 푸터 삽입 위치 -->
+      </div>
+    </div>
+  </div>
+  <script src="/script/inject.js"></script>
+  <script type="module" src="/script/battle/create-room.js"></script>
+</body>
+
+</html>

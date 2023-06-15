@@ -75,6 +75,7 @@ input {
 
 .right-user {
   border: #383838 solid 3px;
+  border-radius: 5px;
 }
 
 .right-user:nth-child(1) {

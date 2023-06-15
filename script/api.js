@@ -29,13 +29,15 @@ export async function loginApi(data) {
     localStorage.setItem("access", responseJson.access);
     localStorage.setItem("refresh", responseJson.refresh);
 
-    // 쿠키 저장
-    function setCookie(name, value, days) {
-      const expirationDate = new Date();
-      expirationDate.setDate(expirationDate.getDate() + days);
-      const cookieValue = `${name}=${value}; expires=${expirationDate.toUTCString()}; path=/`;
-      document.cookie = cookieValue;
-    }
+    // // 쿠키 저장
+    // function setCookie(name, value, days) {
+    //   const expirationDate = new Date();
+    //   expirationDate.setDate(expirationDate.getDate() + days);
+    //   const cookieValue = `${name}=${value}; expires=${expirationDate.toUTCString()}; path=/`;
+    //   document.cookie = cookieValue;
+    // }
+
+    sessionStorage.setItem("session_data", responseJson.session_data);
 
     // payload 저장
     const base64Url = responseJson.access.split(".")[1];
@@ -49,7 +51,7 @@ export async function loginApi(data) {
         .join("")
     );
 
-    setCookie("access_token", responseJson.access, 1);
+    // setCookie("access_token", responseJson.access, 1);
 
     window.location.href = `${FRONT_BASE_URL}/html/home.html`;
   } else {
@@ -91,6 +93,21 @@ export async function getRoomApi() {
 export async function getRoomDetailApi(data) {
   // 방 상세정보 가져오기 api
   const response = await fetch(`${BACK_BASE_URL}/battle/game/${data}/`);
+  const responseJson = await response.json();
+  return { response, responseJson };
+}
+
+export async function makeRoomApi(data) {
+  // 방 만들기 api
+  const access_token = localStorage.getItem("access");
+  const response = await fetch(`${BACK_BASE_URL}/battle/game/`, {
+    headers: {
+      "content-type": "application/json",
+      Authorization: `Bearer ${access_token}`,
+    },
+    method: "POST",
+    body: JSON.stringify(data),
+  });
   const responseJson = await response.json();
   return { response, responseJson };
 }

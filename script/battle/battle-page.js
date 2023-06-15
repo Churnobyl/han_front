@@ -22,8 +22,16 @@ const roomData = {
   roomName: roomName,
 };
 //  + "/?token=" + access
+
+const sessionId = sessionStorage.getItem("session_data");
+
 const chatSocket = new WebSocket(
-  "ws://" + BACK_WEBSOCKET_URL + "/ws/battle/" + roomName + "/"
+  "ws://" +
+    BACK_WEBSOCKET_URL +
+    "/ws/battle/" +
+    roomName +
+    "/?sessionKey=" +
+    sessionId
 );
 
 chatSocket.onmessage = function (e) {
@@ -72,6 +80,11 @@ function sendMessage() {
 getRoomDetailApi(roomName).then(({ response, responseJson }) => {
   if (response.status === 200) {
     console.log(responseJson);
+    document.getElementById("roomId").innerText = responseJson["id"];
+    document.getElementById("roomName").innerText = responseJson["btl_title"];
+    document.getElementById("roomHost").innerText = responseJson["host_user"];
+    document.getElementById("roomCategory").innerText =
+      responseJson["btl_category"];
   } else {
     alert("웹소켓 연결에 실패했습니다.");
   }
