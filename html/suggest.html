@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/reset.css">
+  <link rel="stylesheet" href="/css/default.css">
+  <link rel="stylesheet" href="/css/suggest.css">
+  <title>한 | 한글 퀴즈 서비스</title>
+  <link rel="icon" href="/img/favicon.ico">
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="container">
+      <div class="nav" role="header">
+        <!-- 네비게이션 삽입 위치 -->
+      </div>
+      <div class="main" role="main">
+        <div class="container">
+            <div class="suggest-wrap">
+                <div class="suggest-title">
+                    <h1>📢 어떤 문제를 공유해주시나요?</h1>
+                </div>
+                <div class="suggest-container">
+                  <div class="obj-wrap">
+                    <div class="suggest-obj">
+                      <div class="obj-title">문제 ㅣ</div>
+                      <input class="obj-text" type="text" placeholder="예) 빈 칸에 들어갈 단어로 올바른 것은?">
+                    </div>
+                    <div class="suggest-obj">
+                      <div class="obj-title">문항 ㅣ</div>
+                      <input class="obj-text" type="text" placeholder="예) 평가원은 해당 문제의 ㅁㅁㅁ이 60%라고 밝혔다.">
+                    </div>
+                    <div class="suggest-obj">
+                      <div class="obj-title">설명 ㅣ</div>
+                      <input class="obj-text" type="text" placeholder="예) 앞에 받침이 있으나 ㄴ이 아니면 률을 사용합니다.">
+                    </div>
+                    <div class="suggest-obj">
+                      <div class="obj-title">정답 ㅣ</div>
+                      <input class="obj-text" type="text" placeholder="예) 적중률">
+                    </div>
+                    <div class="suggest-obj">
+                      <div class="obj-title">오답 ㅣ</div>
+                      <input class="obj-text" type="text" placeholder="예) 적중율">
+                    </div>
+                    <div class="suggest-bottom">
+                      <div id="suggest-warning">💡 제출 후 문제가 통과되면 경험치가 부여됩니다.</div>
+                      <div id="suggest-btn">제출하기</div>
+                  </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+      </div>
+      <div class="footer" role="footer">
+        <!-- 푸터 삽입 위치 -->
+      </div>
+    </div>
+  <script src="/script/inject.js"></script>
+  <script type="module" src="/script/suggest.js"></script>
+</body>
+
+</html>
