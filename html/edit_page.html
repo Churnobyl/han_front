@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/reset.css">
+  <link rel="stylesheet" href="/css/default.css">
+  <link rel="stylesheet" href="/css/mypage.css">
+  <link rel="stylesheet" href="/css/edit_page.css">
+  <title>한 | 한글 퀴즈 서비스</title>
+  <link rel="icon" href="/img/favicon.ico">
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="container">
+      <div class="nav" role="header">
+        <!-- 네비게이션 삽입 위치 -->
+      </div>
+      <div class="main" role="main">
+        <div class="container">
+          <nav>
+          </nav>
+          <section class="profile-container">
+            <!-- 프로필 -->
+            <div class="user-profile">
+                <img src="/img/page1-img.jpg" alt="profile-img">
+                <div class="user-info">
+                    <p id="userEmail">
+                        <input type="text" name="email" id="email">
+                    </p>
+                    <p id="userName"></p>
+                </div>
+                <div class="user-edit">
+                    <p><a id="profileEdit">수정하기</a></p>
+                    <p><a id="myPageMove">마이페이지 가기</a></p>
+                </div>
+            </div>
+            <div class="user-level">
+                <label for="" id="userLevel"></label>
+                <progress class="experience" id="exp" max="1000" value="500"></progress>
+            </div>
+          </section>
+          <section class="achieve-container">
+            <!-- 칭호 -->
+            <div class="achieve-box">
+                <p class="user-achieve">내 칭호</p>
+                <p class="achieve-title" id="wearAchieve"></p>
+            </div>
+            <div class="all-achievement">
+                <p class="have-achieve">보유 칭호</p>
+                <div id="userAchievement">
+                    <div class="achieve-radio" id="achieveRadio">
+                    </div>
+                </div>
+            </div>
+          </section>
+        </div>
+      </div>
+      <div class="footer" role="footer">
+        <!-- 푸터 삽입 위치 -->
+      </div>
+    </div>
+  </div>
+
+  <script src="/script/inject.js"></script>
+  <script type="module" src="/script/edit_page.js"></script>
+</body>
+
+</html>
