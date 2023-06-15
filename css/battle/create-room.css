@@ -62,6 +62,7 @@ select {
 }
 
 .write-content {
+  background-image: url("/img/bg.jpg");
   border: 4px solid #383838;
   border-radius: 20px;
   margin: 5px auto 30px;
@@ -118,4 +119,16 @@ select {
 
 .toggleSwitch.blue .toggleButton {
   background: #5151e5;
+}
+
+.room-btnbox {
+  margin-top: 16px;
+}
+
+.room-btnbox a {
+  margin: 0 6px;
+}
+
+.room-btnbox a:hover {
+  cursor: pointer;
 }
