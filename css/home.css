@@ -1,0 +1,54 @@
+.left-nav {
+    display: inline-block;
+    margin: 0;
+    position: fixed;
+    width: 15%;
+    height: 100%;
+    padding: 12px;
+    border-right: 3px solid rgba(40, 40, 40, 0.2);
+}
+
+.page-menu {
+    display: flex;
+    flex-direction: column;
+}
+
+.page-menu li {
+    margin: 12px 0;
+}
+
+.page-menu a {
+    font-size: 1.3rem;
+}
+
+.single-menu {
+    display: flex;
+    flex-direction: column;
+}
+
+.single-menu li {
+    margin: 6px;
+}
+
+.single-menu a {
+    font-size: 1.1rem;
+}
+
+.single-play:hover .single-menu {
+    height: 100px;
+    transition-duration: 0.5s;
+}
+
+.single-menu {
+    height: 0;
+    overflow: hidden;
+}
+
+.footer {
+    color: #ffffff;
+    background-color: #383838;
+    padding: 26px 16px 10px;
+    position : absolute;
+    bottom : 0;
+    width: 100%;
+  }

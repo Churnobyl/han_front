@@ -12,11 +12,11 @@ window.onload = async function loadProfile() {
     // 프로필 보여주기
     document.getElementById("userEmail").innerText = `이메일 : ${responseJson["유저"]["email"]}`;
     document.getElementById("userName").innerHTML = `별명 : <input type="text" name="username" id="username" value=${responseJson["유저"]["username"]}>`
-    document.getElementById("userLevel").innerText = `레벨 ${responseJson["유저"]["level"]} (${responseJson["유저"]["experiment"]}/${responseJson["유저"]["max_experiment"]})`;
+    document.getElementById("userLevel").innerText = `레벨 ${responseJson["정보"]["level"]} (${responseJson["정보"]["experiment"]}/${responseJson["정보"]["max_experiment"]})`;
 
     const expProgress = document.getElementById("exp");
-    expProgress.setAttribute("max", responseJson["유저"]["max_experiment"]);
-    expProgress.setAttribute("value", responseJson["유저"]["experiment"]);
+    expProgress.setAttribute("max", responseJson["정보"]["max_experiment"]);
+    expProgress.setAttribute("value", responseJson["정보"]["experiment"]);
 
     //착용 칭호 보여주기
     const wearAchieve = document.getElementById("wearAchieve")
@@ -56,7 +56,14 @@ async function handleEdit() {
 
     const username = document.getElementById("username").value;
     const achieveChecked = document.getElementById("achieveRadio");
-    const wearAchievement = achieveChecked.querySelector('input[name="wear-achievement"]:checked').value;
+    const data = {}
+    if (achieveChecked.querySelector('input[name="wear-achievement"]:checked')!==null) {
+        const wearAchievement = achieveChecked.querySelector('input[name="wear-achievement"]:checked').value;
+        data["username"] = username;
+        data["wear_achievement"] = wearAchievement
+    } else {
+        data["username"] = username;
+    }
 
     const response = await fetch(`${BACK_BASE_URL}/users/${userId}/`, {
         headers: {
@@ -64,10 +71,7 @@ async function handleEdit() {
             "content-type": "application/json",
         },
         method: "PATCH",
-        body: JSON.stringify({
-            "username":username,
-            "wear_achievement": wearAchievement
-        })
+        body: JSON.stringify(data)
     })
     const responseJson = await response.json();
     console.log(responseJson)
@@ -77,6 +81,7 @@ async function handleEdit() {
         alert(responseJson["message"])
     };
     window.location.href = `${FRONT_BASE_URL}/html/mypage.html?id=${userId}`
+
 }
 
 function handleMyPage() {

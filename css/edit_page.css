@@ -38,3 +38,13 @@
     margin-left: 25px;
     font-size: 1.2rem;
 }
+
+.drawal-btn {
+    margin-left: 12px;
+    color: rgb(250, 150, 150);
+}
+
+.pass-edit {
+    font-size: 1.2rem;
+    color: rgb(255, 20, 20);
+}
