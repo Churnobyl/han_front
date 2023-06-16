@@ -320,3 +320,32 @@ export async function sendPasswordResetApi(data) {
     );
   }
 }
+
+export async function deleteUserApi() {
+  // 토큰 디코딩해서 유저 아이디 값 찾아오기
+  const token = localStorage.getItem("access");
+
+  const payload = token.split(".")[1];
+  const decodedPayload = JSON.parse(atob(payload));
+
+  const userId = decodedPayload["user_id"];
+
+  const response = await fetch(`${BACK_BASE_URL}/users/${userId}/`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "content-type": "application/json",
+    },
+    method: "DELETE",
+    body: JSON.stringify(),
+  });
+  if (response.status == 200) {
+    alert(
+      "회원 탈퇴에 성공했습니다.\n\n지금까지 한을 이용해주셔서 감사합니다."
+    );
+    localStorage.removeItem("access");
+    localStorage.removeItem("refresh");
+    window.location.href = `${FRONT_BASE_URL}/html/`;
+  } else {
+    alert("회원 탈퇴 요청이 정상적으로 이루어지지 않았습니다.");
+  }
+}
