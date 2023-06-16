@@ -24,6 +24,7 @@ const roomData = {
 //  + "/?token=" + access
 
 const sessionId = sessionStorage.getItem("session_data");
+const token = localStorage.getItem("access");
 
 const chatSocket = new WebSocket(
   "ws://" +
@@ -31,7 +32,9 @@ const chatSocket = new WebSocket(
     "/ws/battle/" +
     roomName +
     "/?sessionKey=" +
-    sessionId
+    sessionId +
+    "&token=" +
+    token
 );
 
 chatSocket.onmessage = function (e) {
