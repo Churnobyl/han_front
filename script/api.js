@@ -301,11 +301,11 @@ export async function sendSuggestApi(data) {
 }
 
 export async function sendPasswordResetApi(data) {
-  const response = await fetch(`${BACK_BASE_URL}/reset/`, {
+  const response = await fetch(`${BACK_BASE_URL}/users/reset/`, {
     headers: {
       "content-type": "application/json",
     },
-    method: "POST",
+    method: "PUT",
     body: JSON.stringify(data),
   });
   if (response.status == 200) {
