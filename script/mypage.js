@@ -1,22 +1,43 @@
 import { FRONT_BASE_URL, BACK_BASE_URL } from "./conf.js";
 
 window.onload = async function loadProfile() {
+    const access = localStorage.getItem("access");
+    const base64Url = access.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayloadString = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map(function (c) {
+          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+        .join("")
+    );
+    const jsonPayload = JSON.parse(jsonPayloadString);
+    const userId = jsonPayload["user_id"]
+    const responseUser = await fetch(`${BACK_BASE_URL}/users/${userId}/`, {
+        method: "GET",
+    });
+    const responseUserJson = await responseUser.json();
+
     const urlParams = new URL(location.href).searchParams;
-    const userId = urlParams.get('id');
-    const response = await fetch(`${BACK_BASE_URL}/users/${userId}/`, {
+    const profileId = urlParams.get('id');
+    const response = await fetch(`${BACK_BASE_URL}/users/${profileId}/`, {
         method: "GET",
     });
     const responseJson = await response.json();
+    console.log(jsonPayload);
     console.log(responseJson);
+    console.log(responseUserJson);
 
     // 프로필 보여주기
     document.getElementById("userEmail").innerText = `이메일 : ${responseJson["유저"]["email"]}`;
     document.getElementById("userName").innerText = `별명 : ${responseJson["유저"]["username"]}`;
-    document.getElementById("userLevel").innerText = `레벨 ${responseJson["유저"]["level"]} (${responseJson["유저"]["experiment"]}/${responseJson["유저"]["max_experiment"]})`;
+    document.getElementById("userDay").innerText = `총 학습 일수 : ${responseJson["정보"]["total_study_day"]}일`;
+    document.getElementById("userLevel").innerText = `레벨 ${responseJson["정보"]["level"]} (${responseJson["정보"]["experiment"]}/${responseJson["정보"]["max_experiment"]})`;
 
     const expProgress = document.getElementById("exp");
-    expProgress.setAttribute("max", responseJson["유저"]["max_experiment"]);
-    expProgress.setAttribute("value", responseJson["유저"]["experiment"]);
+    expProgress.setAttribute("max", responseJson["정보"]["max_experiment"]);
+    expProgress.setAttribute("value", responseJson["정보"]["experiment"]);
 
     //착용 칭호 보여주기
     const wearAchieve = document.getElementById("wearAchieve")
@@ -40,12 +61,70 @@ window.onload = async function loadProfile() {
         achieveDiv.appendChild(achieveContent);
         userAchievement.appendChild(achieveDiv);
     });
+
+    // 팔로우 보여주기
+    const following = document.getElementById("following");
+    if (responseJson["유저"]["followings"].length===0) {
+        following.innerHTML = "<p>친구가 없습니다...</p>"
+    } else {
+        responseJson["유저"]["followings"].forEach(follow => {
+            const followingA = document.createElement("a");
+            followingA.setAttribute("href", `${FRONT_BASE_URL}/html/mypage.html?id=${follow["id"]}`)
+            followingA.innerText = follow["username"]
+            following.appendChild(followingA);
+
+            // 팔로우 취소버튼 노출
+            responseUserJson["유저"]["followings"].forEach(find => {
+                if (find["id"]===follow["id"]) {
+                    console.log(find)
+                    document.getElementById("followBtn").innerText = "팔로우 취소"
+                } else {
+                    document.getElementById("followBtn").innerText = "팔로우"
+                }
+                
+            })
+        })
+    }
+
+    // 수정버튼 보여주기
+    const profileEditBtn = document.getElementById("profileEditBtn")
+    if (String(jsonPayload.user_id)===profileId) {
+        profileEditBtn.style.display = "inline"
+    } else {
+        profileEditBtn.style.display = "none"
+    }
 }
 
 document.getElementById("profileEditBtn").addEventListener("click", handleEditPage);
+document.getElementById("followBtn").addEventListener("click", handleFollow);
 
 function handleEditPage() {
     const urlParams = new URL(location.href).searchParams;
-    const userId = urlParams.get('id');
-    window.location.href = `${FRONT_BASE_URL}/html/edit_page.html?id=${userId}`
+    const profileId = urlParams.get('id');
+    window.location.href = `${FRONT_BASE_URL}/html/edit_page.html?id=${profileId}`
 }
+
+function handleFollow() {
+    const urlParams = new URL(location.href).searchParams;
+    const profileId = urlParams.get('id');
+    const followBtn = document.getElementById("followBtn");
+
+    $.ajax({
+        url : `${BACK_BASE_URL}/users/follow/${profileId}/`,
+        type : "POST",
+        headers: {
+            "Authorization": `Bearer ${localStorage.getItem("access")}`,
+        },
+        success: function(data){
+            console.log(data)
+            if (data === "팔로우 취소") {
+                followBtn.innerText = "팔로우"
+            } else if (data === "팔로우 완료") {
+                followBtn.innerText = "팔로우 취소"
+            } else {
+                alert(data);
+            }
+        }
+    })
+}
+

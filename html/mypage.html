@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="/css/reset.css">
   <link rel="stylesheet" href="/css/default.css">
   <link rel="stylesheet" href="/css/mypage.css">
+  <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
   <title>한 | 한글 퀴즈 서비스</title>
   <link rel="icon" href="/img/favicon.ico">
 </head>
@@ -31,7 +32,7 @@
                     <p id="userName"></p>
                 </div>
                 <div class="user-edit">
-                    <p>총 학습일수 : 14일</p>
+                    <p id="userDay">총 학습일수 : 14일</p>
                     <p><a id="profileEditBtn">정보 수정</a></p>
                 </div>
             </div>
@@ -53,6 +54,15 @@
                 </div>
             </div>
           </section>
+          <section class="achieve-container">
+            <div class="follow-box">
+              <h4 class="user-follower">친구</h4>
+              <a id="followBtn">팔로우</a>
+            </div>
+            <div class="user-follower-box" id="following">
+
+            </div>
+          </section>
         </div>
       </div>
       <div class="footer" role="footer">
@@ -60,9 +70,9 @@
       </div>
     </div>
   </div>
-
-  <script src="/script/inject.js"></script>
-  <script type="module" src="/script/mypage.js"></script>
 </body>
+
+<script src="/script/inject.js"></script>
+<script type="module" src="/script/mypage.js"></script>
 
 </html>

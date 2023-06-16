@@ -1,3 +1,7 @@
+a:hover {
+    cursor: pointer;
+}
+
 .profile-container {
     background-color: rgb(246, 246, 246);
     padding: 5%;
@@ -127,4 +131,35 @@
     display: inline-block;
     margin-left: 25px;
     font-size: 1.2rem;
+}
+
+.user-follower {
+    font-size: 1.5rem;
+    margin-left: 25px;
+}
+
+.user-follower-box {
+    display: flex;
+    margin-top: 16px;
+    margin-left: 11px;
+}
+
+.user-follower-box a {
+    margin: 8px;
+    font-size: 1.2rem;
+    border: 2px solid rgba(0,0,0,0.2);
+    padding: 8px;
+    border-radius: 12px;
+}
+
+.follow-box {
+    display: flex;
+    justify-content: space-between;
+}
+
+.follow-box a {
+    font-size: 18px;
+    border: 2px solid;
+    border-radius: 4px;
+    padding: 8px;
 }
