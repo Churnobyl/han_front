@@ -83,6 +83,21 @@ export async function sendQuizResultApi(data) {
   });
 }
 
+export async function sendQuizReportApi(quizId, data) {
+  // 퀴즈 신고하기 api
+  const token = localStorage.getItem("access");
+  const response = await fetch(`${BACK_BASE_URL}/${quizId}/`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "content-type": "application/json",
+    },
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+  const responseJson = await response.json();
+  return responseJson;
+}
+
 export async function getRoomApi() {
   // 배틀 가져오기 api
   const response = await fetch(`${BACK_BASE_URL}/battle/game/`);

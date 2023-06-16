@@ -1,9 +1,12 @@
 import { getQuizApi } from "./api.js";
 import { sendQuizResultApi } from "./api.js";
+import { sendQuizReportApi } from "./api.js";
 
 document.getElementById("answer-button").addEventListener("click", confirmQuiz)
 document.getElementById("result-button").addEventListener("click", goResult)
-
+document.getElementById("report-button").addEventListener("click", reportModalOpen)
+document.getElementById("report-submit-button").addEventListener("click", reportSubmitBtn)
+let modal = document.querySelector('.modal');
 let quizzes
 let quizIndex=0
 let correctCount=0
@@ -90,6 +93,26 @@ async function finishQuiz(){
 
 function goResult() {
   window.location.href = "/html/quiz_result.html";
+}
+
+function reportModalOpen() {
+  modal.classList.toggle('show');
+}
+
+modal.addEventListener('click', (event) => {
+  if (event.target === modal) {
+    modal.classList.toggle('show');
+  }
+});
+
+async function reportSubmitBtn() {
+  const quiz = quizzes[quizIndex]
+  const content = document.getElementById("report-content")
+
+  const reportData = {"content":content.value}
+  const response = await sendQuizReportApi(quiz.id, reportData)
+  alert(response.message)
+  content.value = ""
 }
 
 window.onload = async function(){
