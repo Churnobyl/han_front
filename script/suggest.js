@@ -22,14 +22,11 @@ function handleSuggest() {
     return;
   }
 
-  console.log(title, content, explain, crct, wrong);
-
   const suggestData = {
     quiz: {
       title: title,
       content: content,
       explain: explain,
-      difficulty: 1,
       is_pass: false,
     },
     options: [
