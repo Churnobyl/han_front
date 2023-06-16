@@ -299,3 +299,24 @@ export async function sendSuggestApi(data) {
     alert("퀴즈 제출에 실패했습니다.");
   }
 }
+
+export async function sendPasswordResetApi(data) {
+  const response = await fetch(`${BACK_BASE_URL}/reset/`, {
+    headers: {
+      "content-type": "application/json",
+    },
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+  if (response.status == 200) {
+    alert(
+      "입력해주신 이메일로 초기화 된 비밀번호를 전송했습니다.\n\n로그인 후 반드시 비밀번호를 변경해주세요."
+    );
+
+    window.location.href = `${FRONT_BASE_URL}/html/login.html`;
+  } else {
+    alert(
+      "비밀번호 초기화 메일 전송에 실패했습니다.\n\n등록 된 유저가 맞는지 확인해주세요."
+    );
+  }
+}
