@@ -1,0 +1,90 @@
+.ranking-wrap {
+  margin: 100px auto 50px;
+  width: 1000px;
+  text-align: center;
+}
+
+.ranking-title {
+  position: relative;
+  width: 100%;
+}
+
+h1 {
+  font-size: 40px;
+}
+
+.ranking-content {
+  margin: 5px auto 30px;
+  width: 900px;
+  height: 750px;
+  background-color: #ebebeb;
+  border-radius: 15px;
+  overflow: auto;
+}
+
+.write-container {
+  margin: 0 auto 5px;
+  width: 900px;
+  margin-bottom: 15px;
+  align-items: right;
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: row;
+}
+
+#writeButton {
+  font-size: 16px;
+  background-color: #4d4949;
+  border-radius: 10rem;
+  padding: 5px 15px;
+  color: #ebebeb;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.rank,
+.user,
+.level-xp {
+  display: inline-block;
+  padding: 15px;
+}
+
+.rank {
+  width: 20%;
+}
+
+.user {
+  width: 55%;
+}
+
+.level-xp {
+  width: 20%;
+}
+
+.idx-wrap,
+.user-wrap {
+  width: 95%;
+  margin: auto;
+}
+
+.idx-wrap {
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+.idx-wrap .rank,
+.idx-wrap .user,
+.idx-wrap .level-xp {
+  font-size: 1.4rem;
+}
+
+.user-wrap .rank,
+.user-wrap .user,
+.user-wrap .level-xp {
+  font-size: 1.2rem;
+}
+
+.user-wrap {
+  margin-bottom: 10px;
+  background-color: white;
+}
