@@ -64,7 +64,7 @@ export async function loginApi(data) {
 
 export async function getQuizApi() {
   // 퀴즈 가져오기 api
-  const response = await fetch(`${BACK_BASE_URL}`);
+  const response = await fetch(`${BACK_BASE_URL}/DB/gen/`);
   const responseJson = await response.json();
 
   return responseJson;

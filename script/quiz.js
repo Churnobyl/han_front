@@ -8,23 +8,46 @@ document.getElementById("report-button").addEventListener("click", reportModalOp
 document.getElementById("report-submit-button").addEventListener("click", reportSubmitBtn)
 let modal = document.querySelector('.modal');
 let quizzes
+let quizCounts
 let quizIndex=0
 let correctCount=0
 
 async function getQuiz(){
   quizzes = await getQuizApi()
+  quizCounts = quizzes["counts"]
+  const quizzesOneOfTwo = quizzes["one_of_two"] 
+  const quizzesMeaning = quizzes["meaning"]
+  const quizzesFillInTheBlank = quizzes["fill_in_the_blank"]
+
+  quizzes = [
+    ...quizzesOneOfTwo,
+    ...quizzesMeaning,
+    ...quizzesFillInTheBlank
+  ]
 }
 
 async function showQuiz(){
+  if (quizIndex<quizCounts[0]) {
+    OneOfTwo()
+  }
+  else if (quizIndex<quizCounts[0]+quizCounts[1]) {
+    Meaning()
+  }
+  else if (quizIndex<quizCounts[0]+quizCounts[1]+quizCounts[2]) {
+    FillInTheBlank()
+  }
+}
+
+async function OneOfTwo(){
   const quiz = quizzes[quizIndex]
 
   const quizCategory = document.getElementById("quiz-category")
   const quizTitle = document.getElementById("quiz-title")
-  quizCategory.innerHTML = quiz.title+quiz.id
-  quizTitle.innerHTML = quiz.content
+  quizCategory.innerHTML = "알쏭달쏭 우리말 퀴즈"
+  quizTitle.innerHTML = `<h1>${quiz.title}</h1>`
 
-  const quizOptions = document.getElementById("quiz-options")
-  quizOptions.innerHTML = ""
+  const quizContent = document.getElementById("quiz-content")
+  quizContent.innerHTML = ""
 
   for (let i=0; i < quiz.options.length; i++){
     let optionDiv = document.createElement("div")
@@ -36,10 +59,54 @@ async function showQuiz(){
     optionH2.addEventListener("click", selectOption)
     optionDiv.append(optionH2)
     
-    quizOptions.append(optionDiv)
+    quizContent.append(optionDiv)
   }
 }
 
+async function Meaning(){
+  const quiz = quizzes[quizIndex]
+
+  const quizCategory = document.getElementById("quiz-category")
+  const quizTitle = document.getElementById("quiz-title")
+  quizCategory.innerHTML = "단어 맞추기"
+  quiz.explains.forEach(explain => {
+    quizTitle.innerHTML = `<h1>${explain.content}</h1>`
+  });
+
+  const quizContent = document.getElementById("quiz-content")
+  quizContent.innerHTML = ""
+
+  for (let i=0; i < quiz.words_list.length; i++){
+    let optionDiv = document.createElement("div")
+    optionDiv.setAttribute("class", "quiz")
+
+    let optionH2 = document.createElement("h2")
+    optionH2.setAttribute("id", i)
+    optionH2.innerText = quiz.words_list[i]
+    optionH2.addEventListener("click", selectOption)
+    optionDiv.append(optionH2)
+    
+    quizContent.append(optionDiv)
+  }
+}
+
+async function FillInTheBlank(){
+  const quiz = quizzes[quizIndex]
+  
+  const quizCategory = document.getElementById("quiz-category")
+  const quizTitle = document.getElementById("quiz-title")
+  quizCategory.innerHTML = "빈칸 채우기"
+  quizTitle.innerHTML = `<h1>${quiz.content}</h1>`
+
+  const quizContent = document.getElementById("quiz-content")
+  quizContent.innerHTML = ""
+  quiz.dict_word.examples.forEach(example => {
+    quizContent.innerHTML += `<h3>${example}</h3>`
+  });
+  quizContent.innerHTML += `
+  <input id="inputBox" type="text"></input>`
+}
+  
 function selectOption(e){
   const options = document.querySelectorAll("h2")
   options.forEach(option => {
@@ -50,28 +117,56 @@ function selectOption(e){
 
 function confirmQuiz(){
   const quiz = quizzes[quizIndex]
-  const options = document.getElementsByClassName("selected")
-  if (options.length==0) {
-    alert("정답을 골라주세요")
-    return
+  
+  if (quizIndex<quizCounts[0]) {
+    const options = document.getElementsByClassName("selected")
+    if (options.length==0) {
+      alert("정답을 골라주세요")
+      return
+    }
+    if (quiz.options[options[0].id].is_answer) {
+      alert("정답입니다"+"\n해설:"+quiz.explain)
+      correctCount++
+      quiz["solved"] = true
+    } else {
+      alert("오답입니다"+"\n해설:"+quiz.explain)
+      quiz["solved"] = false
+    }
   }
-  if (quiz.options[options[0].id].is_answer) {
-    alert("정답입니다"+"\n해설:"+quiz.explain)
-    correctCount++
-    quiz["solved"] = true
-  } else {
-    alert("오답입니다"+"\n해설:"+quiz.explain)
-    quiz["solved"] = false
+  else if (quizIndex<quizCounts[0]+quizCounts[1]) {
+    const options = document.getElementsByClassName("selected")
+    if (options.length==0) {
+      alert("정답을 골라주세요")
+      return
+    }
+    if (quiz.answer_index==options[0].id) {
+      alert("정답입니다")
+      correctCount++
+      quiz["solved"] = true
+    } else {
+      alert("오답입니다"+`\n정답은" ${quiz.word} 입니다`)
+      quiz["solved"] = false
+    }
+  }
+  else if (quizIndex<quizCounts[0]+quizCounts[1]+quizCounts[2]) {
+    const inputWord = document.getElementById("inputBox").value
+    if (inputWord==false) {
+      alert("정답을 적어주세요")
+      return
+    }
+    if (quiz.dict_word.word==inputWord) {
+      alert("정답입니다")
+      correctCount++
+      quiz["solved"] = true
+    } else {
+      alert("오답입니다"+`\n정답은" ${quiz.dict_word.word} 입니다`)
+      quiz["solved"] = false
+    }
   }
   nextStep()
 }
 
 function nextStep(){
-  const options = document.querySelectorAll("h2")
-  options.forEach(option => {
-    option.classList.remove("selected")
-  });
-
   quizIndex++
 
   const xpBar = document.getElementById("xp-bar-now")
