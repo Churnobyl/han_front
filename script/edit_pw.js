@@ -21,3 +21,17 @@ function handleEditPassword() {
     editPasswordApi(editData);
   }
 }
+
+window.onload = function () {
+  let fromBtn = false;
+  if (localStorage.getItem("btnHref") === "true") {
+    fromBtn = true;
+  }
+
+  localStorage.removeItem("btnHref");
+
+  if (!fromBtn) {
+    alert("잘못된 접근입니다.");
+    window.location.replace(`${FRONT_BASE_URL}/html/home.html`);
+  }
+};

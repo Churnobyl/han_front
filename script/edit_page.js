@@ -89,3 +89,20 @@ function handleMyPage() {
     const userId = urlParams.get('id');
     window.location.href = `${FRONT_BASE_URL}/html/mypage.html?id=${userId}`
 }
+
+document
+  .getElementsByClassName("drawal-btn")[0]
+  .addEventListener("click", goDeleteUser);
+document
+  .getElementsByClassName("pass-edit")[0]
+  .addEventListener("click", goEditPassword);
+
+function goDeleteUser() {
+  localStorage.setItem("btnHref", "true");
+  window.location.href = `${FRONT_BASE_URL}/html/delete.html`;
+}
+
+function goEditPassword() {
+    localStorage.setItem("btnHref", "true");
+  window.location.href = `${FRONT_BASE_URL}/html/edit_pw.html`;
+}
