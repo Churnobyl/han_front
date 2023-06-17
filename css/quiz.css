@@ -135,3 +135,12 @@ textarea {
 button {
   cursor: pointer;
 }
+
+input {
+  margin:0 auto;
+  width: 300px;
+  height: 35px;
+  border: 2px solid black;
+  border-radius: 3px;
+  text-align: center;
+}
