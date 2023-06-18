@@ -374,3 +374,15 @@ export async function editPasswordApi(data) {
     alert("비밀번호 변경에 실패했습니다.");
   }
 }
+
+export async function getRankingApi(data) {
+  if (!data) {
+    const response = await fetch(`${BACK_BASE_URL}/users/ranking`);
+    const responseJson = await response.json();
+    return responseJson;
+  } else {
+    const response = await fetch(`${data}`);
+    const responseJson = await response.json();
+    return responseJson;
+  }
+}
