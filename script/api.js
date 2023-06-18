@@ -349,3 +349,28 @@ export async function deleteUserApi() {
     alert("회원 탈퇴 요청이 정상적으로 이루어지지 않았습니다.");
   }
 }
+
+export async function editPasswordApi(data) {
+  // 토큰 디코딩해서 유저 아이디 값 찾아오기
+  const token = localStorage.getItem("access");
+
+  const payload = token.split(".")[1];
+  const decodedPayload = JSON.parse(atob(payload));
+
+  const userId = decodedPayload["user_id"];
+
+  const response = await fetch(`${BACK_BASE_URL}/users/${userId}/`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "content-type": "application/json",
+    },
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
+  if (response.status == 200) {
+    alert("비밀번호가 변경되었습니다.");
+    window.location.href = `${FRONT_BASE_URL}/html/mypage.html?id=${userId}`;
+  } else {
+    alert("비밀번호 변경에 실패했습니다.");
+  }
+}
