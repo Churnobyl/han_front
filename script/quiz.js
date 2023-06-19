@@ -16,21 +16,38 @@ let quizCounts;
 let quizIndex = 0;
 let correctCount = 0;
 
-function randomChoice(obj) {
-  let choicedIndex = Math.floor(Math.random() * obj.length);
-  let choicedItem = obj.splice(choicedIndex, 1);
-  return choicedItem[0];
+let quizzesOneOfTwo;
+let quizzesMeaning;
+let quizzesFillInTheBlank;
+
+const xpBar = document.getElementById("xp-bar-now");
+const xpText = document.getElementById("xp-text");
+
+const answerBtn = document.getElementById("answer-button");
+const resultBtn = document.getElementById("result-button");
+
+// query문에 따라서 다른 퀴즈에 접속가능하게 하기
+const urlParams = new URL(location.href).searchParams;
+const quizType = urlParams.get("type");
+
+async function getQuiz() {
+  if (!quizType) {
+    quizzes = await getQuizApi();
+  } else {
+    quizzes = await getQuizApi(quizType);
+  }
+  quizCounts = quizzes["counts"];
+  quizzesOneOfTwo = quizzes["one_of_two"] || [];
+  quizzesMeaning = quizzes["meaning"] || [];
+  quizzesFillInTheBlank = quizzes["fill_in_the_blank"] || [];
+
+  quizzes = [...quizzesOneOfTwo, ...quizzesMeaning, ...quizzesFillInTheBlank];
+
+  xpBar.setAttribute("style", `width: calc(9.9% * ${quizIndex})`);
+  xpText.innerText = `${quizIndex} / 10`;
 }
 
 async function showQuiz() {
-  quizzes = await getQuizApi();
-
-  quizCounts = quizzes["counts"];
-  const quizzesOneOfTwo = quizzes["one_of_two"];
-  const quizzesMeaning = quizzes["meaning"];
-  const quizzesFillInTheBlank = quizzes["fill_in_the_blank"];
-
-  quizzes = [...quizzesOneOfTwo, ...quizzesMeaning, ...quizzesFillInTheBlank];
   const sumQuiz = quizCounts.reduce((a, b) => a + b);
   let restOfQuiz = [...Array(sumQuiz).keys()];
 
@@ -95,7 +112,6 @@ async function Meaning() {
     optionH2.innerText = quiz.words_list[i];
     optionH2.addEventListener("click", selectOption);
     optionDiv.append(optionH2);
-
     quizContent.append(optionDiv);
   }
 }
@@ -114,7 +130,7 @@ async function FillInTheBlank() {
     quizContent.innerHTML += `<h3>${example}</h3>`;
   });
   quizContent.innerHTML += `
-  <input id="inputBox" type="text"></input>`;
+  <input id="inputBox" type="text" placeholder="답안 입력"></input>`;
 }
 
 function selectOption(e) {
@@ -131,15 +147,15 @@ function confirmQuiz() {
   if (quizIndex < quizCounts[0]) {
     const options = document.getElementsByClassName("selected");
     if (options.length == 0) {
-      alert("정답을 골라주세요");
+      alert("❗ 정답을 골라주세요");
       return;
     }
     if (quiz.options[options[0].id].is_answer) {
-      alert("정답입니다" + "\n해설:" + quiz.explain);
+      alert("✅ 정답입니다" + "\n\n해설:" + quiz.explain);
       correctCount++;
       quiz["solved"] = true;
     } else {
-      alert("오답입니다" + "\n해설:" + quiz.explain);
+      alert("🚫 오답입니다" + "\n\n해설:" + quiz.explain);
       quiz["solved"] = false;
     }
   } else if (quizIndex < quizCounts[0] + quizCounts[1]) {
@@ -149,11 +165,11 @@ function confirmQuiz() {
       return;
     }
     if (quiz.answer_index == options[0].id) {
-      alert("정답입니다");
+      alert("✅ 정답입니다");
       correctCount++;
       quiz["solved"] = true;
     } else {
-      alert("오답입니다" + `\n정답은" ${quiz.word} 입니다`);
+      alert("🚫 오답입니다" + `\n\n정답은" ${quiz.word} 입니다`);
       quiz["solved"] = false;
     }
   } else if (quizIndex < quizCounts[0] + quizCounts[1] + quizCounts[2]) {
@@ -163,11 +179,11 @@ function confirmQuiz() {
       return;
     }
     if (quiz.dict_word.word == inputWord) {
-      alert("정답입니다");
+      alert("✅ 정답입니다");
       correctCount++;
       quiz["solved"] = true;
     } else {
-      alert("오답입니다" + `\n정답은" ${quiz.dict_word.word} 입니다`);
+      alert("🚫 오답입니다" + `\n\n정답은 ${quiz.dict_word.word} 입니다`);
       quiz["solved"] = false;
     }
   }
@@ -179,10 +195,14 @@ function nextStep() {
 
   const xpBar = document.getElementById("xp-bar-now");
   const xpText = document.getElementById("xp-text");
+
   xpBar.setAttribute("style", `width: calc(9.9% * ${quizIndex})`);
   xpText.innerText = `${quizIndex} / 10`;
 
   if (quizIndex == quizzes.length) {
+    answerBtn.style.display = "none";
+    resultBtn.style.display = "block";
+
     finishQuiz();
   } else {
     showQuiz();
@@ -195,7 +215,7 @@ async function finishQuiz() {
 }
 
 function goResult() {
-  window.location.href = "/html/quiz_result.html";
+  window.location.replace("/html/quiz_result.html");
 }
 
 function reportModalOpen() {
@@ -217,5 +237,9 @@ async function reportSubmitBtn() {
   alert(response.message);
   content.value = "";
 }
-
-await showQuiz();
+  
+window.onload = async function () {
+  getQuiz().then(() => {showQuiz()});
+  resultBtn.style.display = "none";
+  localStorage.removeItem("correctCount");
+};
