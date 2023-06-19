@@ -12,6 +12,12 @@ let quizCounts
 let quizIndex=0
 let correctCount=0
 
+const xpBar = document.getElementById("xp-bar-now")
+const xpText = document.getElementById("xp-text")
+
+const answerBtn = document.getElementById("answer-button")
+const resultBtn = document.getElementById("result-button")
+
 async function getQuiz(){
   quizzes = await getQuizApi()
   quizCounts = quizzes["counts"]
@@ -24,6 +30,9 @@ async function getQuiz(){
     ...quizzesMeaning,
     ...quizzesFillInTheBlank
   ]
+
+  xpBar.setAttribute("style", `width: calc(9.9% * ${quizIndex})`)
+  xpText.innerText = (`${quizIndex} / 10`)
 }
 
 async function showQuiz(){
@@ -104,7 +113,7 @@ async function FillInTheBlank(){
     quizContent.innerHTML += `<h3>${example}</h3>`
   });
   quizContent.innerHTML += `
-  <input id="inputBox" type="text"></input>`
+  <input id="inputBox" type="text" placeholder="답안 입력"></input>`
 }
   
 function selectOption(e){
@@ -121,15 +130,15 @@ function confirmQuiz(){
   if (quizIndex<quizCounts[0]) {
     const options = document.getElementsByClassName("selected")
     if (options.length==0) {
-      alert("정답을 골라주세요")
+      alert("❗ 정답을 골라주세요")
       return
     }
     if (quiz.options[options[0].id].is_answer) {
-      alert("정답입니다"+"\n해설:"+quiz.explain)
+      alert("✅ 정답입니다"+"\n\n해설:"+quiz.explain)
       correctCount++
       quiz["solved"] = true
     } else {
-      alert("오답입니다"+"\n해설:"+quiz.explain)
+      alert("🚫 오답입니다"+"\n\n해설:"+quiz.explain)
       quiz["solved"] = false
     }
   }
@@ -140,11 +149,11 @@ function confirmQuiz(){
       return
     }
     if (quiz.answer_index==options[0].id) {
-      alert("정답입니다")
+      alert("✅ 정답입니다")
       correctCount++
       quiz["solved"] = true
     } else {
-      alert("오답입니다"+`\n정답은" ${quiz.word} 입니다`)
+      alert("🚫 오답입니다"+`\n\n정답은" ${quiz.word} 입니다`)
       quiz["solved"] = false
     }
   }
@@ -155,11 +164,11 @@ function confirmQuiz(){
       return
     }
     if (quiz.dict_word.word==inputWord) {
-      alert("정답입니다")
+      alert("✅ 정답입니다")
       correctCount++
       quiz["solved"] = true
     } else {
-      alert("오답입니다"+`\n정답은" ${quiz.dict_word.word} 입니다`)
+      alert("🚫 오답입니다"+`\n\n정답은" ${quiz.dict_word.word} 입니다`)
       quiz["solved"] = false
     }
   }
@@ -169,12 +178,12 @@ function confirmQuiz(){
 function nextStep(){
   quizIndex++
 
-  const xpBar = document.getElementById("xp-bar-now")
-  const xpText = document.getElementById("xp-text")
   xpBar.setAttribute("style", `width: calc(9.9% * ${quizIndex})`)
   xpText.innerText = (`${quizIndex} / 10`)
 
-  if (quizIndex==quizzes.length){
+  if (quizIndex == quizzes.length){
+    answerBtn.style.display = "none"
+    resultBtn.style.display = "block"
     finishQuiz()
   } else {
     showQuiz()
@@ -213,4 +222,5 @@ async function reportSubmitBtn() {
 window.onload = async function(){
   await getQuiz();
   await showQuiz();
+  resultBtn.style.display = "none"
 }
