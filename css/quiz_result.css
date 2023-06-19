@@ -33,29 +33,46 @@ h1 {
 }
 
 #quiz-result {
-  font-size: 1.7rem;
-}
-
-.xp-content {
-  margin: 50px auto;
-  width: 400px;
+  font-size: 1.5rem;
 }
 
 .xp-text {
   text-align: right;
 }
 
-.xp-bar {
-  height: 40px;
-  border: 2px solid #383838;
+.user-level {
+  display: flex;
+  flex-direction: column;
+  margin: 15px auto 15px;
+  padding: 20px;
+  width: 70%;
+  background-color: rgb(255, 245, 187);
 }
 
-.xp-bar-now {
-  margin-top: 2px;
-  margin-left: 2px;
-  background-color: #383838;
-  height: 32px;
-  width: calc(9.9% * 0);
+.user-level label {
+  font-size: 1.3rem;
+}
+
+.experience {
+  appearance: none;
+  padding: 10px;
+  margin-bottom: 15px;
+}
+
+.experience::-webkit-progress-bar {
+  background: white;
+  border: solid black;
+  border-radius: 10px;
+  height: 35px;
+  box-sizing: content-box;
+  padding: 5px;
+}
+
+.experience::-webkit-progress-value {
+  background: black;
+  border-radius: 4px;
+  height: 28px;
+  width: 48px;
 }
 
 button {
@@ -65,4 +82,11 @@ button {
   padding: 6px 10px;
   margin: 10px;
   cursor: pointer;
+  font-size: 1.1rem;
+}
+
+#warning-text {
+  margin: 20px auto;
+  width: 400px;
+  background-color: rgb(255, 245, 187);
 }
