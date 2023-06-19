@@ -62,9 +62,14 @@ export async function loginApi(data) {
   // return { response, responseJson };
 }
 
-export async function getQuizApi() {
+export async function getQuizApi(type) {
   // 퀴즈 가져오기 api
-  const response = await fetch(`${BACK_BASE_URL}/DB/gen/`);
+  let response;
+  if (!type) {
+    response = await fetch(`${BACK_BASE_URL}/DB/gen/`);
+  } else {
+    response = await fetch(`${BACK_BASE_URL}/DB/gen/?type=${type}`);
+  }
   const responseJson = await response.json();
 
   return responseJson;
