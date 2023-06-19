@@ -98,8 +98,8 @@ h2 {
 }
 
 .selected {
-  font-style: italic;
-  background-color: rgb(255, 241, 196);
+  background-color: #383838;
+  color: rgb(255, 255, 255);
 }
 
 .modal {

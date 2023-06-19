@@ -48,6 +48,14 @@ async function getQuiz() {
 }
 
 async function showQuiz() {
+  const sumQuiz = quizCounts.reduce((a, b) => a + b);
+  let restOfQuiz = [...Array(sumQuiz).keys()];
+
+  while (0 < restOfQuiz.length) {
+    let nextQuizIndex = randomChoice(restOfQuiz);
+    console.log(quizzes[nextQuizIndex]);
+  }
+
   if (quizIndex < quizCounts[0]) {
     OneOfTwo();
   } else if (quizIndex < quizCounts[0] + quizCounts[1]) {
@@ -104,7 +112,6 @@ async function Meaning() {
     optionH2.innerText = quiz.words_list[i];
     optionH2.addEventListener("click", selectOption);
     optionDiv.append(optionH2);
-
     quizContent.append(optionDiv);
   }
 }
@@ -186,12 +193,16 @@ function confirmQuiz() {
 function nextStep() {
   quizIndex++;
 
+  const xpBar = document.getElementById("xp-bar-now");
+  const xpText = document.getElementById("xp-text");
+
   xpBar.setAttribute("style", `width: calc(9.9% * ${quizIndex})`);
   xpText.innerText = `${quizIndex} / 10`;
 
   if (quizIndex == quizzes.length) {
     answerBtn.style.display = "none";
     resultBtn.style.display = "block";
+
     finishQuiz();
   } else {
     showQuiz();
@@ -226,10 +237,9 @@ async function reportSubmitBtn() {
   alert(response.message);
   content.value = "";
 }
-
+  
 window.onload = async function () {
-  await getQuiz();
-  await showQuiz();
+  getQuiz().then(() => {showQuiz()});
   resultBtn.style.display = "none";
   localStorage.removeItem("correctCount");
 };

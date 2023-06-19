@@ -60,13 +60,11 @@ window.onload = () => {
   const search = window.location.search;
   console.log(search);
   if (search.includes("google")) {
-    googleLoginSend(search)
-  }
-  else if (search.includes("state")) {
-    naverLoginSend(search)
-  }
-  else if (search.includes("code")) {
-    kakaoLoginSend(search)
+    googleLoginSend(search);
+  } else if (search.includes("state")) {
+    naverLoginSend(search);
+  } else if (search.includes("code")) {
+    kakaoLoginSend(search);
   }
 };
 
@@ -91,7 +89,7 @@ function goLogin() {
 }
 
 function goHome() {
-  window.location.href = "/html/";
+  window.location.href = "/";
 }
 
 function goHomePage() {
