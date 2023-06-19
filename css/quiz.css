@@ -50,7 +50,7 @@ h1 {
 }
 
 .quiz-title {
-  margin-top: 70px;
+  margin-top: 40px;
 }
 
 .quiz-content {
@@ -94,7 +94,8 @@ h2 {
 }
 
 .selected {
-  font-style: italic;
+  background-color: #383838;
+  color: rgb(255, 255, 255);
 }
 
 .modal {
@@ -137,7 +138,7 @@ button {
 }
 
 input {
-  margin:0 auto;
+  margin: 0 auto;
   width: 300px;
   height: 35px;
   border: 2px solid black;
