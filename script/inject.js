@@ -28,12 +28,12 @@ async function injectNavbar() {
     );
     const jsonPayload = JSON.parse(jsonPayloadString);
     const getUsername = jsonPayload.username;
-    const username = document.getElementById("navUserName")
-    username.setAttribute("href", `./mypage.html?id=${jsonPayload.user_id}`)
+    const username = document.getElementById("navUserName");
+    username.setAttribute("href", `./mypage.html?id=${jsonPayload.user_id}`);
     username.innerText = getUsername;
     if (
-      window.location.pathname === "/html/" ||
-      window.location.pathname === "/html/index.html"
+      window.location.pathname === "/" ||
+      window.location.pathname === "/index.html"
     ) {
       document.getElementById("menuHome").style.display = "block";
     }
@@ -101,4 +101,3 @@ function goLogout() {
     "access_token=; expires=Thu, 01 Jan 1999 00:00:10 GMT; path=/; Secure";
   window.location.href = "/html/home.html";
 }
-
