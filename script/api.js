@@ -65,12 +65,17 @@ export async function loginApi(data) {
 export async function getQuizApi(type) {
   // 퀴즈 가져오기 api
   let response;
+  let responseJson;
   if (!type) {
     response = await fetch(`${BACK_BASE_URL}/DB/gen/`);
   } else {
     response = await fetch(`${BACK_BASE_URL}/DB/gen/?type=${type}`);
   }
-  const responseJson = await response.json();
+  if (response.status === 200) {
+    responseJson = await response.json();
+  } else {
+    responseJson = response.status;
+  }
 
   return responseJson;
 }

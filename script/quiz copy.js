@@ -1,66 +1,86 @@
 import { getQuizApi, sendQuizResultApi, sendQuizReportApi } from "./api.js";
 
-// 랜덤으로 문제를 선택하는 함수
+document.getElementById("answer-button").addEventListener("click", confirmQuiz);
+document.getElementById("result-button").addEventListener("click", goResult);
+document
+  .getElementById("report-button")
+  .addEventListener("click", reportModalOpen);
+document
+  .getElementById("report-submit-button")
+  .addEventListener("click", reportSubmitBtn);
+let modal = document.querySelector(".modal");
+let quizzes;
+let quizCounts;
+let quizIndex = 0;
+let correctCount = 0;
+
+let quizzesOneOfTwo;
+let quizzesMeaning;
+let quizzesFillInTheBlank;
+
+let oneOfTwoCount = 0;
+let meaningCount = 0;
+let fillInTheBlankCount = 0;
+
+const xpBar = document.getElementById("xp-bar-now");
+const xpText = document.getElementById("xp-text");
+
+const answerBtn = document.getElementById("answer-button");
+const resultBtn = document.getElementById("result-button");
+
+// query문에 따라서 다른 퀴즈에 접속가능하게 하기
+const urlParams = new URL(location.href).searchParams;
+const quizType = urlParams.get("type");
+
 function randomChoice(obj) {
   let choicedIndex = Math.floor(Math.random() * obj.length);
   let choicedItem = obj.splice(choicedIndex, 1);
   return choicedItem[0];
 }
 
-// 퀴즈 가져오는 함수
 async function getQuiz() {
-  // query문에 따라서 다른 퀴즈에 접속가능하게 하기
-  const urlParams = new URL(location.href).searchParams;
-  const quizType = urlParams.get("type");
-  let quizzes;
-
   if (!quizType) {
     quizzes = await getQuizApi();
   } else {
     quizzes = await getQuizApi(quizType);
   }
+  quizCounts = quizzes["counts"];
+  quizzesOneOfTwo = quizzes["one_of_two"] || [];
+  quizzesMeaning = quizzes["meaning"] || [];
+  quizzesFillInTheBlank = quizzes["fill_in_the_blank"] || [];
 
-  return quizzes;
+  quizzesOneOfTwo.forEach((quiz) => (quiz.type = "one_of_two"));
+  quizzesMeaning.forEach((quiz) => (quiz.type = "meaning"));
+  quizzesFillInTheBlank.forEach((quiz) => (quiz.type = "fill_in_the_blank"));
+
+  quizzes = [...quizzesOneOfTwo, ...quizzesMeaning, ...quizzesFillInTheBlank];
+  quizzes = shuffleArray(quizzes);
+
+  xpBar.setAttribute("style", `width: calc(9.9% * ${quizIndex})`);
+  xpText.innerText = `${quizIndex} / 10`;
 }
 
-// 가져온 퀴즈를 보여주기
-async function showQuiz(quizzes) {
-  let quizProgress = 0;
+async function showQuiz() {
+  const sumQuiz = quizCounts.reduce((a, b) => a + b);
+  let restOfQuiz = [...Array(sumQuiz).keys()];
 
-  if (quizzes === Number) {
-    // 문제를 가져오는데 실패했습니다.
-  } else {
-    const quizCounts = quizzes["counts"];
-    const quizzesOneOfTwo = quizzes["one_of_two"] || [];
-    const quizzesMeaning = quizzes["meaning"] || [];
-    const quizzesFillInTheBlank = quizzes["fill_in_the_blank"] || [];
-
-    quizzes = [...quizzesOneOfTwo, ...quizzesMeaning, ...quizzesFillInTheBlank];
-    console.log(quizCounts);
-
-    const sumQuiz = quizCounts.reduce((a, b) => a + b);
-    let restOfQuiz = [...Array(sumQuiz).keys()];
-
-    while (0 < restOfQuiz.length) {
-      let nextQuizIndex = randomChoice(restOfQuiz);
-      if (nextQuizIndex < quizCounts[0]) {
-        OneOfTwo(quizzes[nextQuizIndex]);
-      } else if (nextQuizIndex < quizCounts[0] + quizCounts[1]) {
-        Meaning(quizzes[nextQuizIndex]);
-      } else if (
-        nextQuizIndex <
-        quizCounts[0] + quizCounts[1] + quizCounts[2]
-      ) {
-        FillInTheBlank(quizzes[nextQuizIndex]);
-      }
-    }
+  while (0 < restOfQuiz.length) {
+    let nextQuizIndex = randomChoice(restOfQuiz);
+    console.log(quizzes[nextQuizIndex]);
   }
 
-  xpBar.setAttribute("style", `width: calc(9.9% * ${quizProgress})`);
-  xpText.innerText = `${quizProgress} / 10`;
+  if (quizIndex < quizCounts[0]) {
+    OneOfTwo();
+  } else if (quizIndex < quizCounts[0] + quizCounts[1]) {
+    Meaning();
+  } else if (quizIndex < quizCounts[0] + quizCounts[1] + quizCounts[2]) {
+    FillInTheBlank();
+  }
 }
 
-async function OneOfTwo(quiz) {
+async function OneOfTwo() {
+  const quiz = quizzes[quizIndex];
+
   const quizCategory = document.getElementById("quiz-category");
   const quizTitle = document.getElementById("quiz-title");
   quizCategory.innerHTML = "알쏭달쏭 우리말 퀴즈";
@@ -83,7 +103,9 @@ async function OneOfTwo(quiz) {
   }
 }
 
-async function Meaning(quiz) {
+async function Meaning() {
+  const quiz = quizzes[quizIndex];
+
   const quizCategory = document.getElementById("quiz-category");
   const quizTitle = document.getElementById("quiz-title");
   quizCategory.innerHTML = "단어 맞추기";
@@ -107,7 +129,9 @@ async function Meaning(quiz) {
   }
 }
 
-async function FillInTheBlank(quiz) {
+async function FillInTheBlank() {
+  const quiz = quizzes[quizIndex];
+
   const quizCategory = document.getElementById("quiz-category");
   const quizTitle = document.getElementById("quiz-title");
   quizCategory.innerHTML = "빈칸 채우기";
@@ -132,6 +156,14 @@ function selectOption(e) {
 
 function confirmQuiz() {
   const quiz = quizzes[quizIndex];
+
+  if (quiz.type === "one_of_two") {
+    oneOfTwoCount++;
+  } else if (quiz.type === "meaning") {
+    meaningCount++;
+  } else if (quiz.type === "fill_in_the_blank") {
+    fillInTheBlankCount++;
+  }
 
   if (quizIndex < quizCounts[0]) {
     const options = document.getElementsByClassName("selected");
@@ -211,11 +243,11 @@ function reportModalOpen() {
   modal.classList.toggle("show");
 }
 
-// modal.addEventListener("click", (event) => {
-//   if (event.target === modal) {
-//     modal.classList.toggle("show");
-//   }
-// });
+modal.addEventListener("click", (event) => {
+  if (event.target === modal) {
+    modal.classList.toggle("show");
+  }
+});
 
 async function reportSubmitBtn() {
   const quiz = quizzes[quizIndex];
@@ -227,84 +259,28 @@ async function reportSubmitBtn() {
   content.value = "";
 }
 
-// 페이지 로딩될 때 불러옴
-getQuiz().then((quizzes) => {
-  showQuiz(quizzes);
-});
+function shuffleArray(array) {
+  let currentIndex = array.length,
+    temporaryValue,
+    randomIndex;
 
-// document.getElementById("answer-button").addEventListener("click", confirmQuiz);
-// document.getElementById("result-button").addEventListener("click", goResult);
-// document
-//   .getElementById("report-button")
-//   .addEventListener("click", reportModalOpen);
-// document
-//   .getElementById("report-submit-button")
-//   .addEventListener("click", reportSubmitBtn);
-// let modal = document.querySelector(".modal");
-// let quizzes;
-// let quizCounts;
-// let quizIndex = 0;
-// let correctCount = 0;
+  while (0 !== currentIndex) {
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
 
-// let quizzesOneOfTwo;
-// let quizzesMeaning;
-// let quizzesFillInTheBlank;
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
 
-// const xpBar = document.getElementById("xp-bar-now");
-// const xpText = document.getElementById("xp-text");
+  return array;
+}
 
-// const answerBtn = document.getElementById("answer-button");
-// const resultBtn = document.getElementById("result-button");
-
-// // query문에 따라서 다른 퀴즈에 접속가능하게 하기
-// const urlParams = new URL(location.href).searchParams;
-// const quizType = urlParams.get("type");
-
-// function randomChoice(obj) {
-//   let choicedIndex = Math.floor(Math.random() * obj.length);
-//   let choicedItem = obj.splice(choicedIndex, 1);
-//   return choicedItem[0];
-// }
-
-// async function getQuiz() {
-//   if (!quizType) {
-//     quizzes = await getQuizApi();
-//   } else {
-//     quizzes = await getQuizApi(quizType);
-//   }
-//   quizCounts = quizzes["counts"];
-//   quizzesOneOfTwo = quizzes["one_of_two"] || [];
-//   quizzesMeaning = quizzes["meaning"] || [];
-//   quizzesFillInTheBlank = quizzes["fill_in_the_blank"] || [];
-
-//   quizzes = [...quizzesOneOfTwo, ...quizzesMeaning, ...quizzesFillInTheBlank];
-
-//   xpBar.setAttribute("style", `width: calc(9.9% * ${quizIndex})`);
-//   xpText.innerText = `${quizIndex} / 10`;
-// }
-
-// async function showQuiz() {
-//   const sumQuiz = quizCounts.reduce((a, b) => a + b);
-//   let restOfQuiz = [...Array(sumQuiz).keys()];
-
-//   while (0 < restOfQuiz.length) {
-//     let nextQuizIndex = randomChoice(restOfQuiz);
-//     console.log(quizzes[nextQuizIndex]);
-//   }
-
-//   if (quizIndex < quizCounts[0]) {
-//     OneOfTwo();
-//   } else if (quizIndex < quizCounts[0] + quizCounts[1]) {
-//     Meaning();
-//   } else if (quizIndex < quizCounts[0] + quizCounts[1] + quizCounts[2]) {
-//     FillInTheBlank();
-//   }
-// }
-
-// window.onload = async function () {
-//   getQuiz().then(() => {
-//     showQuiz();
-//   });
-//   resultBtn.style.display = "none";
-//   localStorage.removeItem("correctCount");
-// };
+window.onload = async function () {
+  getQuiz().then(() => {
+    showQuiz();
+  });
+  resultBtn.style.display = "none";
+  localStorage.removeItem("correctCount");
+};
