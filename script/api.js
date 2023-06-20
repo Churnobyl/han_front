@@ -403,9 +403,16 @@ export async function followApi(id) {
   });
   if (response.status == 200) {
     alert("친구 추가가 완료되었습니다.");
-    window.location.reload()
-} else if (response.status == 204) {
-    alert("친구를 끊었습니다.")
-    window.location.reload()
+    window.location.reload();
+  } else if (response.status == 204) {
+    alert("친구를 끊었습니다.");
+    window.location.reload();
   }
+}
+
+export async function emailVerifyApi(uidb64, token) {
+  const response = await fetch(
+    `${BACK_BASE_URL}/users/verify/${uidb64}/${token}`
+  );
+  return response.status;
 }

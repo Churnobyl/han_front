@@ -1,0 +1,69 @@
+.activate-wrap {
+  margin: 100px auto 50px;
+  width: 1000px;
+  text-align: center;
+}
+
+.activate-title {
+  position: relative;
+  width: 100%;
+  height: 80px;
+}
+
+.activate-container {
+  position: relative;
+  width: 100%;
+  height: 450px;
+  border-radius: 10px;
+  box-shadow: 10px 10px 4px rgba(0, 0, 0, 0.2);
+  background-color: #ebebeb;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.obj-wrap {
+  background-color: white;
+  height: 90%;
+  width: 95%;
+}
+
+h1 {
+  font-size: 40px;
+  margin-top: 25px;
+}
+
+.activate-msg {
+  width: 90%;
+  margin: 50px auto 30px auto;
+  border: solid 2px;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.msg-text {
+  font-size: 1.3rem;
+}
+
+#top,
+#agree {
+  margin: 30px;
+}
+
+#message {
+  background-color: wheat;
+  margin: 5px;
+  display: inline-block;
+}
+
+#login-btn {
+  background-color: rgb(77, 76, 76);
+  color: #ebebeb;
+  width: 10%;
+  height: 40px;
+  box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.2);
+
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
