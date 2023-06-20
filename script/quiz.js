@@ -30,6 +30,12 @@ const resultBtn = document.getElementById("result-button");
 const urlParams = new URL(location.href).searchParams;
 const quizType = urlParams.get("type");
 
+function randomChoice(obj) {
+  let choicedIndex = Math.floor(Math.random() * obj.length);
+  let choicedItem = obj.splice(choicedIndex, 1);
+  return choicedItem[0];
+}
+
 async function getQuiz() {
   if (!quizType) {
     quizzes = await getQuizApi();
@@ -237,9 +243,11 @@ async function reportSubmitBtn() {
   alert(response.message);
   content.value = "";
 }
-  
+
 window.onload = async function () {
-  getQuiz().then(() => {showQuiz()});
+  getQuiz().then(() => {
+    showQuiz();
+  });
   resultBtn.style.display = "none";
   localStorage.removeItem("correctCount");
 };
