@@ -1,5 +1,3 @@
-import { googleLogin, kakaoLogin, naverLogin } from "./api.js";
-
 async function injectMainPage() {
   // 메인페이지 삽입
   for (let i = 1; i < 6; i++) {
@@ -55,29 +53,6 @@ function loadClickComponent() {
   document.querySelector(".logo").addEventListener("click", goHome);
   document.getElementById("menuHome").addEventListener("click", goHomePage);
   document.getElementById("btnLogout").addEventListener("click", goLogout);
-}
-window.onload = () => {
-  const search = window.location.search;
-  console.log(search);
-  if (search.includes("google")) {
-    googleLoginSend(search);
-  } else if (search.includes("state")) {
-    naverLoginSend(search);
-  } else if (search.includes("code")) {
-    kakaoLoginSend(search);
-  }
-};
-
-async function googleLoginSend(search) {
-  const response = await googleLogin(search);
-}
-
-async function kakaoLoginSend(search) {
-  const response = await kakaoLogin(search);
-}
-
-async function naverLoginSend(search) {
-  const response = await naverLogin(search);
 }
 
 function goQuiz() {

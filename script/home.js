@@ -1,19 +1,45 @@
 import { FRONT_BASE_URL, BACK_BASE_URL } from "./conf.js";
+import { googleLogin, kakaoLogin, naverLogin } from "./api.js";
 
-const access = localStorage.getItem("access");
-const base64Url = access.split(".")[1];
-const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-const jsonPayloadString = decodeURIComponent(
-    atob(base64)
-    .split("")
-    .map(function (c) {
-        return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-    })
-    .join("")
-);
-const jsonPayload = JSON.parse(jsonPayloadString);
+window.onload = () => {
+    const search = window.location.search;
+    console.log(search);
+    if (search.includes("google")) {
+      googleLoginSend(search)
+    }
+    else if (search.includes("state")) {
+      naverLoginSend(search)
+    }
+    else if (search.includes("code")) {
+      kakaoLoginSend(search)
+    }
+};
 
-window.onload = async function homePage() {
+async function googleLoginSend(search) {
+    const response = await googleLogin(search);
+};
+  
+async function kakaoLoginSend(search) {
+    const response = await kakaoLogin(search);
+};
+  
+async function naverLoginSend(search) {
+    const response = await naverLogin(search);
+};
+
+async function homePage() {
+    const access = localStorage.getItem("access");
+    const base64Url = access.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayloadString = decodeURIComponent(
+        atob(base64)
+        .split("")
+        .map(function (c) {
+            return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+        .join("")
+    );
+    const jsonPayload = JSON.parse(jsonPayloadString);
     const response = await fetch(`${BACK_BASE_URL}/users/${jsonPayload["user_id"]}/`, {
         method:"GET",
     })
@@ -35,6 +61,8 @@ window.onload = async function homePage() {
         userFriend.appendChild(friendP)
     })
 }
+
+homePage();
 
 document.getElementById("myPageMove").addEventListener("click", handleMoveMyPage);
 
