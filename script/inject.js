@@ -69,7 +69,7 @@ function loadComponent() {
   for (let logo of logos) {
     logo.addEventListener("click", goHome);
   }
-  document.getElementById("menuStart").addEventListener("click", goQuiz);
+  document.getElementById("menuStart").addEventListener("click", goStart);
   document.getElementById("menuLogin").addEventListener("click", goLogin);
 }
 
@@ -87,9 +87,9 @@ function goLogin() {
   window.location.href = "/html/login.html";
 }
 
-function goQuiz() {
+function goStart() {
   // 시작 퀴즈
-  window.location.href = "/html/quiz.html";
+  window.location.href = "/html/signup.html";
 }
 
 function goLogout() {
@@ -99,5 +99,5 @@ function goLogout() {
   localStorage.removeItem("payload");
   document.cookie =
     "access_token=; expires=Thu, 01 Jan 1999 00:00:10 GMT; path=/; Secure";
-  window.location.href = "/html/home.html";
+  window.location.href = "/";
 }
