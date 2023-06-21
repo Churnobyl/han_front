@@ -391,3 +391,28 @@ export async function getRankingApi(data) {
     return responseJson;
   }
 }
+
+export async function followApi(id) {
+  const token = localStorage.getItem("access");
+  const response = await fetch(`${BACK_BASE_URL}/users/follow/${id}/`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "content-type": "application/json",
+    },
+    method: "POST",
+  });
+  if (response.status == 200) {
+    alert("친구 추가가 완료되었습니다.");
+    window.location.reload();
+  } else if (response.status == 204) {
+    alert("친구를 끊었습니다.");
+    window.location.reload();
+  }
+}
+
+export async function emailVerifyApi(uidb64, token) {
+  const response = await fetch(
+    `${BACK_BASE_URL}/users/verify/${uidb64}/${token}`
+  );
+  return response.status;
+}

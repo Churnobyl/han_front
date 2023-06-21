@@ -162,3 +162,10 @@ img {
   display: flex;
   margin-bottom: 15px;
 }
+
+#spinner {
+  width: 150px;
+  height: 150px;
+  margin: 300px auto;
+  background-image: url("/img/Spinner.gif");
+}

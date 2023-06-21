@@ -1,4 +1,5 @@
 import { getRankingApi } from "./api.js";
+import { FRONT_BASE_URL } from "./conf.js";
 
 const token = localStorage.getItem("access");
 const payload = token.split(".")[1];
@@ -61,6 +62,9 @@ async function getRanking(link, e) {
       parentElement.style.display = "block";
       rank.innerText = page + i + 1;
       user.innerText = result["player"]["username"];
+      user.addEventListener("click", function () {
+        window.location.href = `${FRONT_BASE_URL}/html/mypage.html?id=${result["player"]["id"]}`;
+      });
       levelXp.innerText = `${result["level"]} (${result["experiment"]})`;
       if (result["player"]["id"] == userId) {
         parentElement.style.backgroundColor = "wheat";

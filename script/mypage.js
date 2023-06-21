@@ -1,4 +1,5 @@
 import { FRONT_BASE_URL, BACK_BASE_URL } from "./conf.js";
+import { followApi } from "./api.js";
 
 window.onload = async function loadProfile() {
     const access = localStorage.getItem("access");
@@ -61,6 +62,12 @@ window.onload = async function loadProfile() {
         achieveDiv.appendChild(achieveContent);
         userAchievement.appendChild(achieveDiv);
     });
+    // 팔로우 버튼
+
+    const followBtn = document.getElementById("followBtn")            
+    if (userId == profileId) {
+        followBtn.remove()
+    }
 
     // 팔로우 보여주기
     const following = document.getElementById("following");
@@ -72,19 +79,25 @@ window.onload = async function loadProfile() {
             followingA.setAttribute("href", `${FRONT_BASE_URL}/html/mypage.html?id=${follow["id"]}`)
             followingA.innerText = follow["username"]
             following.appendChild(followingA);
+            
+            // console.log(jsonPayload);
+            // console.log(responseJson);
+            // console.log(responseUserJson);
 
             // 팔로우 취소버튼 노출
-            responseUserJson["유저"]["followings"].forEach(find => {
-                if (find["id"]===follow["id"]) {
-                    console.log(find)
-                    document.getElementById("followBtn").innerText = "팔로우 취소"
-                } else {
-                    document.getElementById("followBtn").innerText = "팔로우"
-                }
-                
-            })
+            // userId
+            // profileId
+
         })
-    }
+    };
+    responseUserJson["유저"]["followings"].forEach(find => {
+        if (find["id"]===parseInt(profileId)) {
+            console.log(find)
+            followBtn.innerText = "친구 끊기"
+        } else {
+            followBtn.innerText = "친구 추가"
+        }  
+    });
 
     // 수정버튼 보여주기
     const profileEditBtn = document.getElementById("profileEditBtn")
@@ -104,27 +117,30 @@ function handleEditPage() {
     window.location.href = `${FRONT_BASE_URL}/html/edit_page.html?id=${profileId}`
 }
 
-function handleFollow() {
+async function handleFollow() {
     const urlParams = new URL(location.href).searchParams;
     const profileId = urlParams.get('id');
-    const followBtn = document.getElementById("followBtn");
+    // const followBtn = document.getElementById("followBtn");
 
-    $.ajax({
-        url : `${BACK_BASE_URL}/users/follow/${profileId}/`,
-        type : "POST",
-        headers: {
-            "Authorization": `Bearer ${localStorage.getItem("access")}`,
-        },
-        success: function(data){
-            console.log(data)
-            if (data === "팔로우 취소") {
-                followBtn.innerText = "팔로우"
-            } else if (data === "팔로우 완료") {
-                followBtn.innerText = "팔로우 취소"
-            } else {
-                alert(data);
-            }
-        }
-    })
+    await followApi(profileId)
+
+
+    // $.ajax({
+    //     url : `${BACK_BASE_URL}/users/follow/${profileId}/`,
+    //     type : "POST",
+    //     headers: {
+    //         "Authorization": `Bearer ${localStorage.getItem("access")}`,
+    //     },
+    //     success: function(data){
+    //         console.log(data)
+    //         if (data === "팔로우 취소") {
+    //             followBtn.innerText = "팔로우"
+    //         } else if (data === "팔로우 완료") {
+    //             followBtn.innerText = "팔로우 취소"
+    //         } else {
+    //             alert(data);
+    //         }
+    //     }
+    // })
 }
 
