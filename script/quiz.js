@@ -1,6 +1,7 @@
 import { getQuizApi } from "./api.js";
 import { sendQuizResultApi } from "./api.js";
 import { sendQuizReportApi } from "./api.js";
+import { FRONT_BASE_URL } from "./conf.js";
 
 document.getElementById("answer-button").addEventListener("click", confirmQuiz);
 document.getElementById("result-button").addEventListener("click", goResult);
@@ -10,7 +11,11 @@ document
 document
   .getElementById("report-submit-button")
   .addEventListener("click", reportSubmitBtn);
+document.getElementById("back-arrow").addEventListener("click", function() {
+  window.location.replace(`${FRONT_BASE_URL}/html/home.html`)
+});
 let modal = document.querySelector(".modal");
+let quiz
 let quizzes;
 let quizCounts;
 let quizIndex = 0;
@@ -94,7 +99,7 @@ function showQuiz() {
 }
 
 function OneOfTwo() {
-  const quiz = quizzes[quizIndex];
+  quiz = quizzes[quizIndex];
 
   const quizCategory = document.getElementById("quiz-category");
   const quizTitle = document.getElementById("quiz-title");
@@ -119,7 +124,7 @@ function OneOfTwo() {
 }
 
 function Meaning() {
-  const quiz = quizzes[quizIndex];
+  quiz = quizzes[quizIndex];
 
   const quizCategory = document.getElementById("quiz-category");
   const quizTitle = document.getElementById("quiz-title");
@@ -145,7 +150,7 @@ function Meaning() {
 }
 
 function FillInTheBlank() {
-  const quiz = quizzes[quizIndex];
+  quiz = quizzes[quizIndex];
 
   const quizCategory = document.getElementById("quiz-category");
   const quizTitle = document.getElementById("quiz-title");
@@ -509,7 +514,7 @@ function Crossword() {
       quizBase.innerHTML = responseText;
     })
     .then(() => {
-      const quiz = quizzes[quizIndex];
+      quiz = quizzes[quizIndex];
       let table = document.getElementById("crossword");
       let horizontalExplanations = document.getElementById(
         "horizontalExplanations"
@@ -536,7 +541,7 @@ function selectOption(e) {
 }
 
 function confirmQuiz() {
-  const quiz = quizzes[quizIndex];
+  quiz = quizzes[quizIndex];
 
   if (quizIndex < quizCounts[0]) {
     const options = document.getElementsByClassName("selected");
@@ -623,30 +628,15 @@ modal.addEventListener("click", (event) => {
 });
 
 async function reportSubmitBtn() {
+  console.log("quizzes")
+  console.log(quiz)
   const content = document.getElementById("report-content");
   const type = document.getElementById("quiz-category").textContent;
-  const quizTitle = document
-    .getElementById("quiz-title")
-    .querySelector("h1").textContent;
-
-  const options = document.getElementsByClassName("quiz");
-  const quizOptions = [];
-  for (let i = 0; i < options.length; i++) {
-    const option = options[i].querySelector("h2").textContent;
-    quizOptions.push(option);
-  }
-
-  const explains = Array.from(document.querySelectorAll("#quiz-content h3"));
-  const quizExplains = explains.map((explain) => explain.textContent);
 
   const reportData = {
     content: content.value,
     quiz_type: type,
-    quiz_content: {
-      title: quizTitle,
-      explain: quizExplains || "",
-      option: quizOptions || "",
-    },
+    quiz_content: quiz
   };
 
   const response = await sendQuizReportApi(reportData);
