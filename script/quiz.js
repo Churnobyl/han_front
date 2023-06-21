@@ -19,6 +19,11 @@ let correctCount = 0;
 let quizzesOneOfTwo;
 let quizzesMeaning;
 let quizzesFillInTheBlank;
+let quizzesCrossword;
+
+let activeInput = null;
+let activeLabel = null;
+let activeCellId = null;
 
 const xpBar = document.getElementById("xp-bar-now");
 const xpText = document.getElementById("xp-text");
@@ -30,11 +35,11 @@ const resultBtn = document.getElementById("result-button");
 const urlParams = new URL(location.href).searchParams;
 const quizType = urlParams.get("type");
 
-function randomChoice(obj) {
-  let choicedIndex = Math.floor(Math.random() * obj.length);
-  let choicedItem = obj.splice(choicedIndex, 1);
-  return choicedItem[0];
-}
+// function randomChoice(obj) {
+//   let choicedIndex = Math.floor(Math.random() * obj.length);
+//   let choicedItem = obj.splice(choicedIndex, 1);
+//   return choicedItem[0];
+// }
 
 async function getQuiz() {
   if (!quizType) {
@@ -42,25 +47,37 @@ async function getQuiz() {
   } else {
     quizzes = await getQuizApi(quizType);
   }
+
   quizCounts = quizzes["counts"];
   quizzesOneOfTwo = quizzes["one_of_two"] || [];
   quizzesMeaning = quizzes["meaning"] || [];
   quizzesFillInTheBlank = quizzes["fill_in_the_blank"] || [];
-
-  quizzes = [...quizzesOneOfTwo, ...quizzesMeaning, ...quizzesFillInTheBlank];
+  quizzesCrossword = quizzes["crossword_puzzle"] || undefined;
+  if (quizzesCrossword !== undefined) {
+    quizzesCrossword = await JSON.parse(quizzesCrossword);
+    quizzes = [
+      ...quizzesOneOfTwo,
+      ...quizzesMeaning,
+      ...quizzesFillInTheBlank,
+      quizzesCrossword,
+    ];
+  } else {
+    quizzes = [...quizzesOneOfTwo, ...quizzesMeaning, ...quizzesFillInTheBlank];
+  }
+  const sumQuiz = quizCounts.reduce((a, b) => a + b);
 
   xpBar.setAttribute("style", `width: calc(9.9% * ${quizIndex})`);
-  xpText.innerText = `${quizIndex} / 10`;
+  xpText.innerText = `${quizIndex} / ${sumQuiz}`;
 }
 
-async function showQuiz() {
-  const sumQuiz = quizCounts.reduce((a, b) => a + b);
-  let restOfQuiz = [...Array(sumQuiz).keys()];
+function showQuiz() {
+  // const sumQuiz = quizCounts.reduce((a, b) => a + b);
+  // let restOfQuiz = [...Array(sumQuiz).keys()];
 
-  while (0 < restOfQuiz.length) {
-    let nextQuizIndex = randomChoice(restOfQuiz);
-    console.log(quizzes[nextQuizIndex]);
-  }
+  // while (0 < restOfQuiz.length) {
+  //   let nextQuizIndex = randomChoice(restOfQuiz);
+  //   console.log(quizzes[nextQuizIndex]);
+  // }
 
   if (quizIndex < quizCounts[0]) {
     OneOfTwo();
@@ -68,10 +85,15 @@ async function showQuiz() {
     Meaning();
   } else if (quizIndex < quizCounts[0] + quizCounts[1] + quizCounts[2]) {
     FillInTheBlank();
+  } else if (
+    quizIndex <
+    quizCounts[0] + quizCounts[1] + quizCounts[2] + quizCounts[3]
+  ) {
+    Crossword();
   }
 }
 
-async function OneOfTwo() {
+function OneOfTwo() {
   const quiz = quizzes[quizIndex];
 
   const quizCategory = document.getElementById("quiz-category");
@@ -96,7 +118,7 @@ async function OneOfTwo() {
   }
 }
 
-async function Meaning() {
+function Meaning() {
   const quiz = quizzes[quizIndex];
 
   const quizCategory = document.getElementById("quiz-category");
@@ -122,7 +144,7 @@ async function Meaning() {
   }
 }
 
-async function FillInTheBlank() {
+function FillInTheBlank() {
   const quiz = quizzes[quizIndex];
 
   const quizCategory = document.getElementById("quiz-category");
@@ -137,6 +159,372 @@ async function FillInTheBlank() {
   });
   quizContent.innerHTML += `
   <input id="inputBox" type="text" placeholder="답안 입력"></input>`;
+}
+
+class CrosswordMaker {
+  constructor(quiz, table, horizontalExplanations, verticalExplanations) {
+    this.quiz = quiz;
+    this.table = table;
+    this.horizontalExplanations = horizontalExplanations;
+    this.verticalExplanations = verticalExplanations;
+
+    this.activeCellId = null;
+    this.cellNumberCounts = {};
+    this.wordInput = document.getElementById("word-input");
+    this.wordLabel = document.getElementById("word-label");
+    this.cells = {};
+    this.activeCells = [];
+    this.nowOrientation;
+    this.nowNum;
+    this.activeExplanationId = null;
+    this.checkAnswerButton = document.getElementById("checkAnswer");
+    this.preparePuzzle();
+    this.populateCells();
+    this.checkAnswer();
+    this.removeKoreanCharacters();
+  }
+
+  preparePuzzle() {
+    this.data = this.quiz.problems;
+    this.problemData = this.quiz.problem_data.sort((a, b) => {
+      return (
+        a.position[0] * 10 +
+        a.position[1] -
+        (b.position[0] * 10 + b.position[1])
+      );
+    });
+  }
+
+  populateCells() {
+    for (let i = 0; i < this.data.length; i++) {
+      let row = this.table.insertRow();
+      for (let j = 0; j < this.data[i].length; j++) {
+        let cell = row.insertCell();
+        cell.id = `cell-${i}-${j}`;
+        this.prepareCell(cell, i, j);
+      }
+    }
+  }
+
+  prepareCell(cell, i, j) {
+    let cellText = this.data[i][j] !== " " ? this.data[i][j] : "";
+    cell.innerHTML = cellText;
+    if (cellText === "") {
+      cell.classList.add("emptyCell");
+    } else {
+      cell.classList.add("hidden");
+    }
+
+    for (let k = 0; k < this.problemData.length; k++) {
+      let wordPosition = this.problemData[k].position;
+      let wordLength = this.problemData[k].word.length;
+
+      if (
+        (this.problemData[k].orientation === "right" &&
+          wordPosition[0] === i &&
+          wordPosition[1] <= j &&
+          j < wordPosition[1] + wordLength) ||
+        (this.problemData[k].orientation === "bottom" &&
+          wordPosition[1] === j &&
+          wordPosition[0] <= i &&
+          i < wordPosition[0] + wordLength)
+      ) {
+        if (!this.cells[`${i}-${j}`]) {
+          this.cells[`${i}-${j}`] = [];
+        }
+        this.cells[`${i}-${j}`].push({
+          index: k,
+          start: wordPosition,
+          orientation: this.problemData[k].orientation,
+          length: wordLength,
+          explanation: this.problemData[k].explain,
+        });
+
+        if (wordPosition[0] === i && wordPosition[1] === j) {
+          let numberElement = document.createElement("div");
+          numberElement.textContent = (k + 1).toString();
+          numberElement.classList.add("word-number");
+          numberElement.style.top =
+            (this.cellNumberCounts[`${i},${j}`] || 0) * 1.2 + "em";
+          cell.appendChild(numberElement);
+          this.cellNumberCounts[`${i},${j}`] =
+            (this.cellNumberCounts[`${i},${j}`] || 0) + 1;
+
+          let listItem = document.createElement("li");
+          listItem.textContent =
+            k + 1 + ". " + this.problemData[k].explain.slice(0, 3);
+          listItem.id = "explanation-" + (k + 1);
+          if (this.problemData[k].orientation === "right") {
+            this.horizontalExplanations.appendChild(listItem);
+          } else {
+            this.verticalExplanations.appendChild(listItem);
+          }
+        }
+
+        cell.clickListeners = [];
+
+        // this.handleCellClick(cell, i, j, k, wordPosition, wordLength);
+        if (this.cells[`${i}-${j}`]) {
+          this.cells[`${i}-${j}`].forEach((wordInfo) => {
+            this.handleCellClick(
+              cell,
+              i,
+              j,
+              wordInfo.index,
+              wordInfo.start,
+              wordInfo.length
+            );
+          });
+        }
+
+        cell.addEventListener("click", () => {
+          let listener = cell.clickListeners.shift();
+          if (listener) {
+            listener();
+            cell.clickListeners.push(listener);
+          }
+        });
+      }
+    }
+  }
+
+  handleCellClick(cell, i, j, k, wordPosition, wordLength) {
+    let hintButton = document.getElementById("giveHint");
+    let hintBox = document.querySelector(".hint-box");
+    let orientation = this.problemData[k].orientation;
+    let highlightClass =
+      orientation === "right" ? "highlightRight" : "highlightBottom";
+
+    let highlightStayClass =
+      orientation === "right" ? "highlightStayRight" : "highlightStayBottom";
+
+    let highlightExplainClass =
+      orientation === "right"
+        ? "highlightExplainHorizontal"
+        : "highlightExplainVertical";
+
+    let highlightExplainStayClass =
+      orientation === "right"
+        ? "highlightExplainStayHorizontal"
+        : "highlightExplainStayVertical";
+
+    cell.addEventListener("mouseover", () => {
+      for (let l = 0; l < wordLength; l++) {
+        let highlightCell =
+          orientation === "right"
+            ? this.table.rows[i].cells[wordPosition[1] + l]
+            : this.table.rows[wordPosition[0] + l].cells[j];
+        highlightCell.classList.add(highlightClass);
+      }
+      document
+        .getElementById("explanation-" + (k + 1))
+        .classList.add(highlightExplainClass);
+    });
+
+    cell.addEventListener("mouseout", () => {
+      for (let l = 0; l < wordLength; l++) {
+        let highlightCell =
+          orientation === "right"
+            ? this.table.rows[i].cells[wordPosition[1] + l]
+            : this.table.rows[wordPosition[0] + l].cells[j];
+        highlightCell.classList.remove(highlightClass);
+      }
+      document
+        .getElementById("explanation-" + (k + 1))
+        .classList.remove(highlightExplainClass);
+    });
+
+    cell.clickListeners.push(() => {
+      if (this.activeExplanationId) {
+        document
+          .getElementById(this.activeExplanationId)
+          .classList.remove(
+            "highlightExplainStayHorizontal",
+            "highlightExplainStayVertical"
+          );
+        this.activeExplanationId = null;
+      }
+
+      for (let l = 0; l < this.activeCells.length; l++) {
+        this.activeCells[l].classList.remove(
+          "highlightStayRight",
+          "highlightStayBottom"
+        );
+      }
+
+      hintBox.textContent = "";
+
+      this.activeCells = [];
+
+      if (this.activeCellId !== cell.id) {
+        this.wordLabel.textContent =
+          (orientation === "right" ? "가로 " : "세로 ") + (k + 1) + "번";
+
+        this.nowOrientation = orientation;
+        this.nowNum = k + 1;
+
+        this.wordInput.value = "";
+        this.wordInput.dataset.cells =
+          orientation === "right"
+            ? Array.from(
+                { length: wordLength },
+                (_, l) => `cell-${i}-${wordPosition[1] + l}`
+              )
+            : Array.from(
+                { length: wordLength },
+                (_, l) => `cell-${wordPosition[0] + l}-${j}`
+              );
+
+        this.activeCellId = cell.id;
+
+        for (let l = 0; l < wordLength; l++) {
+          let highlightCell =
+            orientation === "right"
+              ? this.table.rows[i].cells[wordPosition[1] + l]
+              : this.table.rows[wordPosition[0] + l].cells[j];
+          highlightCell.classList.add(highlightStayClass);
+          this.activeCells.push(highlightCell);
+        }
+
+        let explanationElement = document.getElementById(
+          "explanation-" + (k + 1)
+        );
+        explanationElement.classList.add(highlightExplainStayClass);
+        this.activeExplanationId = explanationElement.id;
+      } else {
+        this.wordLabel.textContent = "";
+        this.wordInput.value = "";
+        this.wordInput.dataset.cells = "";
+        this.activeCellId = null;
+
+        for (let l = 0; l < wordLength; l++) {
+          let highlightCell =
+            orientation === "right"
+              ? this.table.rows[i].cells[wordPosition[1] + l]
+              : this.table.rows[wordPosition[0] + l].cells[j];
+          highlightCell.classList.remove(highlightStayClass);
+        }
+        document
+          .getElementById("explanation-" + (k + 1))
+          .classList.remove(highlightExplainStayClass);
+      }
+
+      hintButton.addEventListener("click", () => {
+        let hint = this.problemData[k].hint;
+        hintBox.textContent = hint;
+      });
+    });
+
+    console.log(cell.clickListeners);
+
+    cell.clickListeners = cell.clickListeners.filter(
+      (listener) => listener !== this
+    );
+  }
+
+  checkAnswer() {
+    const input = document.getElementById("word-input");
+    input.addEventListener("keyup", (e) => {
+      if (e.key === 13 || e.key === "Enter") {
+        this.checkAnswerEach();
+      }
+    });
+    this.checkAnswerButton.addEventListener("click", () =>
+      this.checkAnswerEach()
+    );
+  }
+
+  checkAllAnswers() {
+    // 모든 셀 가져오기
+    let allCells = document.getElementsByTagName("td");
+
+    // 모든 셀 검사
+    for (let cell of allCells) {
+      if (
+        !cell.classList.contains("emptyCell") &&
+        cell.classList.contains("hidden")
+      ) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  checkAnswerEach() {
+    // 현재 선택된 단어의 정보 가져오기
+    let cells = this.wordInput.dataset.cells.split(",");
+    let userInput = this.wordInput.value;
+
+    // this.quiz에서 해당 단어의 정보 찾기
+    let wordInfo = this.quiz.problem_data[this.nowNum - 1];
+
+    // 사용자 입력이 정답과 일치하는지 확인
+    if (userInput === wordInfo.word) {
+      // 정답이면 각 셀에 표시
+      cells.forEach((cellId, index) => {
+        let cell = document.getElementById(cellId);
+        if (
+          cell &&
+          !Array.from(cell.childNodes).some(
+            (node) => node.nodeType === Node.TEXT_NODE
+          )
+        ) {
+          let textNode = document.createTextNode(wordInfo.word[index]);
+          cell.appendChild(textNode);
+          cell.classList.remove("hidden");
+        }
+      });
+    } else {
+      alert("틀렸습니다.");
+    }
+
+    if (this.checkAllAnswers()) {
+      alert("축하합니다! 퍼즐을 완성했습니다!");
+    }
+  }
+
+  removeKoreanCharacters() {
+    const hiddenCells = document.querySelectorAll(".hidden");
+    let koreanRegex = /[\uAC00-\uD7A3]/g;
+
+    hiddenCells.forEach((cell) => {
+      let originalHTML = cell.innerHTML;
+      let newHTML = originalHTML.replace(koreanRegex, "");
+
+      // 셀의 HTML을 새 HTML로 변경
+      cell.innerHTML = newHTML;
+    });
+  }
+}
+
+function Crossword() {
+  const quizCategory = document.getElementById("quiz-category");
+  quizCategory.innerHTML = "십자말퍼즐";
+  fetch("/html/quiz/quiz-category/crossword.html")
+    .then((response) => {
+      return response.text();
+    })
+    .then((responseText) => {
+      const quizBase = document.querySelector(".quiz-base");
+      quizBase.innerHTML = responseText;
+    })
+    .then(() => {
+      const quiz = quizzes[quizIndex];
+      let table = document.getElementById("crossword");
+      let horizontalExplanations = document.getElementById(
+        "horizontalExplanations"
+      );
+      let verticalExplanations = document.getElementById(
+        "verticalExplanations"
+      );
+
+      new CrosswordMaker(
+        quiz,
+        table,
+        horizontalExplanations,
+        verticalExplanations
+      );
+    });
 }
 
 function selectOption(e) {
