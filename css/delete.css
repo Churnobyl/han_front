@@ -41,7 +41,8 @@ h1 {
   padding: 10px;
 }
 
-.msg-text {
+.msg-text,
+#user-email {
   font-size: 1.3rem;
 }
 
@@ -50,7 +51,8 @@ h1 {
   margin: 30px;
 }
 
-#message {
+#message-1,
+#message-2 {
   background-color: wheat;
   margin: 5px;
   display: inline-block;
