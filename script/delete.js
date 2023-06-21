@@ -24,6 +24,14 @@ window.onload = function () {
 
   localStorage.removeItem("btnHref");
 
+  const token = localStorage.getItem("access");
+  const payload = token.split(".")[1];
+  const decodedPayload = JSON.parse(atob(payload));
+
+  document.getElementById(
+    "user-email"
+  ).innerText = `(${decodedPayload["email"]})`;
+
   if (!fromBtn) {
     alert("잘못된 접근입니다.");
     window.location.replace(`${FRONT_BASE_URL}/html/home.html`);

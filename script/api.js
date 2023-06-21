@@ -93,10 +93,10 @@ export async function sendQuizResultApi(data) {
   });
 }
 
-export async function sendQuizReportApi(quizId, data) {
+export async function sendQuizReportApi(data) {
   // 퀴즈 신고하기 api
   const token = localStorage.getItem("access");
-  const response = await fetch(`${BACK_BASE_URL}/${quizId}/`, {
+  const response = await fetch(`${BACK_BASE_URL}/report/`, {
     headers: {
       Authorization: `Bearer ${token}`,
       "content-type": "application/json",
@@ -354,7 +354,7 @@ export async function deleteUserApi() {
     );
     localStorage.removeItem("access");
     localStorage.removeItem("refresh");
-    window.location.href = `${FRONT_BASE_URL}/html/`;
+    window.location.href = `${FRONT_BASE_URL}`;
   } else {
     alert("회원 탈퇴 요청이 정상적으로 이루어지지 않았습니다.");
   }

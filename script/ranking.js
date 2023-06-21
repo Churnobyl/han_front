@@ -2,31 +2,41 @@ import { getRankingApi } from "./api.js";
 import { FRONT_BASE_URL } from "./conf.js";
 
 const token = localStorage.getItem("access");
-const payload = token.split(".")[1];
-const decodedPayload = JSON.parse(atob(payload));
-const userId = decodedPayload["user_id"];
+let userId;
+if (token) {
+  const payload = token.split(".")[1];
+  const decodedPayload = JSON.parse(atob(payload));
+  userId = decodedPayload["user_id"];
+}
 
 const leftArrow = document.getElementById("left-btn");
 const rightArrow = document.getElementById("right-btn");
 
 let rankingData;
 let page = 0;
+let isFetching;
 
 window.onload = function () {
   getRanking();
 };
 
 async function getRanking(link, e) {
+  // 호출 중일 경우에 추가로 호출 못하게
+  if (isFetching) {
+    return;
+  }
+  isFetching = true;
+
   //   버튼을 통해 들어왔을 경우 & 아닐 경우
   if (!link) {
     rankingData = await getRankingApi();
   } else {
+    rankingData = await getRankingApi(link);
     if (e === "p") {
       page -= 10;
     } else if (e === "n") {
       page += 10;
     }
-    rankingData = await getRankingApi(link);
   }
 
   //   받아온 데이터에서 previous, next 가 존재할 경우
@@ -75,4 +85,6 @@ async function getRanking(link, e) {
       parentElement.style.display = "none";
     }
   }
+  // 호출 끝나고 다 보여준 뒤에 false로 바꿈
+  isFetching = false;
 }

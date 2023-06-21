@@ -623,11 +623,33 @@ modal.addEventListener("click", (event) => {
 });
 
 async function reportSubmitBtn() {
-  const quiz = quizzes[quizIndex];
   const content = document.getElementById("report-content");
+  const type = document.getElementById("quiz-category").textContent;
+  const quizTitle = document
+    .getElementById("quiz-title")
+    .querySelector("h1").textContent;
 
-  const reportData = { content: content.value };
-  const response = await sendQuizReportApi(quiz.id, reportData);
+  const options = document.getElementsByClassName("quiz");
+  const quizOptions = [];
+  for (let i = 0; i < options.length; i++) {
+    const option = options[i].querySelector("h2").textContent;
+    quizOptions.push(option);
+  }
+
+  const explains = Array.from(document.querySelectorAll("#quiz-content h3"));
+  const quizExplains = explains.map((explain) => explain.textContent);
+
+  const reportData = {
+    content: content.value,
+    quiz_type: type,
+    quiz_content: {
+      title: quizTitle,
+      explain: quizExplains || "",
+      option: quizOptions || "",
+    },
+  };
+
+  const response = await sendQuizReportApi(reportData);
   alert(response.message);
   content.value = "";
 }

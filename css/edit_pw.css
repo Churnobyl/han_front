@@ -9,6 +9,11 @@ h2 {
   text-align: center;
 }
 
+.waring-msg {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
 .password {
   margin-top: 20px;
 }
