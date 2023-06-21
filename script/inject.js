@@ -1,3 +1,5 @@
+const FRONT_BASE_URL = "http://127.0.0.1:5500";
+
 async function injectNavbar() {
   // 네비게이션 바 삽입
   const navbarHtml = await fetch("/html/nav.html");
@@ -29,7 +31,7 @@ async function injectNavbar() {
     const jsonPayload = JSON.parse(jsonPayloadString);
     const getUsername = jsonPayload.username;
     const username = document.getElementById("navUserName");
-    username.setAttribute("href", `./mypage.html?id=${jsonPayload.user_id}`);
+    username.setAttribute("href", `${FRONT_BASE_URL}/html/mypage.html?id=${jsonPayload.user_id}`);
     username.innerText = getUsername;
     if (
       window.location.pathname === "/" ||
@@ -76,9 +78,9 @@ function loadComponent() {
 function goHome() {
   // 홈으로
   if (window.location.pathname === "/html/") {
-    window.location.href = "/html/";
+    window.location.href = `${FRONT_BASE_URL}/html/`;
   } else {
-    window.location.href = "/html/home.html";
+    window.location.href = `${FRONT_BASE_URL}/html/home.html`;
   }
 }
 
@@ -88,7 +90,7 @@ function goLogin() {
 }
 
 function goStart() {
-  // 시작 퀴즈
+  // 시작
   window.location.href = "/html/signup.html";
 }
 
