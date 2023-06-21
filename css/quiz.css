@@ -162,3 +162,145 @@ input {
   margin-bottom: 10px;
   font-size: 1.3rem;
 }
+
+.crossword-base {
+  margin: 0 auto;
+  width: 90%;
+  display: flex;
+}
+
+table {
+  margin: 1rem;
+  border-collapse: collapse;
+}
+
+td {
+  width: 3em;
+  height: 3em;
+  line-height: 3em;
+  text-align: center;
+  border: 1px solid #c7c7c7;
+  vertical-align: middle;
+  position: relative;
+  overflow: hidden;
+}
+
+td.emptyCell {
+  background-color: rgb(146, 146, 146);
+}
+
+.hiddenText {
+  visibility: hidden;
+}
+
+.crossword-input {
+  width: 50%;
+}
+
+.crossword-explain {
+  display: grid;
+  width: 90%;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.crossword-explain h3 {
+  font-size: 24px;
+  color: #000000;
+  margin: 10px;
+}
+
+.crossword-explain li {
+  list-style-type: none;
+  list-style: none;
+  margin-bottom: 5px;
+  font-size: 16px;
+  color: #383838;
+}
+
+/* #horizontalExplanations {
+  margin-bottom: 20px;
+} */
+
+.word-number {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 0.7em;
+  color: rgb(231, 0, 0);
+  line-height: 1em;
+}
+
+.highlightRight {
+  background-color: rgb(255, 255, 78);
+}
+
+.highlightBottom {
+  background-color: rgb(138, 138, 255);
+}
+
+.highlightStayRight {
+  background-color: rgb(255, 255, 78);
+}
+
+.highlightStayBottom {
+  background-color: rgb(138, 138, 255);
+}
+
+li.highlightExplainHorizontal {
+  background-color: rgb(255, 255, 78);
+}
+li.highlightExplainVertical {
+  background-color: rgb(138, 138, 255);
+}
+
+li.highlightExplainStayHorizontal {
+  background-color: rgb(255, 255, 78);
+}
+li.highlightExplainStayVertical {
+  background-color: rgb(138, 138, 255);
+}
+
+.btn-box {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+}
+
+.btn-box > .btn {
+  cursor: pointer;
+  margin-right: 20px;
+  font-size: 20px;
+  color: #f9f9f9;
+  background-color: #383838;
+  border-radius: 10rem;
+  padding: 2px 10px;
+}
+
+.hint-box {
+  display: flex;
+  font-size: 30px;
+  margin: 20px auto;
+  justify-content: center;
+  flex-direction: row;
+}
+
+.hint-text {
+  font-size: 24px;
+  width: 150px;
+  height: 100px;
+  line-height: 100px;
+  border: #383838 solid 2px;
+}
+
+.hint {
+  font-size: 30px;
+  width: 200px;
+  height: 100px;
+  line-height: 100px;
+  border: #383838 solid 2px;
+}

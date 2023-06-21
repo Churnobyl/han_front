@@ -73,8 +73,8 @@ export async function getQuizApi(type) {
   }
   if (response.status === 200) {
     responseJson = await response.json();
-  } else {
-    responseJson = response.status;
+  } else if (response.status === 500) {
+    window.location.reload();
   }
 
   return responseJson;
