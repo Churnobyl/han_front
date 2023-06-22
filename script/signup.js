@@ -1,5 +1,5 @@
 import { signupApi } from "./api.js";
-import { FRONT_BASE_URL } from "./conf.js";
+import { FRONT_BASE_URL, BACK_BASE_URL } from "./conf.js";
 // import { googleApi } from "./api.js";
 
 /* 로그인한 유저 메인화면으로 이동 */
@@ -51,4 +51,20 @@ function handleSignup() {
       }
     });
   }
+}
+
+document.getElementById("btnGoogleSignup").addEventListener("click", handleGoogleSignup);
+document.getElementById("btnKakaoSignup").addEventListener("click", handleKakaoSignup);
+document.getElementById("btnNaverSignup").addEventListener("click", handleNaverSignup);
+
+function handleGoogleSignup() {
+  window.location.href = BACK_BASE_URL + "/users/google/login/"
+}
+
+function handleKakaoSignup() {
+  window.location.href = BACK_BASE_URL + "/users/kakao/login/"
+}
+
+function handleNaverSignup() {
+  window.location.href = BACK_BASE_URL + "/users/naver/login/"
 }

@@ -75,6 +75,5 @@ function goLogout() {
   // 로그아웃
   localStorage.removeItem("access");
   localStorage.removeItem("refresh");
-  localStorage.removeItem("payload");
   window.location.href = "/html/home.html";
 }

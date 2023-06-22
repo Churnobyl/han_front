@@ -26,9 +26,6 @@ window.onload = async function loadProfile() {
         method: "GET",
     });
     const responseJson = await response.json();
-    console.log(jsonPayload);
-    console.log(responseJson);
-    console.log(responseUserJson);
 
     // 프로필 보여주기
     document.getElementById("userEmail").innerText = `이메일 : ${responseJson["유저"]["email"]}`;
@@ -79,17 +76,9 @@ window.onload = async function loadProfile() {
             followingA.setAttribute("href", `${FRONT_BASE_URL}/html/mypage.html?id=${follow["id"]}`)
             followingA.innerText = follow["username"]
             following.appendChild(followingA);
-            
-            // console.log(jsonPayload);
-            // console.log(responseJson);
-            // console.log(responseUserJson);
-
-            // 팔로우 취소버튼 노출
-            // userId
-            // profileId
-
         })
     };
+    // 팔로우되어 있는지 찾기
     responseUserJson["유저"]["followings"].forEach(find => {
         if (find["id"]===parseInt(profileId)) {
             console.log(find)

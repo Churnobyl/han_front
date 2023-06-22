@@ -39,18 +39,6 @@ export async function loginApi(data) {
 
     sessionStorage.setItem("session_data", responseJson.session_data);
 
-    // payload 저장
-    const base64Url = responseJson.access.split(".")[1];
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split("")
-        .map(function (c) {
-          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-        })
-        .join("")
-    );
-
     // setCookie("access_token", responseJson.access, 1);
 
     window.location.href = `${FRONT_BASE_URL}/html/home.html`;
@@ -168,21 +156,9 @@ export async function googleLogin(search) {
     localStorage.setItem("refresh", responseJsonGoogle.refresh);
     setCookie("access_token", responseJsonGoogle.access, 1);
 
-    // payload 저장
-    const base64Url = responseJsonGoogle.access.split(".")[1];
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split("")
-        .map(function (c) {
-          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-        })
-        .join("")
-    );
-    localStorage.setItem("payload", jsonPayload);
     window.location.href = `${FRONT_BASE_URL}/html/home.html`;
   } else {
-    alert("소셜 로그인에 실패했습니다.");
+    alert(responseJsonGoogle.message);
   }
   return { response, responseJson };
 }
@@ -219,21 +195,9 @@ export async function kakaoLogin(search) {
     localStorage.setItem("refresh", responseJsonKakao.refresh);
     setCookie("access_token", responseJsonKakao.access, 1);
 
-    // payload 저장
-    const base64Url = responseJsonKakao.access.split(".")[1];
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split("")
-        .map(function (c) {
-          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-        })
-        .join("")
-    );
-    localStorage.setItem("payload", jsonPayload);
     window.location.href = `${FRONT_BASE_URL}/html/home.html`;
   } else {
-    alert("소셜 로그인에 실패했습니다.");
+    alert(responseJsonKakao.message);
   }
   return { response, responseJson };
 }
@@ -270,22 +234,9 @@ export async function naverLogin(search) {
     localStorage.setItem("refresh", responseJsonNaver.refresh);
     setCookie("access_token", responseJsonNaver.access, 1);
 
-    // payload 저장
-    const base64Url = responseJsonNaver.access.split(".")[1];
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split("")
-        .map(function (c) {
-          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-        })
-        .join("")
-    );
-    localStorage.setItem("payload", jsonPayload);
-
     window.location.href = `${FRONT_BASE_URL}/html/home.html`;
   } else {
-    alert("소셜 로그인에 실패했습니다.");
+    alert(responseJsonNaver.message);
   }
   return { response, responseJson };
 }
@@ -354,7 +305,7 @@ export async function deleteUserApi() {
     );
     localStorage.removeItem("access");
     localStorage.removeItem("refresh");
-    window.location.href = `${FRONT_BASE_URL}`;
+    window.location.href = `${FRONT_BASE_URL}`; 
   } else {
     alert("회원 탈퇴 요청이 정상적으로 이루어지지 않았습니다.");
   }
