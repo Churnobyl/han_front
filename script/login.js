@@ -1,11 +1,11 @@
 import { loginApi } from "./api.js";
-import { FRONT_BASE_URL } from "./conf.js";
+import { FRONT_BASE_URL, BACK_BASE_URL } from "./conf.js";
 
 /* 로그인한 유저 메인화면으로 이동 */
-const payload = localStorage.getItem("payload");
-const payloadParse = JSON.parse(payload);
+const access = localStorage.getItem("access");
+const accessParse = JSON.parse(access);
 
-if (payloadParse != null) {
+if (accessParse != null) {
   window.location.href = `${FRONT_BASE_URL}/html/home.html`;
 }
 /* 로그인한 유저 메인화면으로 이동 end */
@@ -33,4 +33,20 @@ function handleLogin() {
   };
 
   loginApi(loginData);
+}
+
+document.getElementById("btnGoogleLogin").addEventListener("click", handleGoogleLogin);
+document.getElementById("btnKakaoLogin").addEventListener("click", handleKakaoLogin);
+document.getElementById("btnNaverLogin").addEventListener("click", handleNaverLogin);
+
+function handleGoogleLogin() {
+  window.location.href = BACK_BASE_URL + "/users/google/login/"
+}
+
+function handleKakaoLogin() {
+  window.location.href = BACK_BASE_URL + "/users/kakao/login/"
+}
+
+function handleNaverLogin() {
+  window.location.href = BACK_BASE_URL + "/users/naver/login/"
 }
