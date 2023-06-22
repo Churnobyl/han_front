@@ -1,17 +1,16 @@
 label {
-  margin-top: 10px;
+  margin-top: 15px;
   display: block;
-  font-size: 18px;
+  font-size: 1.3rem
 }
 
 input {
-  font-size: 16px;
   border: 2px solid #383838;
+  padding: 3px 5px;
 }
 
 select {
   padding: 5px;
-  font-size: 14px;
   border: 2px solid #383838;
 }
 
@@ -127,8 +126,10 @@ select {
 
 .room-btnbox a {
   margin: 0 6px;
+  font-size: 1.1rem;
 }
 
 .room-btnbox a:hover {
   cursor: pointer;
+  color: red;
 }
