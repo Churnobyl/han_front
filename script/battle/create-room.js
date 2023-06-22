@@ -41,7 +41,8 @@ function handleMakeRoom() {
 
   makeRoomApi(roomData).then(({ response, responseJson }) => {
     if (response.status === 201) {
-      window.location.href = "/html/battle/lobby.html";
+      alert("새로운 방이 생성됐습니다");
+      window.location.href = `/html/battle/battle-page.html?room=${responseJson}`;
     } else if (response.status === 500) {
       alert("이미 생성된 방이 있습니다");
     } else if (response.status === 400) {
