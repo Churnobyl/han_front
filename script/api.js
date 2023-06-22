@@ -71,7 +71,7 @@ export async function getQuizApi(type) {
 export async function sendQuizResultApi(data) {
   // 퀴즈 결과보내기 api
   const token = localStorage.getItem("access");
-  const response = await fetch(`${BACK_BASE_URL}`, {
+  const response = await fetch(`${BACK_BASE_URL}/result/`, {
     headers: {
       Authorization: `Bearer ${token}`,
       "content-type": "application/json",
