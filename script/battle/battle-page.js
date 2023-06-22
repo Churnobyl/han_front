@@ -1,6 +1,13 @@
 import { getRoomDetailApi } from "/script/api.js";
 import { BACK_WEBSOCKET_URL } from "/script/conf.js";
 
+// 버튼 이벤트리스너 모음
+document
+  .getElementById("quit-btn")
+  .addEventListener("click", function() { 
+    window.location.replace("/html/battle/lobby.html")
+  });
+
 /* 웹소켓 관련 */
 const urlParams = new URLSearchParams(window.location.search);
 const roomName = urlParams.get("room");
@@ -25,6 +32,11 @@ const roomData = {
 
 const sessionId = sessionStorage.getItem("session_data");
 const token = localStorage.getItem("access");
+
+const payload = token.split(".")[1];
+const decodedPayload = JSON.parse(atob(payload));
+const userId = decodedPayload["user_id"];
+
 
 const chatSocket = new WebSocket(
   "ws://" +
@@ -83,11 +95,51 @@ function sendMessage() {
 getRoomDetailApi(roomName).then(({ response, responseJson }) => {
   if (response.status === 200) {
     console.log(responseJson);
-    document.getElementById("roomId").innerText = responseJson["id"];
+    // 방 정보
+    document.getElementById("roomId").innerText = `[ ${responseJson["id"]} ]`;
     document.getElementById("roomName").innerText = responseJson["btl_title"];
     document.getElementById("roomHost").innerText = responseJson["host_user"];
     document.getElementById("roomCategory").innerText =
       responseJson["btl_category"];
+
+    // 유저 정보
+    const onUsers = responseJson["participant_list"];
+    const maxUsers = responseJson["max_users"]
+    for (let i = maxUsers + 1; i <= 4; i++) {
+      let userBox = document.getElementById(`user-box-${i}`)
+      userBox.style = "visibility: hidden;"
+    }
+    let i = 1;
+    let hostUser
+    onUsers.forEach((user) => {
+      let userBox = document.getElementById(`user-box-${i}`);
+      console.log(userBox);
+      let img
+      if (user["participant"]["image"]){
+        img = user["participant"]["image"]
+      } else {
+        img = "/img/page1-img.jpg"
+      }
+      userBox.querySelector(".profile-container img").src =
+        img;
+      const isHost = user["is_host"]
+      if (isHost) {
+        document.getElementById("is-host").src = "/img/fake/crown.png"
+        hostUser = user["participant"]["id"]
+      }
+      const nickname = user["participant"]["username"];
+      const username = document.getElementById("username")
+      username.innerText = nickname;
+      username.addEventListener("click", function() {
+        window.location.replace(`/html/mypage.html?id=${user["participant"]["id"]}`)
+      })
+      i++;
+    });
+    if (userId == hostUser){
+      document.getElementById("ready").style = "display: none;"
+    } else {
+      document.getElementById("start").style = "display: none;"
+    }
   } else {
     alert("웹소켓 연결에 실패했습니다.");
   }

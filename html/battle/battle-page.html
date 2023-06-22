@@ -24,31 +24,31 @@
             <div class="main-grid">
               <div class="grid-item">
                 <div class="left-user-table">
-                  <div class="left-user">
+                  <div class="left-user" id="user-box-1">
                     <div class="profile-container">
-                      <img src="/img/fake/shin.jpg">
+                      <img id="profile-image">
                     </div>
                     <div class="profile-info">
                       <div class="username-container">
-                        <span class="user-achieve"><img src="/img/fake/crown.png"></span>
-                        <span>김치왕감자</span>
+                        <span class="user-achieve"><img id="is-host"></span>
+                        <span id="username"></span>
                       </div>
                     </div>
                   </div>
-                  <div class="left-user">
+                  <div class="left-user" id="user-box-3">
                     <div class="profile-container">
-                      <img src="/img/fake/shin.jpg">
+                      <img id="profile-image">
                     </div>
                     <div class="profile-info">
                       <div class="username-container">
-                        <span class="user-achieve"><img src="/img/fake/crown.png"></span>
-                        <span>김치왕감자</span>
+                        <span class="user-achieve"><img id="is-host"></span>
+                        <span id="username"></span>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="grid-item">
+              <div class="grid-item" id="main-box">
                 <div class="room-info">
                   <div class="room-title-container">
                     <span id="roomId">방 번호</span>
@@ -57,38 +57,49 @@
                   <div class="room-info-container">
                     <span id="roomHost">방장</span>
                     <span id="roomCategory">방 종류</span>
-
                   </div>
-
-
                 </div>
                 <div class="main-component">
-
+                  <div class="quiz-title">문제 : <span id="title">다음 칸에 들어갈 단어로 옳은 것은?</span></div>
+                  <div class="quiz-content">
+                    <div>[보기]</div>
+                    <div>특별한 신분이나 지위를 가지고 있지 않고 있는 보통 사람.</div>
+                    <div>연예인과 ㅁㅁㅁ A씨가 교제를 시작했다.</div>
+                    <div>ㅁㅁㅁ 신분으로 경찰에 출석했다.</div>
+                  </div>
+                  <div class="quiz-answer">정답 : <span id="answer">일반인</span></div>
                 </div>
               </div>
               <div class="grid-item">
                 <div class="right-user-table">
-                  <div class="right-user">
+                  <div class="right-user" id="user-box-2">
                     <div class="profile-container">
-                      <img src="/img/fake/shin.jpg">
+                      <img id="profile-image">
                     </div>
                     <div class="profile-info">
                       <div class="username-container">
-                        <span class="user-achieve"><img src="/img/fake/crown.png"></span>
-                        <span>김치왕감자</span>
+                        <span class="user-achieve"><img id="is-host"></span>
+                        <span id="username"></span>
                       </div>
                     </div>
                   </div>
-                  <div class="right-user">
+                  <div class="right-user" id="user-box-4">
                     <div class="profile-container">
-                      <img src="/img/fake/shin.jpg">
+                      <img id="profile-image">
                     </div>
                     <div class="profile-info">
                       <div class="username-container">
-                        <span class="user-achieve"><img src="/img/fake/crown.png"></span>
-                        <span>김치왕감자</span>
+                        <span class="user-achieve"><img id="is-host"></span>
+                        <span id="username"></span>
                       </div>
                     </div>
+                  </div>
+                  <div id="button-wrap">
+                    <button id="start">시작하기</button>
+                    <button id="ready">준비하기</button>
+                  </div>
+                  <div id="quit-btn">
+                    <button>나가기</button>
                   </div>
                 </div>
               </div>
@@ -96,7 +107,7 @@
                 <div class="chat-component">
                   <textarea id="chat-log" readonly></textarea><br>
                   <input id="chat-message-input" type="text"><br>
-                  <input id="chat-message-submit" type="button" value="Send">
+                  <input id="chat-message-submit" type="button" value="보내기">
                 </div>
               </div>
             </div>
