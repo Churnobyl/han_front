@@ -150,6 +150,7 @@ function FillInTheBlank() {
   });
   quizContent.innerHTML += `
   <input id="inputBox" type="text" placeholder="답안 입력"></input>`;
+  document.getElementById("inputBox").focus();
 }
 
 class CrosswordMaker {
@@ -596,6 +597,19 @@ function nextStep() {
     finishQuiz();
   } else {
     showQuiz();
+    const inputBoxTag = document.getElementById("inputBox")
+      ? document.getElementById("inputBox")
+      : null;
+
+    console.log(inputBoxTag);
+
+    if (inputBoxTag !== null) {
+      inputBoxTag.addEventListener("keyup", (e) => {
+        if (e.key === 13 || e.key === "Enter") {
+          confirmQuiz();
+        }
+      });
+    }
   }
 }
 

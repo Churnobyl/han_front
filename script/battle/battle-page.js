@@ -34,7 +34,10 @@ const token = localStorage.getItem("access");
 const nowPage = window.location.pathname;
 const pageSplit = nowPage.split("/");
 const pageName = pageSplit[pageSplit.length - 1].split(".")[0];
-console.log(pageName);
+
+const payload = token.split(".")[1];
+const decodedPayload = JSON.parse(atob(payload));
+const userId = decodedPayload["user_id"];
 
 const chatSocket = new WebSocket(
   "ws://" +

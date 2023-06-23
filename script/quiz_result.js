@@ -1,4 +1,7 @@
+import { checkAnonymous } from "./api.js";
 import { FRONT_BASE_URL, BACK_BASE_URL } from "./conf.js";
+
+checkAnonymous();
 
 // access token에서 유저 닉네임 받아오기
 const token = localStorage.getItem("access");

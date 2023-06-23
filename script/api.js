@@ -306,7 +306,7 @@ export async function deleteUserApi() {
     );
     localStorage.removeItem("access");
     localStorage.removeItem("refresh");
-    window.location.href = `${FRONT_BASE_URL}`; 
+    window.location.href = `${FRONT_BASE_URL}`;
   } else {
     alert("회원 탈퇴 요청이 정상적으로 이루어지지 않았습니다.");
   }

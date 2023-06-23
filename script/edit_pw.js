@@ -1,4 +1,4 @@
-import { editPasswordApi } from "./api.js";
+import { editPasswordApi, checkAnonymous } from "./api.js";
 import { FRONT_BASE_URL } from "./conf.js";
 
 checkAnonymous();

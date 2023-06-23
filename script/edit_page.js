@@ -1,4 +1,5 @@
-import { FRONT_BASE_URL, BACK_BASE_URL, checkAnonymous } from "./conf.js";
+import { FRONT_BASE_URL, BACK_BASE_URL } from "./conf.js";
+import { checkAnonymous } from "./api.js";
 
 checkAnonymous();
 
@@ -9,7 +10,6 @@ window.onload = async function loadProfile() {
     method: "GET",
   });
   const responseJson = await response.json();
-  console.log(responseJson);
 
   // 프로필 보여주기
   document.getElementById(
