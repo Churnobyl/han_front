@@ -1,4 +1,6 @@
-import { makeRoomApi } from "/script/api.js";
+import { makeRoomApi, checkAnonymous } from "/script/api.js";
+
+checkAnonymous();
 
 const inputs = document.querySelectorAll("input");
 for (let input of inputs) {

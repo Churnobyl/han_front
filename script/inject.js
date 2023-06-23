@@ -29,7 +29,10 @@ async function injectNavbar() {
     const jsonPayload = JSON.parse(jsonPayloadString);
     const getUsername = jsonPayload.username;
     const username = document.getElementById("navUserName");
-    username.setAttribute("href", `/html/mypage.html?id=${jsonPayload.user_id}`);
+    username.setAttribute(
+      "href",
+      `/html/mypage.html?id=${jsonPayload.user_id}`
+    );
     username.innerText = getUsername;
     if (
       window.location.pathname === "/" ||
@@ -60,7 +63,11 @@ async function injectFooter() {
 }
 
 // 네비바, 푸터 전부 불러온 다음에 이벤트리스너 부착
-Promise.all([injectNavbar(), injectFooter()]).then(() => loadComponent());
+Promise.all([injectNavbar(), injectFooter()])
+  .then(() => loadComponent())
+  .then(() => {
+    // websocketLoading();
+  });
 
 function loadComponent() {
   // 각 컴포넌트에 이벤트리스너 부착
@@ -99,4 +106,67 @@ function goLogout() {
   document.cookie =
     "access_token=; expires=Thu, 01 Jan 1999 00:00:10 GMT; path=/; Secure";
   window.location.href = "/";
+}
+
+async function websocketLoading() {
+  const access = localStorage.getItem("access");
+  if (access !== null) {
+    const nowPage = window.location.pathname;
+    const pageSplit = nowPage.split("/");
+    const pageName = pageSplit[pageSplit.length - 1].split(".")[0];
+    if (
+      !(
+        pageName === "battle-page" ||
+        pageName === "lobby" ||
+        pageName == "create-room"
+      )
+    ) {
+      /* 웹소켓 관련 */
+      const urlParams = new URLSearchParams(window.location.search);
+      const base64Url = access.split(".")[1];
+      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      const jsonPayloadString = decodeURIComponent(
+        atob(base64)
+          .split("")
+          .map(function (c) {
+            return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+          })
+          .join("")
+      );
+      const jsonPayload = JSON.parse(jsonPayloadString);
+      const getUsername = jsonPayload.username;
+
+      const token = localStorage.getItem("access");
+
+      const chatSocket = new WebSocket(
+        "ws://" +
+          BACK_WEBSOCKET_URL +
+          "/ws/notification" +
+          "/?page=" +
+          pageName +
+          "&token=" +
+          token
+      );
+
+      chatSocket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+        document.getElementById("chat-log").value += data.message + "\n";
+      };
+
+      chatSocket.onclose = function (e) {
+        console.error("Chat socket closed unexpectedly");
+      };
+
+      chatSocket.onopen = () => {
+        chatSocket.send(
+          JSON.stringify({
+            // roomData: roomData,
+            message: "접속했습니다.",
+          })
+        );
+      };
+    }
+
+    /* 웹소켓 관련 end */
+  }
 }

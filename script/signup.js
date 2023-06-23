@@ -1,15 +1,6 @@
-import { signupApi } from "./api.js";
-import { FRONT_BASE_URL, BACK_BASE_URL } from "./conf.js";
-// import { googleApi } from "./api.js";
+import { signupApi, checkLoginUser } from "./api.js";
 
-/* 로그인한 유저 메인화면으로 이동 */
-const payload = localStorage.getItem("payload");
-const payloadParse = JSON.parse(payload);
-
-if (payloadParse != null) {
-  window.location.href = `${FRONT_BASE_URL}/html/home.html`;
-}
-/* 로그인한 유저 메인화면으로 이동 end */
+checkLoginUser();
 
 // 엔터했을 때 회원가입 함수 동작
 const inputs = document.querySelectorAll("input");
@@ -53,18 +44,24 @@ function handleSignup() {
   }
 }
 
-document.getElementById("btnGoogleSignup").addEventListener("click", handleGoogleSignup);
-document.getElementById("btnKakaoSignup").addEventListener("click", handleKakaoSignup);
-document.getElementById("btnNaverSignup").addEventListener("click", handleNaverSignup);
+document
+  .getElementById("btnGoogleSignup")
+  .addEventListener("click", handleGoogleSignup);
+document
+  .getElementById("btnKakaoSignup")
+  .addEventListener("click", handleKakaoSignup);
+document
+  .getElementById("btnNaverSignup")
+  .addEventListener("click", handleNaverSignup);
 
 function handleGoogleSignup() {
-  window.location.href = BACK_BASE_URL + "/users/google/login/"
+  window.location.href = BACK_BASE_URL + "/users/google/login/";
 }
 
 function handleKakaoSignup() {
-  window.location.href = BACK_BASE_URL + "/users/kakao/login/"
+  window.location.href = BACK_BASE_URL + "/users/kakao/login/";
 }
 
 function handleNaverSignup() {
-  window.location.href = BACK_BASE_URL + "/users/naver/login/"
+  window.location.href = BACK_BASE_URL + "/users/naver/login/";
 }

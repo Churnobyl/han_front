@@ -11,11 +11,11 @@ document
 document
   .getElementById("report-submit-button")
   .addEventListener("click", reportSubmitBtn);
-document.getElementById("back-arrow").addEventListener("click", function() {
-  window.location.replace(`${FRONT_BASE_URL}/html/home.html`)
+document.getElementById("back-arrow").addEventListener("click", function () {
+  window.location.replace(`${FRONT_BASE_URL}/html/home.html`);
 });
 let modal = document.querySelector(".modal");
-let quiz
+let quiz;
 let quizzes;
 let quizCounts;
 let quizIndex = 0;
@@ -39,12 +39,6 @@ const resultBtn = document.getElementById("result-button");
 // query문에 따라서 다른 퀴즈에 접속가능하게 하기
 const urlParams = new URL(location.href).searchParams;
 const quizType = urlParams.get("type");
-
-// function randomChoice(obj) {
-//   let choicedIndex = Math.floor(Math.random() * obj.length);
-//   let choicedItem = obj.splice(choicedIndex, 1);
-//   return choicedItem[0];
-// }
 
 async function getQuiz() {
   if (!quizType) {
@@ -76,14 +70,6 @@ async function getQuiz() {
 }
 
 function showQuiz() {
-  // const sumQuiz = quizCounts.reduce((a, b) => a + b);
-  // let restOfQuiz = [...Array(sumQuiz).keys()];
-
-  // while (0 < restOfQuiz.length) {
-  //   let nextQuizIndex = randomChoice(restOfQuiz);
-  //   console.log(quizzes[nextQuizIndex]);
-  // }
-
   if (quizIndex < quizCounts[0]) {
     OneOfTwo();
   } else if (quizIndex < quizCounts[0] + quizCounts[1]) {
@@ -167,6 +153,7 @@ function FillInTheBlank() {
 }
 
 class CrosswordMaker {
+  // 십자말퍼즐 생성기
   constructor(quiz, table, horizontalExplanations, verticalExplanations) {
     this.quiz = quiz;
     this.table = table;
@@ -175,8 +162,8 @@ class CrosswordMaker {
 
     this.activeCellId = null;
     this.cellNumberCounts = {};
-    this.wordInput = document.getElementById("word-input");
-    this.wordLabel = document.getElementById("word-label");
+    this.wordInput = document.getElementById("wordInput");
+    this.wordLabel = document.getElementById("wordLabel");
     this.cells = {};
     this.activeCells = [];
     this.nowOrientation;
@@ -190,6 +177,7 @@ class CrosswordMaker {
   }
 
   preparePuzzle() {
+    // 퍼즐 데이터 정렬
     this.data = this.quiz.problems;
     this.problemData = this.quiz.problem_data.sort((a, b) => {
       return (
@@ -201,6 +189,7 @@ class CrosswordMaker {
   }
 
   populateCells() {
+    // 퍼즐 데이터 길이만큼 셀 생성하기
     for (let i = 0; i < this.data.length; i++) {
       let row = this.table.insertRow();
       for (let j = 0; j < this.data[i].length; j++) {
@@ -212,6 +201,7 @@ class CrosswordMaker {
   }
 
   prepareCell(cell, i, j) {
+    // 셀에 정보 담기
     let cellText = this.data[i][j] !== " " ? this.data[i][j] : "";
     cell.innerHTML = cellText;
     if (cellText === "") {
@@ -294,6 +284,7 @@ class CrosswordMaker {
   }
 
   handleCellClick(cell, i, j, k, wordPosition, wordLength) {
+    // 셀 클릭했을 때 동작하는 핸들러
     let hintButton = document.getElementById("giveHint");
     let hintBox = document.querySelector(".hint-box");
     let orientation = this.problemData[k].orientation;
@@ -420,14 +411,13 @@ class CrosswordMaker {
       });
     });
 
-    console.log(cell.clickListeners);
-
     cell.clickListeners = cell.clickListeners.filter(
       (listener) => listener !== this
     );
   }
 
   checkAnswer() {
+    // 엔터나 확인 버튼 클릭했을 때 checkAnswerEach 동작
     const input = document.getElementById("word-input");
     input.addEventListener("keyup", (e) => {
       if (e.key === 13 || e.key === "Enter") {
@@ -489,6 +479,7 @@ class CrosswordMaker {
   }
 
   removeKoreanCharacters() {
+    // 답안 숨기기
     const hiddenCells = document.querySelectorAll(".hidden");
     let koreanRegex = /[\uAC00-\uD7A3]/g;
 
@@ -628,15 +619,13 @@ modal.addEventListener("click", (event) => {
 });
 
 async function reportSubmitBtn() {
-  console.log("quizzes")
-  console.log(quiz)
   const content = document.getElementById("report-content");
   const type = document.getElementById("quiz-category").textContent;
 
   const reportData = {
     content: content.value,
     quiz_type: type,
-    quiz_content: quiz
+    quiz_content: quiz,
   };
 
   const response = await sendQuizReportApi(reportData);

@@ -122,6 +122,7 @@ export async function makeRoomApi(data) {
     body: JSON.stringify(data),
   });
   const responseJson = await response.json();
+  console.log(response.status);
   return { response, responseJson };
 }
 
@@ -371,4 +372,24 @@ export async function emailVerifyApi(uidb64, token) {
     `${BACK_BASE_URL}/users/verify/${uidb64}/${token}`
   );
   return response.status;
+}
+
+export async function checkAnonymous() {
+  const access = localStorage.getItem("access");
+
+  // 로그인 하지 않은 유저는 접근할 수 없음
+  if (access === null) {
+    alert("로그인해주세요!");
+    window.location.replace(`${FRONT_BASE_URL}/html/home.html`);
+  }
+}
+
+export async function checkLoginUser() {
+  const access = localStorage.getItem("access");
+
+  // 로그인한 유저는 접근할 수 없음
+  if (access !== null) {
+    alert("이미 로그인 되어 있습니다.");
+    window.location.replace(`${FRONT_BASE_URL}/html/home.html`);
+  }
 }

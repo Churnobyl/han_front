@@ -1,5 +1,7 @@
-import { getRankingApi } from "./api.js";
+import { getRankingApi, checkAnonymous } from "./api.js";
 import { FRONT_BASE_URL } from "./conf.js";
+
+checkAnonymous();
 
 const token = localStorage.getItem("access");
 let userId;

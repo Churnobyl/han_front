@@ -1,4 +1,6 @@
-import { sendSuggestApi } from "./api.js";
+import { sendSuggestApi, checkAnonymous } from "./api.js";
+
+checkAnonymous();
 
 // 버튼 클릭 시 함수 작동
 document.getElementById("suggest-btn").addEventListener("click", handleSuggest);

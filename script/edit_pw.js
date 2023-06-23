@@ -1,6 +1,8 @@
 import { editPasswordApi } from "./api.js";
 import { FRONT_BASE_URL } from "./conf.js";
 
+checkAnonymous();
+
 // 버튼 클릭 시 함수 작동
 document
   .getElementById("btnPassword")
