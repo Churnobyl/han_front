@@ -7,7 +7,6 @@ window.onload = () => {
   getRoomApi()
     .then(({ response, responseJson }) => {
       const roomData = responseJson;
-      console.log(roomData);
       if (response.status === 200) {
         for (let data of roomData) {
           const check_private = data.is_private

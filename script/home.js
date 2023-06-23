@@ -20,7 +20,6 @@ const myPageBtn = document.getElementById("myPageMove");
 
 window.onload = () => {
   const search = window.location.search;
-  console.log(search);
   if (search.includes("google")) {
     googleLoginSend(search);
   } else if (search.includes("state")) {

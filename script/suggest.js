@@ -2,12 +2,21 @@ import { sendSuggestApi, checkAnonymous } from "./api.js";
 
 checkAnonymous();
 
+// 엔터 시 함수 작동
+const inputs = document.querySelectorAll("input");
+for (let input of inputs) {
+  input.addEventListener("keyup", (e) => {
+    if (e.key === 13 || e.key === "Enter") {
+      handleSuggest();
+    }
+  });
+}
+
 // 버튼 클릭 시 함수 작동
 document.getElementById("suggest-btn").addEventListener("click", handleSuggest);
 
 function handleSuggest() {
   const title = document.getElementById("title").value;
-  const content = document.getElementById("content").value;
   const explain = document.getElementById("explain").value;
   const crct = document.getElementById("crct").value;
   const wrong = document.getElementById("wrong").value;
@@ -15,7 +24,6 @@ function handleSuggest() {
   // 칸을 전부 안채웠을 때
   if (
     title === "" ||
-    content === "" ||
     explain === "" ||
     crct === "" ||
     wrong === ""
@@ -27,7 +35,6 @@ function handleSuggest() {
   const suggestData = {
     quiz: {
       title: title,
-      content: content,
       explain: explain,
       is_pass: false,
     },

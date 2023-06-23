@@ -22,7 +22,7 @@ h1 {
   overflow: auto;
 }
 
-.write-container {
+.ranking-btn-wrap {
   margin: 0 auto 5px;
   width: 900px;
   margin-bottom: 15px;
@@ -32,14 +32,17 @@ h1 {
   flex-direction: row;
 }
 
-#writeButton {
+.ranking-btn-wrap > div {
   font-size: 16px;
   background-color: #4d4949;
   border-radius: 10rem;
   padding: 5px 15px;
   color: #ebebeb;
-  cursor: pointer;
   margin-left: 10px;
+}
+
+.ranking-btn-wrap > div:hover {
+  cursor: pointer;
 }
 
 .rank,
@@ -108,4 +111,13 @@ h1 {
 
 #right-btn {
   transform: scaleX(-1);
+}
+
+#waiting {
+  text-align: center;
+  display: inline-block;
+  padding: 15px;
+  width: 90%;
+  background-color: white;
+  font-size: 1.5rem;
 }

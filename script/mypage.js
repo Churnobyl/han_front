@@ -100,7 +100,6 @@ window.onload = async function loadProfile() {
   // 팔로우되어 있는지 찾기
   responseUserJson["유저"]["followings"].forEach((find) => {
     if (find["id"] === parseInt(profileId)) {
-      console.log(find);
       followBtn.innerText = "친구 끊기";
     } else {
       followBtn.innerText = "친구 추가";
@@ -130,25 +129,6 @@ function handleEditPage() {
 async function handleFollow() {
   const urlParams = new URL(location.href).searchParams;
   const profileId = urlParams.get("id");
-  // const followBtn = document.getElementById("followBtn");
 
   await followApi(profileId);
-
-  // $.ajax({
-  //     url : `${BACK_BASE_URL}/users/follow/${profileId}/`,
-  //     type : "POST",
-  //     headers: {
-  //         "Authorization": `Bearer ${localStorage.getItem("access")}`,
-  //     },
-  //     success: function(data){
-  //         console.log(data)
-  //         if (data === "팔로우 취소") {
-  //             followBtn.innerText = "팔로우"
-  //         } else if (data === "팔로우 완료") {
-  //             followBtn.innerText = "팔로우 취소"
-  //         } else {
-  //             alert(data);
-  //         }
-  //     }
-  // })
 }
