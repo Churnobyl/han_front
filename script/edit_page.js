@@ -10,6 +10,7 @@ window.onload = async function loadProfile() {
     method: "GET",
   });
   const responseJson = await response.json();
+  console.log(responseJson);
 
   // 프로필 보여주기
   document.getElementById(

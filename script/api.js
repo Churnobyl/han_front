@@ -380,7 +380,7 @@ export async function checkAnonymous() {
   // 로그인 하지 않은 유저는 접근할 수 없음
   if (access === null) {
     alert("로그인해주세요!");
-    window.location.replace(`${FRONT_BASE_URL}/html/home.html`);
+    window.location.replace(`${FRONT_BASE_URL}/html/login.html`);
   }
 }
 
