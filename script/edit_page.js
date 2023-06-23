@@ -67,40 +67,47 @@ async function handleEdit() {
   const urlParams = new URL(location.href).searchParams;
   const userId = urlParams.get("id");
 
-  const username = document.getElementById("username").value;
-  const achieveChecked = document.getElementById("achieveRadio");
-  const profileImage = document.getElementById("profileImage").src;
-  const data = {};
-  if (
-    achieveChecked.querySelector('input[name="wear-achievement"]:checked') !==
-    null
-  ) {
-    const wearAchievement = achieveChecked.querySelector(
-      'input[name="wear-achievement"]:checked'
-    ).value;
-    data["username"] = username;
-    data["wear_achievement"] = wearAchievement;
-    data["image"] = profileImage;
-  } else {
-    data["username"] = username;
-    data["image"] = profileImage;
-  }
+    const username = document.getElementById("username").value;
+    const achieveChecked = document.getElementById("achieveRadio");
+    const profileImage = document.getElementById("profileImage").src;
+    const data = {}
+    
+    if (profileImage.includes("data")) {
+        if (achieveChecked.querySelector('input[name="wear-achievement"]:checked')!==null) {
+            const wearAchievement = achieveChecked.querySelector('input[name="wear-achievement"]:checked').value;
+            data["username"] = username;
+            data["wear_achievement"] = wearAchievement;
+            data["image"] = profileImage;
+        } else {
+            data["username"] = username;
+            data["image"] = profileImage;
+        }
+    } else {
+        if (achieveChecked.querySelector('input[name="wear-achievement"]:checked')!==null) {
+            const wearAchievement = achieveChecked.querySelector('input[name="wear-achievement"]:checked').value;
+            data["username"] = username;
+            data["wear_achievement"] = wearAchievement;
+        } else {
+            data["username"] = username;
+        }
+    }
 
-  const response = await fetch(`${BACK_BASE_URL}/users/${userId}/`, {
-    headers: {
-      Authorization: "Bearer " + localStorage.getItem("access"),
-      "content-type": "application/json",
-    },
-    method: "PATCH",
-    body: JSON.stringify(data),
-  });
-  const responseJson = await response.json();
-  if (responseJson === "수정완료") {
-    alert(responseJson["message"]);
-  } else {
-    alert(responseJson["message"]);
-  }
-  window.location.href = `${FRONT_BASE_URL}/html/mypage.html?id=${userId}`;
+    const response = await fetch(`${BACK_BASE_URL}/users/${userId}/`, {
+        headers: {
+            "Authorization": "Bearer " + localStorage.getItem("access"),
+            "content-type": "application/json",
+        },
+        method: "PATCH",
+        body: JSON.stringify(data)
+    })
+    const responseJson = await response.json();
+    
+    if (responseJson==="수정완료") {
+        alert(responseJson["message"]);
+    } else {
+        alert(responseJson["message"])
+    };
+    window.location.href = `${FRONT_BASE_URL}/html/mypage.html?id=${userId}`
 }
 
 function handleMyPage() {
