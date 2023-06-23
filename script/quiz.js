@@ -3,6 +3,13 @@ import { sendQuizResultApi } from "./api.js";
 import { sendQuizReportApi } from "./api.js";
 import { FRONT_BASE_URL } from "./conf.js";
 
+document.addEventListener("keyup", (e) => {
+  if (e.key === 13 || e.key === "Enter") {
+    e.stopPropagation();
+    confirmQuiz();
+  }
+});
+
 document.getElementById("answer-button").addEventListener("click", confirmQuiz);
 document.getElementById("result-button").addEventListener("click", goResult);
 document
@@ -18,6 +25,7 @@ let modal = document.querySelector(".modal");
 let quiz;
 let quizzes;
 let quizCounts;
+let sumQuiz;
 let quizIndex = 0;
 let correctCount = 0;
 
@@ -48,6 +56,7 @@ async function getQuiz() {
   }
 
   quizCounts = quizzes["counts"];
+  sumQuiz = quizCounts.reduce((a, b) => a + b);
   quizzesOneOfTwo = quizzes["one_of_two"] || [];
   quizzesMeaning = quizzes["meaning"] || [];
   quizzesFillInTheBlank = quizzes["fill_in_the_blank"] || [];
@@ -63,10 +72,14 @@ async function getQuiz() {
   } else {
     quizzes = [...quizzesOneOfTwo, ...quizzesMeaning, ...quizzesFillInTheBlank];
   }
-  const sumQuiz = quizCounts.reduce((a, b) => a + b);
 
-  xpBar.setAttribute("style", `width: calc(9.9% * ${quizIndex})`);
-  xpText.innerText = `${quizIndex} / ${sumQuiz}`;
+  if (quizIndex <= sumQuiz) {
+    xpBar.setAttribute("style", `width: calc(9.9% * ${quizIndex})`);
+    xpText.innerText = `${quizIndex} / ${sumQuiz}`;
+  } else {
+    xpBar.setAttribute("style", `width: calc(9.9% * ${sumQuiz})`);
+    xpText.innerText = `${sumQuiz} / ${sumQuiz}`;
+  }
 }
 
 function showQuiz() {
@@ -419,10 +432,10 @@ class CrosswordMaker {
 
   checkAnswer() {
     // 엔터나 확인 버튼 클릭했을 때 checkAnswerEach 동작
-    const input = document.getElementById("word-input");
-    input.addEventListener("keyup", (e) => {
+    document.addEventListener("keyup", (e) => {
       if (e.key === 13 || e.key === "Enter") {
-        this.checkAnswerEach();
+        e.stopPropagation();
+        confirmQuiz();
       }
     });
     this.checkAnswerButton.addEventListener("click", () =>
@@ -587,8 +600,13 @@ function nextStep() {
   const xpBar = document.getElementById("xp-bar-now");
   const xpText = document.getElementById("xp-text");
 
-  xpBar.setAttribute("style", `width: calc(9.9% * ${quizIndex})`);
-  xpText.innerText = `${quizIndex} / 10`;
+  if (quizIndex <= sumQuiz) {
+    xpBar.setAttribute("style", `width: calc(9.9% * ${quizIndex})`);
+    xpText.innerText = `${quizIndex} / ${sumQuiz}`;
+  } else {
+    xpBar.setAttribute("style", `width: calc(9.9% * ${sumQuiz})`);
+    xpText.innerText = `${sumQuiz} / ${sumQuiz}`;
+  }
 
   if (quizIndex == quizzes.length) {
     answerBtn.style.display = "none";
@@ -600,14 +618,6 @@ function nextStep() {
     const inputBoxTag = document.getElementById("inputBox")
       ? document.getElementById("inputBox")
       : null;
-
-    if (inputBoxTag !== null) {
-      inputBoxTag.addEventListener("keyup", (e) => {
-        if (e.key === 13 || e.key === "Enter") {
-          confirmQuiz();
-        }
-      });
-    }
   }
 }
 

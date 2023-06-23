@@ -20,43 +20,50 @@
       </div>
       <div class="main" role="main">
         <div class="container">
-            <div class="suggest-wrap">
-                <div class="suggest-title">
-                    <h1>📢 어떤 문제를 공유해주시나요?</h1>
-                </div>
-                <div class="suggest-container">
-                  <div class="obj-wrap">
-                    <div class="suggest-obj">
-                      <div class="obj-title">문제 ㅣ</div>
-                      <input class="obj-text" id="title" type="text" placeholder="예) 평가원은 해당 문제의 ㅁㅁㅁ이 60%라고 밝혔다." onfocus="this.placeholder=''" onblur="this.placeholder='예) 평가원은 해당 문제의 ㅁㅁㅁ이 60%라고 밝혔다.'">
-                    </div>
-                    <div class="suggest-obj">
-                      <div class="obj-title">설명 ㅣ</div>
-                      <input class="obj-text" id="explain" type="text" placeholder="예) 앞에 받침이 있으나 ㄴ이 아니면 률을 사용합니다." onfocus="this.placeholder=''" onblur="this.placeholder='예) 앞에 받침이 있으나 ㄴ이 아니면 률을 사용합니다.'">
-                    </div>
-                    <div class="suggest-obj">
-                      <div class="obj-title">정답 ㅣ</div>
-                      <input class="obj-text" id="crct" type="text" placeholder="예) 적중률" onfocus="this.placeholder=''" onblur="this.placeholder='예) 적중률'">
-                    </div>
-                    <div class="suggest-obj">
-                      <div class="obj-title">오답 ㅣ</div>
-                      <input class="obj-text" id="wrong" type="text" placeholder="예) 적중율" onfocus="this.placeholder=''" onblur="this.placeholder='예) 적중율'">
-                    </div>
-                    <div class="suggest-bottom">
-                      <div id="suggest-warning">💡 제출 후 문제가 통과되면 경험치가 부여됩니다.</div>
-                      <div id="suggest-btn">제출하기</div>
-                  </div>
-                  </div>
-                </div>
+          <div class="suggest-wrap">
+            <div class="suggest-title">
+              <h1>📢 어떤 문제를 공유해주시나요?</h1>
+              <div class="explains">
+                공유하고 싶은 문제가 있다면 공유해주세요! 당신의 퀴즈가 다른 유저에게 출제되면 혜택이 있어요.
+              </div>
             </div>
+            <div class="suggest-container">
+              <div class="obj-wrap">
+                <div class="suggest-obj">
+                  <div class="obj-title">문제 ㅣ</div>
+                  <input class="obj-text" id="title" type="text" placeholder="예) 평가원은 해당 문제의 ㅁㅁㅁ이 60%라고 밝혔다."
+                    onfocus="this.placeholder=''" onblur="this.placeholder='예) 평가원은 해당 문제의 ㅁㅁㅁ이 60%라고 밝혔다.'">
+                </div>
+                <div class="suggest-obj">
+                  <div class="obj-title">설명 ㅣ</div>
+                  <input class="obj-text" id="explain" type="text" placeholder="예) 앞에 받침이 있으나 ㄴ이 아니면 률을 사용합니다."
+                    onfocus="this.placeholder=''" onblur="this.placeholder='예) 앞에 받침이 있으나 ㄴ이 아니면 률을 사용합니다.'">
+                </div>
+                <div class="suggest-obj">
+                  <div class="obj-title">정답 ㅣ</div>
+                  <input class="obj-text" id="crct" type="text" placeholder="예) 적중률" onfocus="this.placeholder=''"
+                    onblur="this.placeholder='예) 적중률'">
+                </div>
+                <div class="suggest-obj">
+                  <div class="obj-title">오답 ㅣ</div>
+                  <input class="obj-text" id="wrong" type="text" placeholder="예) 적중율" onfocus="this.placeholder=''"
+                    onblur="this.placeholder='예) 적중율'">
+                </div>
+                <div class="suggest-bottom">
+                  <div id="suggest-warning">💡 제출 후 문제가 통과되면 경험치가 부여됩니다.</div>
+                  <div id="suggest-btn">제출하기</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="footer" role="footer">
         <!-- 푸터 삽입 위치 -->
       </div>
     </div>
-  <script src="/script/inject.js"></script>
-  <script type="module" src="/script/suggest.js"></script>
+    <script src="/script/inject.js"></script>
+    <script type="module" src="/script/suggest.js"></script>
 </body>
 
 </html>
