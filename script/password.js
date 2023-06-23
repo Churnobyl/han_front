@@ -1,4 +1,6 @@
-import { sendPasswordResetApi } from "./api.js";
+import { sendPasswordResetApi, checkAnonymous } from "./api.js";
+
+checkAnonymous();
 
 // 버튼 클릭 시 함수 작동
 document.getElementById("btnPassword").addEventListener("click", handleReset);

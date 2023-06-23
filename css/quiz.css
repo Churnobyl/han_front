@@ -300,18 +300,3 @@ li.highlightExplainStayVertical {
   flex-direction: row;
 }
 
-.hint-text {
-  font-size: 24px;
-  width: 150px;
-  height: 100px;
-  line-height: 100px;
-  border: #383838 solid 2px;
-}
-
-.hint {
-  font-size: 30px;
-  width: 200px;
-  height: 100px;
-  line-height: 100px;
-  border: #383838 solid 2px;
-}

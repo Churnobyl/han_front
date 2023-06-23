@@ -1,4 +1,6 @@
-import { getRoomApi } from "/script/api.js";
+import { getRoomApi, checkAnonymous } from "/script/api.js";
+
+checkAnonymous();
 
 window.onload = () => {
   // 방 정보 가져오기
