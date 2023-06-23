@@ -95,7 +95,6 @@ function sendMessage() {
 // 방 정보 가져오기
 getRoomDetailApi(roomName).then(({ response, responseJson }) => {
   if (response.status === 200) {
-    console.log(responseJson);
     // 방 정보
     document.getElementById("roomId").innerText = `[ ${responseJson["id"]} ]`;
     document.getElementById("roomName").innerText = responseJson["btl_title"];
@@ -114,7 +113,6 @@ getRoomDetailApi(roomName).then(({ response, responseJson }) => {
     let hostUser;
     onUsers.forEach((user) => {
       let userBox = document.getElementById(`user-box-${i}`);
-      console.log(userBox);
       let img;
       if (user["participant"]["image"]) {
         img = user["participant"]["image"];

@@ -13,14 +13,34 @@ if (token) {
 
 const leftArrow = document.getElementById("left-btn");
 const rightArrow = document.getElementById("right-btn");
+const ranks = document.querySelectorAll(".user-wrap")
+const idxWrap = document.querySelector(".idx-wrap")
 
 let rankingData;
 let page = 0;
 let isFetching;
+let waiting
+
+document.getElementById("battle-rank").addEventListener("click", getBattle)
+document.getElementById("exp-rank").addEventListener("click", function(){
+  getRanking();
+})
 
 window.onload = function () {
   getRanking();
 };
+
+function getBattle() {
+  ranks.forEach(rank => {
+    rank.style = "display: none;"
+  });
+  leftArrow.style = "display: none;"
+  rightArrow.style = "display: none;"
+  if (!document.getElementById("waiting")) {
+    idxWrap.insertAdjacentHTML("afterend", `<div id="waiting">준비중입니다.</div>`);
+    waiting = document.getElementById("waiting");
+  }
+}
 
 async function getRanking(link, e) {
   // 호출 중일 경우에 추가로 호출 못하게
@@ -28,6 +48,12 @@ async function getRanking(link, e) {
     return;
   }
   isFetching = true;
+  
+  if (waiting) {
+    setTimeout(() => {
+      waiting.parentNode.removeChild(waiting);
+    }, 0);
+  }
 
   //   버튼을 통해 들어왔을 경우 & 아닐 경우
   if (!link) {
@@ -60,7 +86,9 @@ async function getRanking(link, e) {
       getRanking(link, "n");
     };
   }
-
+  ranks.forEach(rank => {
+    rank.style = "display: block;"
+  });
   //   랭킹 순위 순서대로 띄워주기
   for (var i = 0; i <= 9; i++) {
     let parentElement = document.getElementById("rank-" + i);

@@ -122,7 +122,6 @@ export async function makeRoomApi(data) {
     body: JSON.stringify(data),
   });
   const responseJson = await response.json();
-  console.log(response.status);
   return { response, responseJson };
 }
 
@@ -181,7 +180,6 @@ export async function kakaoLogin(search) {
     }
   );
   const responseJsonKakao = await responseKakao.json();
-  console.log(responseJsonKakao);
 
   if (responseKakao.status === 200) {
     // 쿠키 저장
@@ -220,7 +218,6 @@ export async function naverLogin(search) {
     }
   );
   const responseJsonNaver = await responseNaver.json();
-  console.log(responseJsonNaver);
 
   if (responseNaver.status === 200) {
     // 쿠키 저장
@@ -343,7 +340,7 @@ export async function getRankingApi(data) {
     const responseJson = await response.json();
     return responseJson;
   } else {
-    const response = await fetch(`${data}`);
+    const response = await fetch(data);
     const responseJson = await response.json();
     return responseJson;
   }

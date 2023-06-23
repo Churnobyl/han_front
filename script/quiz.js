@@ -601,8 +601,6 @@ function nextStep() {
       ? document.getElementById("inputBox")
       : null;
 
-    console.log(inputBoxTag);
-
     if (inputBoxTag !== null) {
       inputBoxTag.addEventListener("keyup", (e) => {
         if (e.key === 13 || e.key === "Enter") {

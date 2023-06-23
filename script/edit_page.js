@@ -10,7 +10,6 @@ window.onload = async function loadProfile() {
     method: "GET",
   });
   const responseJson = await response.json();
-  console.log(responseJson);
 
   // 프로필 보여주기
   document.getElementById(
@@ -44,7 +43,6 @@ window.onload = async function loadProfile() {
   //칭호 보여주기
   const achieveRadio = document.getElementById("achieveRadio");
   responseJson["유저"]["achieve"].forEach((achieve) => {
-    console.log(achieve);
     const achieveLabel = document.createElement("label");
     achieveLabel.setAttribute("class", "achieve-show");
     const achieveSpan = document.createElement("span");
@@ -97,7 +95,6 @@ async function handleEdit() {
     body: JSON.stringify(data),
   });
   const responseJson = await response.json();
-  console.log(responseJson);
   if (responseJson === "수정완료") {
     alert(responseJson["message"]);
   } else {
