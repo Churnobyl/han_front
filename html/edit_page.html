@@ -9,8 +9,10 @@
   <link rel="stylesheet" href="/css/default.css">
   <link rel="stylesheet" href="/css/mypage.css">
   <link rel="stylesheet" href="/css/edit_page.css">
+  <script src="/script/preview.js"></script>
   <title>한 | 한글 퀴즈 서비스</title>
   <link rel="icon" href="/img/favicon.ico">
+  
 </head>
 
 <body>
@@ -26,7 +28,10 @@
           <section class="profile-container">
             <!-- 프로필 -->
             <div class="user-profile">
-                <img src="/img/page1-img.jpg" alt="profile-img">
+              <div class="profile-image">
+                <img src="/img/page1-img.jpg" alt="profile-img" id="profileImage">
+                <input type="file" id="image" onchange="preview(this)">
+              </div>
                 <div class="user-info">
                     <p id="userEmail">
                         <input type="text" name="email" id="email">

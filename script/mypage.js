@@ -37,6 +37,12 @@ window.onload = async function loadProfile() {
     expProgress.setAttribute("max", responseJson["정보"]["max_experiment"]);
     expProgress.setAttribute("value", responseJson["정보"]["experiment"]);
 
+    // 프로필 사진 보여주기
+    const profileImage = document.getElementById("profileImage")
+    if (responseJson["유저"]["image"] !== null) {
+        profileImage.src = `${BACK_BASE_URL}${responseJson["유저"]["image"]}`
+    }
+
     //착용 칭호 보여주기
     const wearAchieve = document.getElementById("wearAchieve")
     if (responseJson["칭호"]==="null") {

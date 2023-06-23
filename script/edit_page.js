@@ -18,6 +18,12 @@ window.onload = async function loadProfile() {
     expProgress.setAttribute("max", responseJson["정보"]["max_experiment"]);
     expProgress.setAttribute("value", responseJson["정보"]["experiment"]);
 
+    // 프로필 사진 보여주기
+    const profileImage = document.getElementById("profileImage")
+    if (responseJson["유저"]["image"] !== null) {
+        profileImage.src = `${BACK_BASE_URL}${responseJson["유저"]["image"]}`
+    }
+
     //착용 칭호 보여주기
     const wearAchieve = document.getElementById("wearAchieve")
     if (responseJson["칭호"]==="null") {
@@ -56,13 +62,16 @@ async function handleEdit() {
 
     const username = document.getElementById("username").value;
     const achieveChecked = document.getElementById("achieveRadio");
+    const profileImage = document.getElementById("profileImage").src;
     const data = {}
     if (achieveChecked.querySelector('input[name="wear-achievement"]:checked')!==null) {
         const wearAchievement = achieveChecked.querySelector('input[name="wear-achievement"]:checked').value;
         data["username"] = username;
-        data["wear_achievement"] = wearAchievement
+        data["wear_achievement"] = wearAchievement;
+        data["image"] = profileImage;
     } else {
         data["username"] = username;
+        data["image"] = profileImage;
     }
 
     const response = await fetch(`${BACK_BASE_URL}/users/${userId}/`, {
@@ -81,7 +90,6 @@ async function handleEdit() {
         alert(responseJson["message"])
     };
     window.location.href = `${FRONT_BASE_URL}/html/mypage.html?id=${userId}`
-
 }
 
 function handleMyPage() {

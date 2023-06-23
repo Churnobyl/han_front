@@ -48,3 +48,13 @@
     font-size: 1.2rem;
     color: rgb(255, 20, 20);
 }
+
+.profile-image {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-image input {
+    width: 150px;
+    margin-top: 20px;
+}
