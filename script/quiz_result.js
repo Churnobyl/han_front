@@ -12,7 +12,8 @@ const userId = decodedPayload["user_id"];
 let correctCount = JSON.parse(localStorage.getItem("correctCount"));
 
 window.onload = async function () {
-  if (correctCount) {
+  const checkCount = correctCount === 0 ? true : correctCount;
+  if (checkCount) {
     // 정답 개수
     const quizResult = document.getElementById("quiz-result");
     quizResult.innerText = `전체 문제 중 🎉${correctCount}개🎉를 맞췄어요!`;
