@@ -435,7 +435,7 @@ class CrosswordMaker {
     document.addEventListener("keyup", (e) => {
       if (e.key === 13 || e.key === "Enter") {
         e.stopPropagation();
-        confirmQuiz();
+        this.checkAnswerEach();
       }
     });
     this.checkAnswerButton.addEventListener("click", () =>
