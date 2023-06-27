@@ -1,4 +1,4 @@
-import { getRoomDetailApi, checkAnonymous } from "/script/api.js";
+import { getRoomDetailApi, checkAnonymous, socket } from "/script/api.js";
 import { BACK_WEBSOCKET_URL } from "/script/conf.js";
 
 checkAnonymous();
@@ -12,6 +12,27 @@ document.getElementById("quit-btn").addEventListener("click", function () {
 const urlParams = new URLSearchParams(window.location.search);
 const roomName = urlParams.get("room");
 const access = localStorage.getItem("access");
+
+socket.onopen = function(e) {
+  socket.send(
+  JSON.stringify({
+    type: 'join_room',
+    room: roomName,
+  })
+  );
+  socket.send(
+  JSON.stringify({
+    type: 'chat_message',
+    message: "접속했습니다.",
+  })
+  );
+}
+
+socket.onmessage = function (e) {
+  const data = JSON.parse(e.data);
+  document.getElementById("chat-log").value += data.message + "\n";
+};
+
 const base64Url = access.split(".")[1];
 const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
 const jsonPayloadString = decodeURIComponent(
@@ -39,34 +60,34 @@ const payload = token.split(".")[1];
 const decodedPayload = JSON.parse(atob(payload));
 const userId = decodedPayload["user_id"];
 
-const chatSocket = new WebSocket(
-  "ws://" +
-    BACK_WEBSOCKET_URL +
-    "/ws/battle/" +
-    roomName +
-    "/?page=" +
-    pageName +
-    "&token=" +
-    token
-);
+// const chatSocket = new WebSocket(
+//   "ws://" +
+//     BACK_WEBSOCKET_URL +
+//     "/ws/battle/" +
+//     roomName +
+//     "/?page=" +
+//     pageName +
+//     "&token=" +
+//     token
+// );
 
-chatSocket.onmessage = function (e) {
-  const data = JSON.parse(e.data);
-  document.getElementById("chat-log").value += data.message + "\n";
-};
+// chatSocket.onmessage = function (e) {
+//   const data = JSON.parse(e.data);
+//   document.getElementById("chat-log").value += data.message + "\n";
+// };
 
-chatSocket.onopen = () => {
-  chatSocket.send(
-    JSON.stringify({
-      roomData: roomData,
-      message: "접속했습니다.",
-    })
-  );
-};
+// chatSocket.onopen = () => {
+//   chatSocket.send(
+//     JSON.stringify({
+//       roomData: roomData,
+//       message: "접속했습니다.",
+//     })
+//   );
+// };
 
-chatSocket.onclose = function (e) {
-  console.error("Chat socket closed unexpectedly");
-};
+// chatSocket.onclose = function (e) {
+//   console.error("Chat socket closed unexpectedly");
+// };
 
 document.getElementById("chat-message-input").focus();
 document.getElementById("chat-message-input").onkeyup = function (e) {
@@ -81,9 +102,9 @@ document.getElementById("chat-message-submit").onclick = function (e) {
 function sendMessage() {
   const messageInputDom = document.getElementById("chat-message-input");
   const message = messageInputDom.value;
-  chatSocket.send(
+  socket.send(
     JSON.stringify({
-      roomData: roomData,
+      type: "chat_message",
       message: message,
     })
   );
