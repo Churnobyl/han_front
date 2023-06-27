@@ -1,4 +1,4 @@
-import { BACK_BASE_URL, FRONT_BASE_URL } from "./conf.js";
+import { BACK_BASE_URL, FRONT_BASE_URL, BACK_WEBSOCKET_URL } from "./conf.js";
 
 export async function signupApi(data) {
   // 회원가입 api
@@ -389,4 +389,15 @@ export async function checkLoginUser() {
     alert("이미 로그인 되어 있습니다.");
     window.location.replace(`${FRONT_BASE_URL}/html/home.html`);
   }
+}
+
+export let socket
+const token = localStorage.getItem("access");
+if (token){
+  socket = new WebSocket(`ws://${BACK_WEBSOCKET_URL}/ws/notification/?token=${token}`);
+}
+
+socket.onmessage = function (e) {
+  const notification = JSON.parse(e.data)
+  document.getElementById("notification-list").innerHTML += `<li>${notification}</li>`
 }
