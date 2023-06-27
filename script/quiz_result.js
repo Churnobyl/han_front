@@ -10,6 +10,9 @@ const decodedPayload = JSON.parse(atob(payload));
 const userId = decodedPayload["user_id"];
 
 let correctCount = JSON.parse(localStorage.getItem("correctCount"));
+let checkCrossword = localStorage.getItem("crossword")
+  ? JSON.parse(localStorage.getItem("crossword"))
+  : null;
 
 window.onload = async function () {
   const checkCount = correctCount === 0 ? true : correctCount;
@@ -42,7 +45,11 @@ window.onload = async function () {
     expProgress.setAttribute("max", info["max_experiment"]);
     expProgress.setAttribute("value", info["experiment"]);
     const xpText = document.getElementById("xp-text");
-    xpText.innerText = `${correctCount * 10}xp 획득`;
+    if (checkCrossword === true) {
+      xpText.innerText = `${checkCrossword * 250}xp 획득`;
+    } else {
+      xpText.innerText = `${correctCount * 10}xp 획득`;
+    }
   } else {
     alert("이미 퀴즈를 재시작했거나, 퀴즈 결과가 없습니다!");
     window.location.replace(`${FRONT_BASE_URL}/html/home.html`);
