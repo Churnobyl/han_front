@@ -1,63 +1,58 @@
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/css/reset.css" />
-    <link rel="stylesheet" href="/css/default.css" />
-    <link rel="stylesheet" href="/css/edit_pw.css" />
-    <title>한 | 한글 퀴즈 서비스</title>
-    <link rel="icon" href="/img/favicon.ico" />
-  </head>
 
-  <body>
-    <div class="wrap">
-      <div class="container">
-        <div class="nav" role="header">
-          <!-- 네비게이션 삽입 위치 -->
-        </div>
-        <div class="main" role="main">
-          <div class="container">
-            <div class="password-wrap">
-              <div class="password-container">
-                <h2>✅ 비밀번호 변경</h2>
-                <h6 class="waring-msg">
-                  ❗ 소셜 로그인 유저의 경우 해당 사이트에서 비밀번호를
-                  변경해주세요.
-                </h6>
-                <form class="password">
-                  <div class="password-ec">
-                    <label for="password" class="custom-label"
-                      >변경할 비밀번호</label
-                    >
-                    <input type="password" id="new-pw" placeholder="비밀번호" />
-                  </div>
-                  <div class="password-ec">
-                    <label for="password" class="custom-label"
-                      >비밀번호 확인</label
-                    >
-                    <input
-                      type="password"
-                      id="check-pw"
-                      placeholder="비밀번호"
-                    />
-                  </div>
-                  <div class="password-btnbox">
-                    <a id="btnPassword">비밀번호 변경</a>
-                  </div>
-                </form>
-              </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/css/reset.css" />
+  <link rel="stylesheet" href="/css/default.css" />
+  <link rel="stylesheet" href="/css/edit_pw.css" />
+  <title>한 | 한글 퀴즈 서비스</title>
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+  <link rel="icon" href="/img/favicon.ico" />
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="container">
+      <div class="nav" role="header">
+        <!-- 네비게이션 삽입 위치 -->
+      </div>
+      <div class="main" role="main">
+        <div class="container">
+          <div class="password-wrap">
+            <div class="password-container">
+              <h2>✅ 비밀번호 변경</h2>
+              <h6 class="waring-msg">
+                ❗ 소셜 로그인 유저의 경우 해당 사이트에서 비밀번호를
+                변경해주세요.
+              </h6>
+              <form class="password">
+                <div class="password-ec">
+                  <label for="password" class="custom-label">변경할 비밀번호</label>
+                  <input type="password" id="new-pw" placeholder="비밀번호" />
+                </div>
+                <div class="password-ec">
+                  <label for="password" class="custom-label">비밀번호 확인</label>
+                  <input type="password" id="check-pw" placeholder="비밀번호" />
+                </div>
+                <div class="password-btnbox">
+                  <a id="btnPassword">비밀번호 변경</a>
+                </div>
+              </form>
             </div>
           </div>
         </div>
-        <div class="footer" role="footer">
-          <!-- 푸터 삽입 위치 -->
-        </div>
+      </div>
+      <div class="footer" role="footer">
+        <!-- 푸터 삽입 위치 -->
       </div>
     </div>
+  </div>
 
-    <script src="/script/inject.js"></script>
-    <script type="module" src="/script/edit_pw.js"></script>
-  </body>
+  <script src="/script/inject.js"></script>
+  <script type="module" src="/script/edit_pw.js"></script>
+</body>
+
 </html>

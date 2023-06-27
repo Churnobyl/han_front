@@ -71,6 +71,13 @@ function goHomePage() {
   window.location.href = "/html/home.html";
 }
 
+function goSurvey() {
+  window.open(
+    "https://docs.google.com/forms/d/e/1FAIpQLSeGKaUdU2awd6gkbd9Oqu4CN2VkXUNIhk2QnTXz1zGMFycPIQ/viewform?vc=0&c=0&w=1&flr=0",
+    "_blank"
+  );
+}
+
 function goLogout() {
   // 로그아웃
   localStorage.removeItem("access");

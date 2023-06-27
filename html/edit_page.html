@@ -11,8 +11,9 @@
   <link rel="stylesheet" href="/css/edit_page.css">
   <script src="/script/preview.js"></script>
   <title>한 | 한글 퀴즈 서비스</title>
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
   <link rel="icon" href="/img/favicon.ico">
-  
+
 </head>
 
 <body>
@@ -32,35 +33,35 @@
                 <img src="/img/page1-img.jpg" alt="profile-img" id="profileImage">
                 <input type="file" id="image" onchange="preview(this)">
               </div>
-                <div class="user-info">
-                    <p id="userEmail">
-                        <input type="text" name="email" id="email">
-                    </p>
-                    <p id="userName"></p>
-                    <a class="pass-edit">비밀번호 변경</a>
-                </div>
-                <div class="user-edit">
-                    <p><a id="profileEdit">수정하기</a> <a class="drawal-btn">탈퇴하기</a></p>
-                    <p><a id="myPageMove">마이페이지 가기</a></p>
-                </div>
+              <div class="user-info">
+                <p id="userEmail">
+                  <input type="text" name="email" id="email">
+                </p>
+                <p id="userName"></p>
+                <a class="pass-edit">비밀번호 변경</a>
+              </div>
+              <div class="user-edit">
+                <p><a id="profileEdit">수정하기</a> <a class="drawal-btn">탈퇴하기</a></p>
+                <p><a id="myPageMove">마이페이지 가기</a></p>
+              </div>
             </div>
             <div class="user-level">
-                <label for="" id="userLevel"></label>
-                <progress class="experience" id="exp" max="1000" value="500"></progress>
+              <label for="" id="userLevel"></label>
+              <progress class="experience" id="exp" max="1000" value="500"></progress>
             </div>
           </section>
           <section class="achieve-container">
             <!-- 칭호 -->
             <div class="achieve-box">
-                <p class="user-achieve">내 칭호</p>
-                <p class="achieve-title" id="wearAchieve"></p>
+              <p class="user-achieve">내 칭호</p>
+              <p class="achieve-title" id="wearAchieve"></p>
             </div>
             <div class="all-achievement">
-                <p class="have-achieve">보유 칭호</p>
-                <div id="userAchievement">
-                    <div class="achieve-radio" id="achieveRadio">
-                    </div>
+              <p class="have-achieve">보유 칭호</p>
+              <div id="userAchievement">
+                <div class="achieve-radio" id="achieveRadio">
                 </div>
+              </div>
             </div>
           </section>
         </div>
