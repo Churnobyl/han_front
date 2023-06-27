@@ -6,7 +6,7 @@
   font-style: normal;
 }
 
-* {
+html {
   font-family: "LINESeedKR-Bd";
   font-size: 16px;
 }
@@ -119,6 +119,13 @@ img {
   font-size: 22px;
   color: rgb(255, 255, 255);
   background-color: #383838;
+}
+
+.btn.menu-survey {
+  padding: 5px 14px;
+  font-size: 16px;
+  color: #383838;
+  background-color: #e76a6a;
 }
 
 .main {

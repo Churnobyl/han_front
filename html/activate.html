@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,6 +9,7 @@
   <link rel="stylesheet" href="/css/default.css">
   <link rel="stylesheet" href="/css/activate.css">
   <title>한 | 한글 퀴즈 서비스</title>
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
   <link rel="icon" href="/img/favicon.ico">
 </head>
 
@@ -19,30 +21,30 @@
       </div>
       <div class="main" role="main">
         <div class="container">
-            <div id="spinner"></div>
-            <div class="activate-wrap">
-                <div class="activate-title">
-                    <h1>🎉회원 가입 완료🎉</h1>
-                </div>
-                <div class="activate-container">
-                  <div class="obj-wrap">
-                    <div class="activate-msg">
-                      <div class="msg-text" id="top">한국어 학습 퀴즈 서비스 <한>에 가입해주셔서 감사합니다.</div>
-                      <div class="msg-text" id="message">이메일 인증이 완료되었으며, 지금부터 <한>의 서비스를 이용하실 수 있습니다.</div>
-                      <div class="msg-text" id="agree">아래 로그인 버튼을 누르면 로그인 화면으로 이동합니다.</div>
-                    </div>
-                    <button id="login-btn">로그인</button>
-                  </div>
-                </div>
+          <div id="spinner"></div>
+          <div class="activate-wrap">
+            <div class="activate-title">
+              <h1>🎉회원 가입 완료🎉</h1>
             </div>
+            <div class="activate-container">
+              <div class="obj-wrap">
+                <div class="activate-msg">
+                  <div class="msg-text" id="top">한국어 학습 퀴즈 서비스 <한>에 가입해주셔서 감사합니다.</div>
+                  <div class="msg-text" id="message">이메일 인증이 완료되었으며, 지금부터 <한>의 서비스를 이용하실 수 있습니다.</div>
+                  <div class="msg-text" id="agree">아래 로그인 버튼을 누르면 로그인 화면으로 이동합니다.</div>
+                </div>
+                <button id="login-btn">로그인</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="footer" role="footer">
         <!-- 푸터 삽입 위치 -->
       </div>
     </div>
-  <script src="/script/inject.js"></script>
-  <script type="module" src="/script/activate.js"></script>
+    <script src="/script/inject.js"></script>
+    <script type="module" src="/script/activate.js"></script>
 </body>
 
 </html>
