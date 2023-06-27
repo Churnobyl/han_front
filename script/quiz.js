@@ -3,13 +3,6 @@ import { sendQuizResultApi } from "./api.js";
 import { sendQuizReportApi } from "./api.js";
 import { FRONT_BASE_URL } from "./conf.js";
 
-document.addEventListener("keyup", (e) => {
-  if (e.key === 13 || e.key === "Enter") {
-    e.stopPropagation();
-    confirmQuiz();
-  }
-});
-
 document.getElementById("answer-button").addEventListener("click", confirmQuiz);
 document.getElementById("result-button").addEventListener("click", goResult);
 document
@@ -34,6 +27,8 @@ let quizzesMeaning;
 let quizzesFillInTheBlank;
 let quizzesCrossword;
 
+let checkCrosswordNow = false;
+
 let activeInput = null;
 let activeLabel = null;
 let activeCellId = null;
@@ -43,6 +38,13 @@ const xpText = document.getElementById("xp-text");
 
 const answerBtn = document.getElementById("answer-button");
 const resultBtn = document.getElementById("result-button");
+
+document.addEventListener("keyup", (e) => {
+  if (checkCrosswordNow === false && (e.key === 13 || e.key === "Enter")) {
+    e.stopPropagation();
+    confirmQuiz();
+  }
+});
 
 // query문에 따라서 다른 퀴즈에 접속가능하게 하기
 const urlParams = new URL(location.href).searchParams;
@@ -94,6 +96,7 @@ function showQuiz() {
     quizCounts[0] + quizCounts[1] + quizCounts[2] + quizCounts[3]
   ) {
     Crossword();
+    checkCrosswordNow = true;
   }
 }
 
@@ -182,6 +185,14 @@ class CrosswordMaker {
     this.activeCells = [];
     this.nowOrientation;
     this.nowNum;
+
+    let hintButton = document.getElementById("giveHint");
+    let hintBox = document.querySelector(".hint-box");
+    hintButton.addEventListener("click", () => {
+      if (this.currentHint) {
+        hintBox.textContent = this.currentHint;
+      }
+    });
     this.activeExplanationId = null;
     this.checkAnswerButton = document.getElementById("checkAnswer");
     this.preparePuzzle();
@@ -268,11 +279,24 @@ class CrosswordMaker {
           } else {
             this.verticalExplanations.appendChild(listItem);
           }
+          if (!cell.clickListeners) {
+            cell.clickListeners = [];
+          }
+
+          this.handleExplanationClick(
+            listItem,
+            i,
+            j,
+            k,
+            wordPosition,
+            wordLength
+          );
         }
 
-        cell.clickListeners = [];
+        if (!cell.clickListeners) {
+          cell.clickListeners = [];
+        }
 
-        // this.handleCellClick(cell, i, j, k, wordPosition, wordLength);
         if (this.cells[`${i}-${j}`]) {
           this.cells[`${i}-${j}`].forEach((wordInfo) => {
             this.handleCellClick(
@@ -298,53 +322,50 @@ class CrosswordMaker {
   }
 
   handleCellClick(cell, i, j, k, wordPosition, wordLength) {
-    // 셀 클릭했을 때 동작하는 핸들러
-    let hintButton = document.getElementById("giveHint");
     let hintBox = document.querySelector(".hint-box");
-    let orientation = this.problemData[k].orientation;
-    let highlightClass =
-      orientation === "right" ? "highlightRight" : "highlightBottom";
 
-    let highlightStayClass =
-      orientation === "right" ? "highlightStayRight" : "highlightStayBottom";
+    let cellInfo = [
+      {
+        orientation: this.problemData[k].orientation,
+        wordPosition: wordPosition,
+        wordLength: wordLength,
+        k: k,
+      },
+    ];
 
-    let highlightExplainClass =
-      orientation === "right"
-        ? "highlightExplainHorizontal"
-        : "highlightExplainVertical";
-
-    let highlightExplainStayClass =
-      orientation === "right"
-        ? "highlightExplainStayHorizontal"
-        : "highlightExplainStayVertical";
+    let toggleIndex = 0;
 
     cell.addEventListener("mouseover", () => {
-      for (let l = 0; l < wordLength; l++) {
+      let info = cellInfo[toggleIndex];
+      let orientation = info.orientation;
+      let highlightClass =
+        orientation === "right" ? "highlightRight" : "highlightBottom";
+      for (let l = 0; l < info.wordLength; l++) {
         let highlightCell =
           orientation === "right"
-            ? this.table.rows[i].cells[wordPosition[1] + l]
-            : this.table.rows[wordPosition[0] + l].cells[j];
+            ? this.table.rows[i].cells[info.wordPosition[1] + l]
+            : this.table.rows[info.wordPosition[0] + l].cells[j];
         highlightCell.classList.add(highlightClass);
       }
-      document
-        .getElementById("explanation-" + (k + 1))
-        .classList.add(highlightExplainClass);
     });
 
     cell.addEventListener("mouseout", () => {
-      for (let l = 0; l < wordLength; l++) {
+      let info = cellInfo[toggleIndex];
+      let orientation = info.orientation;
+      let highlightClass =
+        orientation === "right" ? "highlightRight" : "highlightBottom";
+      for (let l = 0; l < info.wordLength; l++) {
         let highlightCell =
           orientation === "right"
-            ? this.table.rows[i].cells[wordPosition[1] + l]
-            : this.table.rows[wordPosition[0] + l].cells[j];
+            ? this.table.rows[i].cells[info.wordPosition[1] + l]
+            : this.table.rows[info.wordPosition[0] + l].cells[j];
         highlightCell.classList.remove(highlightClass);
       }
-      document
-        .getElementById("explanation-" + (k + 1))
-        .classList.remove(highlightExplainClass);
     });
 
     cell.clickListeners.push(() => {
+      hintBox.textContent = "";
+
       if (this.activeExplanationId) {
         document
           .getElementById(this.activeExplanationId)
@@ -361,73 +382,122 @@ class CrosswordMaker {
           "highlightStayBottom"
         );
       }
-
-      hintBox.textContent = "";
-
       this.activeCells = [];
 
-      if (this.activeCellId !== cell.id) {
-        this.wordLabel.textContent =
-          (orientation === "right" ? "가로 " : "세로 ") + (k + 1) + "번";
+      let info = cellInfo[toggleIndex];
+      let orientation = info.orientation;
+      let highlightClass =
+        orientation === "right" ? "highlightStayRight" : "highlightStayBottom";
+      let highlightExplainStayClass =
+        orientation === "right"
+          ? "highlightExplainStayHorizontal"
+          : "highlightExplainStayVertical";
 
-        this.nowOrientation = orientation;
-        this.nowNum = k + 1;
+      this.wordLabel.textContent =
+        (orientation === "right" ? "가로 " : "세로 ") + (info.k + 1) + "번";
+      this.nowOrientation = orientation;
+      this.nowNum = info.k + 1;
+      this.wordInput.value = "";
+      this.wordInput.focus();
+      this.wordInput.dataset.cells =
+        orientation === "right"
+          ? Array.from(
+              { length: info.wordLength },
+              (_, l) => `cell-${i}-${info.wordPosition[1] + l}`
+            )
+          : Array.from(
+              { length: info.wordLength },
+              (_, l) => `cell-${info.wordPosition[0] + l}-${j}`
+            );
 
-        this.wordInput.value = "";
-        this.wordInput.dataset.cells =
+      for (let l = 0; l < info.wordLength; l++) {
+        let highlightCell =
           orientation === "right"
-            ? Array.from(
-                { length: wordLength },
-                (_, l) => `cell-${i}-${wordPosition[1] + l}`
-              )
-            : Array.from(
-                { length: wordLength },
-                (_, l) => `cell-${wordPosition[0] + l}-${j}`
-              );
-
-        this.activeCellId = cell.id;
-
-        for (let l = 0; l < wordLength; l++) {
-          let highlightCell =
-            orientation === "right"
-              ? this.table.rows[i].cells[wordPosition[1] + l]
-              : this.table.rows[wordPosition[0] + l].cells[j];
-          highlightCell.classList.add(highlightStayClass);
-          this.activeCells.push(highlightCell);
-        }
-
-        let explanationElement = document.getElementById(
-          "explanation-" + (k + 1)
-        );
-        explanationElement.classList.add(highlightExplainStayClass);
-        this.activeExplanationId = explanationElement.id;
-      } else {
-        this.wordLabel.textContent = "";
-        this.wordInput.value = "";
-        this.wordInput.dataset.cells = "";
-        this.activeCellId = null;
-
-        for (let l = 0; l < wordLength; l++) {
-          let highlightCell =
-            orientation === "right"
-              ? this.table.rows[i].cells[wordPosition[1] + l]
-              : this.table.rows[wordPosition[0] + l].cells[j];
-          highlightCell.classList.remove(highlightStayClass);
-        }
-        document
-          .getElementById("explanation-" + (k + 1))
-          .classList.remove(highlightExplainStayClass);
+            ? this.table.rows[i].cells[info.wordPosition[1] + l]
+            : this.table.rows[info.wordPosition[0] + l].cells[j];
+        highlightCell.classList.add(highlightClass);
+        this.activeCells.push(highlightCell);
       }
 
-      hintButton.addEventListener("click", () => {
-        let hint = this.problemData[k].hint;
-        hintBox.textContent = hint;
-      });
-    });
+      let explanationElement = document.getElementById(
+        "explanation-" + (info.k + 1)
+      );
+      explanationElement.classList.add(highlightExplainStayClass);
+      this.activeExplanationId = explanationElement.id;
 
-    cell.clickListeners = cell.clickListeners.filter(
-      (listener) => listener !== this
-    );
+      toggleIndex = (toggleIndex + 1) % cellInfo.length;
+
+      this.currentHint = this.problemData[k].hint;
+    });
+  }
+
+  handleExplanationClick(listItem, i, j, k, wordPosition, wordLength) {
+    let hintBox = document.querySelector(".hint-box");
+
+    listItem.addEventListener("click", () => {
+      hintBox.textContent = "";
+
+      let hint = this.problemData[k].hint;
+
+      if (this.activeExplanationId) {
+        document
+          .getElementById(this.activeExplanationId)
+          .classList.remove(
+            "highlightExplainStayHorizontal",
+            "highlightExplainStayVertical"
+          );
+        this.activeExplanationId = null;
+      }
+
+      for (let l = 0; l < this.activeCells.length; l++) {
+        this.activeCells[l].classList.remove(
+          "highlightStayRight",
+          "highlightStayBottom"
+        );
+      }
+      this.activeCells = [];
+
+      let orientation = this.problemData[k].orientation;
+      let highlightClass =
+        orientation === "right" ? "highlightStayRight" : "highlightStayBottom";
+      let highlightExplainStayClass =
+        orientation === "right"
+          ? "highlightExplainStayHorizontal"
+          : "highlightExplainStayVertical";
+
+      this.wordLabel.textContent =
+        (orientation === "right" ? "가로 " : "세로 ") + (k + 1) + "번";
+      this.nowOrientation = orientation;
+      this.nowNum = k + 1;
+
+      for (let l = 0; l < wordLength; l++) {
+        let highlightCell =
+          orientation === "right"
+            ? this.table.rows[i].cells[wordPosition[1] + l]
+            : this.table.rows[wordPosition[0] + l].cells[j];
+        highlightCell.classList.add(highlightClass);
+        this.activeCells.push(highlightCell);
+      }
+
+      this.wordInput.dataset.cells =
+        orientation === "right"
+          ? Array.from(
+              { length: wordLength },
+              (_, l) => `cell-${i}-${wordPosition[1] + l}`
+            )
+          : Array.from(
+              { length: wordLength },
+              (_, l) => `cell-${wordPosition[0] + l}-${j}`
+            );
+
+      listItem.classList.add(highlightExplainStayClass);
+      this.activeExplanationId = listItem.id;
+
+      this.currentHint = this.problemData[k].hint;
+
+      this.wordInput.value = "";
+      this.wordInput.focus();
+    });
   }
 
   checkAnswer() {
@@ -489,6 +559,16 @@ class CrosswordMaker {
 
     if (this.checkAllAnswers()) {
       alert("축하합니다! 퍼즐을 완성했습니다!");
+      checkCrosswordNow = false;
+      quiz = quizzes[quizIndex];
+      quiz["crossword"] = true;
+      quiz["solved"] = true;
+      quizIndex++;
+      correctCount++;
+      localStorage.setItem("crossword", true);
+      finishQuiz().then(() => {
+        window.location.replace("/html/quiz_result.html");
+      });
     }
   }
 
@@ -661,4 +741,5 @@ window.onload = async function () {
   });
   resultBtn.style.display = "none";
   localStorage.removeItem("correctCount");
+  localStorage.removeItem("crossword");
 };
