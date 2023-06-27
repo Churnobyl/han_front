@@ -68,8 +68,15 @@ async function injectFooter() {
   }
 }
 
-// 네비바, 푸터 전부 불러온 다음에 이벤트리스너 부착
-Promise.all([injectNavbar(), injectFooter()])
+async function injectNotification() {
+  // 알림창 삽입
+  const notificationHtml = await fetch("/html/notification.html");
+  let data = await notificationHtml.text();
+  document.querySelector(".main").innerHTML += data;
+}
+
+// 네비바, 푸터, 알림창 전부 불러온 다음에 이벤트리스너 부착
+Promise.all([injectNavbar(), injectFooter(), injectNotification()])
   .then(() => loadComponent())
   .then(() => {
     const font = new FontFace(
@@ -150,6 +157,7 @@ function loadComponent() {
   }
   document.getElementById("menuStart").addEventListener("click", goStart);
   document.getElementById("menuLogin").addEventListener("click", goLogin);
+  document.getElementById("notification-button").addEventListener("click", notificationDropdownOpen);
 }
 
 function goHome() {
@@ -240,5 +248,14 @@ async function websocketLoading() {
     }
 
     /* 웹소켓 관련 end */
+  }
+}
+
+function notificationDropdownOpen() {
+  const dropdown = document.getElementById("notification-dropdown");
+  if (dropdown.style.display === "none") {
+    dropdown.style.display = "block";
+  } else {
+    dropdown.style.display = "none";
   }
 }
