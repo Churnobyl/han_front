@@ -1,8 +1,5 @@
 import { getRoomDetailApi, checkAnonymous, socket } from "/script/api.js";
-<<<<<<< HEAD
 import { BACK_WEBSOCKET_URL, BACK_BASE_URL } from "/script/conf.js";
-=======
->>>>>>> 415aeed (:sparkles:Feat: 칭호 이미지 추가)
 
 checkAnonymous();
 
@@ -32,33 +29,8 @@ socket.onopen = function (e) {
   );
 };
 
-
 socket.onmessage = function (e) {
   const data = JSON.parse(e.data);
-<<<<<<< HEAD
-
-    if (data.message) {
-      document.getElementById("chat-log").value += data.message + "\n";
-    } else if (data.type === "start_game") {
-      start_game = true
-      startBtn.style = "display: none;";
-    } else if (data.type === "send_quiz") {
-      const quiz = data.quiz
-      console.log(quiz)
-      showQuiz(quiz);
-
-      // quiz_answer = quiz["dict_word"]["word"]
-      // const message = document.getElementById("chat-message-input").value;
-      // if (quiz_answer === message){
-      //   console.log("정답!")
-      // }
-      // chatSocket.send(
-      //   JSON.stringify({
-      //     roomData: roomData,
-      //     message: message,
-      //   })
-      // );
-=======
   if (data.message) {
     document.getElementById("chat-log").value += data.message + "\n";
   } else if (data.type == "start_game") {
@@ -73,7 +45,6 @@ socket.onmessage = function (e) {
     const message = document.getElementById("chat-message-input").value;
     if (quiz_answer == message) {
       console.log("정답!");
->>>>>>> 415aeed (:sparkles:Feat: 칭호 이미지 추가)
     }
     // chatSocket.send(
     //   JSON.stringify({
@@ -83,8 +54,6 @@ socket.onmessage = function (e) {
     // );
   }
 };
-
-
 
 const base64Url = access.split(".")[1];
 const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
@@ -113,8 +82,8 @@ const payload = token.split(".")[1];
 const decodedPayload = JSON.parse(atob(payload));
 const userId = decodedPayload["user_id"];
 
-const startBtn = document.getElementById("start")
-let start_game = false
+const startBtn = document.getElementById("start");
+let start_game = false;
 let quiz_answer;
 
 // const chatSocket = new WebSocket(
@@ -180,10 +149,10 @@ function gameStart() {
 
 function showQuiz(quiz) {
   const quizTitle = document.getElementById("title");
-  quizTitle.innerText = quiz["content"]
-  for (let i=1; i<=quiz["dict_word"]["examples"].length; i++) {
-    const exampleInner = document.getElementById(`examples-${i}`)
-    exampleInner.innerText = `${i}: ${quiz["dict_word"]["examples"][i-1]}`
+  quizTitle.innerText = quiz["content"];
+  for (let i = 1; i <= quiz["dict_word"]["examples"].length; i++) {
+    const exampleInner = document.getElementById(`examples-${i}`);
+    exampleInner.innerText = `${i}: ${quiz["dict_word"]["examples"][i - 1]}`;
   }
 }
 
@@ -193,9 +162,9 @@ function correctQuiz() {
     socket.send(
       JSON.stringify({
         type: "correct_answer",
-        message: "정답"
+        message: "정답",
       })
-    )
+    );
   }
 }
 
