@@ -1,5 +1,4 @@
 import { getRoomDetailApi, checkAnonymous, socket } from "/script/api.js";
-import { BACK_WEBSOCKET_URL } from "/script/conf.js";
 
 checkAnonymous();
 
@@ -7,52 +6,52 @@ checkAnonymous();
 document.getElementById("quit-btn").addEventListener("click", function () {
   window.location.replace("/html/battle/lobby.html");
 });
-document.getElementById("start").addEventListener("click", gameStart)
+document.getElementById("start").addEventListener("click", gameStart);
 
 /* 웹소켓 관련 */
 const urlParams = new URLSearchParams(window.location.search);
 const roomName = urlParams.get("room");
 const access = localStorage.getItem("access");
 
-socket.onopen = function(e) {
+socket.onopen = function (e) {
   socket.send(
-  JSON.stringify({
-    type: 'join_room',
-    room: roomName,
-  })
+    JSON.stringify({
+      type: "join_room",
+      room: roomName,
+    })
   );
   socket.send(
-  JSON.stringify({
-    type: 'chat_message',
-    message: "접속했습니다.",
-  })
+    JSON.stringify({
+      type: "chat_message",
+      message: "접속했습니다.",
+    })
   );
-}
+};
 
 socket.onmessage = function (e) {
   const data = JSON.parse(e.data);
-    if (data.message) {
-      document.getElementById("chat-log").value += data.message + "\n";
-    } else if (data.type == "start_game") {
-      console.log(data)
-      start_game = true
-      startBtn.style = "display: none;";
-    } else if (data.type == "quiz") {
-      const quiz = data.quiz
-      console.log(quiz)
+  if (data.message) {
+    document.getElementById("chat-log").value += data.message + "\n";
+  } else if (data.type == "start_game") {
+    console.log(data);
+    start_game = true;
+    startBtn.style = "display: none;";
+  } else if (data.type == "quiz") {
+    const quiz = data.quiz;
+    console.log(quiz);
 
-      quiz_answer = quiz["dict_word"]["word"]
-      const message = document.getElementById("chat-message-input").value;
-      if (quiz_answer == message){
-        console.log("정답!")
-      }
-      // chatSocket.send(
-      //   JSON.stringify({
-      //     roomData: roomData,
-      //     message: message,
-      //   })
-      // );
+    quiz_answer = quiz["dict_word"]["word"];
+    const message = document.getElementById("chat-message-input").value;
+    if (quiz_answer == message) {
+      console.log("정답!");
     }
+    // chatSocket.send(
+    //   JSON.stringify({
+    //     roomData: roomData,
+    //     message: message,
+    //   })
+    // );
+  }
 };
 
 const base64Url = access.split(".")[1];
@@ -82,39 +81,6 @@ const payload = token.split(".")[1];
 const decodedPayload = JSON.parse(atob(payload));
 const userId = decodedPayload["user_id"];
 
-const startBtn = document.getElementById("start")
-let start_game = false
-let quiz_answer
-
-// const chatSocket = new WebSocket(
-//   "ws://" +
-//     BACK_WEBSOCKET_URL +
-//     "/ws/battle/" +
-//     roomName +
-//     "/?page=" +
-//     pageName +
-//     "&token=" +
-//     token
-// );
-
-// chatSocket.onmessage = function (e) {
-//   const data = JSON.parse(e.data);
-//   document.getElementById("chat-log").value += data.message + "\n";
-// };
-
-// chatSocket.onopen = () => {
-//   chatSocket.send(
-//     JSON.stringify({
-//       roomData: roomData,
-//       message: "접속했습니다.",
-//     })
-//   );
-// };
-
-// chatSocket.onclose = function (e) {
-//   console.error("Chat socket closed unexpectedly");
-// };
-
 document.getElementById("chat-message-input").focus();
 document.getElementById("chat-message-input").onkeyup = function (e) {
   if (e.key === 13 || e.key === "Enter") {
@@ -141,9 +107,9 @@ function gameStart() {
   socket.send(
     JSON.stringify({
       type: "start_game",
-      message: "start game"
+      message: "start game",
     })
-  )
+  );
 }
 
 /* 웹소켓 관련 end */
@@ -173,12 +139,13 @@ getRoomDetailApi(roomName).then(({ response, responseJson }) => {
       if (user["participant"]["image"]) {
         img = user["participant"]["image"];
       } else {
-        img = "/img/page1-img.jpg";
+        const randomPick = Math.floor(Math.random() * 5 + 1);
+        img = `/img/user-profile/${randomPick}.png`;
       }
       userBox.querySelector(".profile-container img").src = img;
       const isHost = user["is_host"];
       if (isHost) {
-        document.getElementById("is-host").src = "/img/fake/crown.png";
+        document.querySelector(".achievement").src = "/img/fake/crown.png";
         hostUser = user["participant"]["id"];
       }
       const nickname = user["participant"]["username"];
