@@ -87,35 +87,6 @@ const startBtn = document.getElementById("start");
 let start_game = false;
 let quiz_answer;
 
-// const chatSocket = new WebSocket(
-//   "ws://" +
-//     BACK_WEBSOCKET_URL +
-//     "/ws/battle/" +
-//     roomName +
-//     "/?page=" +
-//     pageName +
-//     "&token=" +
-//     token
-// );
-
-// chatSocket.onmessage = function (e) {
-//   const data = JSON.parse(e.data);
-//   document.getElementById("chat-log").value += data.message + "\n";
-// };
-
-// chatSocket.onopen = () => {
-//   chatSocket.send(
-//     JSON.stringify({
-//       roomData: roomData,
-//       message: "접속했습니다.",
-//     })
-//   );
-// };
-
-// chatSocket.onclose = function (e) {
-//   console.error("Chat socket closed unexpectedly");
-// };
-
 document.getElementById("chat-message-input").focus();
 document.getElementById("chat-message-input").onkeyup = function (e) {
   if (e.key === 13 || e.key === "Enter") {
