@@ -400,7 +400,49 @@ if (token){
 if (socket){
   socket.onmessage = function (e) {
     const notification = JSON.parse(e.data)
-    console.log(notification)
-    document.getElementById("notification-list").innerHTML += `<li>${notification}</li>`
+    const notificationDrop = document.getElementById("notification-list")
+    notification["message"].forEach(element => {
+      const notification = document.createElement("li")
+      notification.innerText = `${element.sender}의 겨루기 초대 `
+
+      const accept = document.createElement("a")
+      accept.innerText = "수락"
+      accept.setAttribute("data-id", element.id)
+      accept.setAttribute("data-room", element.room)
+      accept.addEventListener("click", acceptInvitation)
+      notification.append(accept)
+
+      const reject = document.createElement("a")
+      reject.innerText = "거절"
+      reject.setAttribute("data-id", element.id)
+      reject.setAttribute("data-room", element.room)
+      reject.addEventListener("click", rejectInvitation)
+      notification.append(reject)
+
+      notificationDrop.append(notification)
+    });
   }
+}
+
+async function acceptInvitation(e) {
+  const invitationId = e.target.getAttribute("data-id")
+  const roomName = e.target.getAttribute("data-room")
+  socket.send(
+      JSON.stringify({
+        type: 'read_notification',
+        notification: invitationId,
+      })
+  )
+  window.location.href = `/html/battle/battle-page.html?room=${roomName}`;
+}
+
+async function rejectInvitation(e) {
+  const invitationId = e.target.getAttribute("data-id")
+  socket.send(
+      JSON.stringify({
+        type: 'read_notification',
+        notification: invitationId,
+      })
+  )
+  window.location.reload()
 }
