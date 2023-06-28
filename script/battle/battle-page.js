@@ -7,6 +7,7 @@ checkAnonymous();
 document.getElementById("quit-btn").addEventListener("click", function () {
   window.location.replace("/html/battle/lobby.html");
 });
+document.getElementById("start").addEventListener("click", gameStart)
 
 /* 웹소켓 관련 */
 const urlParams = new URLSearchParams(window.location.search);
@@ -30,7 +31,28 @@ socket.onopen = function(e) {
 
 socket.onmessage = function (e) {
   const data = JSON.parse(e.data);
-  document.getElementById("chat-log").value += data.message + "\n";
+    if (data.message) {
+      document.getElementById("chat-log").value += data.message + "\n";
+    } else if (data.type == "start_game") {
+      console.log(data)
+      start_game = true
+      startBtn.style = "display: none;";
+    } else if (data.type == "quiz") {
+      const quiz = data.quiz
+      console.log(quiz)
+
+      quiz_answer = quiz["dict_word"]["word"]
+      const message = document.getElementById("chat-message-input").value;
+      if (quiz_answer == message){
+        console.log("정답!")
+      }
+      // chatSocket.send(
+      //   JSON.stringify({
+      //     roomData: roomData,
+      //     message: message,
+      //   })
+      // );
+    }
 };
 
 const base64Url = access.split(".")[1];
@@ -59,6 +81,10 @@ const pageName = pageSplit[pageSplit.length - 1].split(".")[0];
 const payload = token.split(".")[1];
 const decodedPayload = JSON.parse(atob(payload));
 const userId = decodedPayload["user_id"];
+
+const startBtn = document.getElementById("start")
+let start_game = false
+let quiz_answer
 
 // const chatSocket = new WebSocket(
 //   "ws://" +
@@ -111,6 +137,15 @@ function sendMessage() {
   messageInputDom.value = "";
 }
 
+function gameStart() {
+  socket.send(
+    JSON.stringify({
+      type: "start_game",
+      message: "start game"
+    })
+  )
+}
+
 /* 웹소켓 관련 end */
 
 // 방 정보 가져오기
@@ -156,10 +191,8 @@ getRoomDetailApi(roomName).then(({ response, responseJson }) => {
       });
       i++;
     });
-    if (userId == hostUser) {
-      document.getElementById("ready").style = "display: none;";
-    } else {
-      document.getElementById("start").style = "display: none;";
+    if (userId != hostUser) {
+      startBtn.style = "display: none;";
     }
   } else {
     alert("웹소켓 연결에 실패했습니다.");
