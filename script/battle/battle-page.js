@@ -8,6 +8,7 @@ document.getElementById("quit-btn").addEventListener("click", function () {
   window.location.replace("/html/battle/lobby.html");
 });
 document.getElementById("start").addEventListener("click", gameStart);
+document.getElementById("invite").addEventListener("click", inviteModal);
 
 /* 웹소켓 관련 */
 const urlParams = new URLSearchParams(window.location.search);
@@ -169,6 +170,8 @@ function correctQuiz() {
 }
 
 /* 웹소켓 관련 end */
+
+function inviteModal() {}
 
 // 방 정보 가져오기
 getRoomDetailApi(roomName).then(({ response, responseJson }) => {
