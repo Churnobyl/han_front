@@ -232,9 +232,17 @@ td.emptyCell {
   color: #383838;
 }
 
-/* #horizontalExplanations {
-  margin-bottom: 20px;
-} */
+#horizontalExplanations li {
+  cursor: pointer;
+}
+
+#verticalExplanations li {
+  cursor: pointer;
+}
+
+.hidden {
+  cursor: pointer;
+}
 
 .word-number {
   position: absolute;
@@ -243,6 +251,14 @@ td.emptyCell {
   font-size: 0.7em;
   color: rgb(231, 0, 0);
   line-height: 1em;
+}
+
+#wordInput {
+  border: #383838 3px solid;
+}
+
+.explanation {
+  font-size: 28px;
 }
 
 .highlightRight {
@@ -299,4 +315,3 @@ li.highlightExplainStayVertical {
   justify-content: center;
   flex-direction: row;
 }
-
