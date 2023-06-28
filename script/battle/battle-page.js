@@ -1,5 +1,4 @@
 import { getRoomDetailApi, checkAnonymous, socket } from "/script/api.js";
-import { BACK_WEBSOCKET_URL } from "/script/conf.js";
 
 checkAnonymous();
 
@@ -13,20 +12,20 @@ const urlParams = new URLSearchParams(window.location.search);
 const roomName = urlParams.get("room");
 const access = localStorage.getItem("access");
 
-socket.onopen = function(e) {
+socket.onopen = function (e) {
   socket.send(
-  JSON.stringify({
-    type: 'join_room',
-    room: roomName,
-  })
+    JSON.stringify({
+      type: "join_room",
+      room: roomName,
+    })
   );
   socket.send(
-  JSON.stringify({
-    type: 'chat_message',
-    message: "접속했습니다.",
-  })
+    JSON.stringify({
+      type: "chat_message",
+      message: "접속했습니다.",
+    })
   );
-}
+};
 
 socket.onmessage = function (e) {
   const data = JSON.parse(e.data);
@@ -59,35 +58,6 @@ const pageName = pageSplit[pageSplit.length - 1].split(".")[0];
 const payload = token.split(".")[1];
 const decodedPayload = JSON.parse(atob(payload));
 const userId = decodedPayload["user_id"];
-
-// const chatSocket = new WebSocket(
-//   "ws://" +
-//     BACK_WEBSOCKET_URL +
-//     "/ws/battle/" +
-//     roomName +
-//     "/?page=" +
-//     pageName +
-//     "&token=" +
-//     token
-// );
-
-// chatSocket.onmessage = function (e) {
-//   const data = JSON.parse(e.data);
-//   document.getElementById("chat-log").value += data.message + "\n";
-// };
-
-// chatSocket.onopen = () => {
-//   chatSocket.send(
-//     JSON.stringify({
-//       roomData: roomData,
-//       message: "접속했습니다.",
-//     })
-//   );
-// };
-
-// chatSocket.onclose = function (e) {
-//   console.error("Chat socket closed unexpectedly");
-// };
 
 document.getElementById("chat-message-input").focus();
 document.getElementById("chat-message-input").onkeyup = function (e) {
@@ -138,12 +108,13 @@ getRoomDetailApi(roomName).then(({ response, responseJson }) => {
       if (user["participant"]["image"]) {
         img = user["participant"]["image"];
       } else {
-        img = "/img/page1-img.jpg";
+        const randomPick = Math.floor(Math.random() * 5 + 1);
+        img = `/img/user-profile/${randomPick}.png`;
       }
       userBox.querySelector(".profile-container img").src = img;
       const isHost = user["is_host"];
       if (isHost) {
-        document.getElementById("is-host").src = "/img/fake/crown.png";
+        document.querySelector(".achievement").src = "/img/fake/crown.png";
         hostUser = user["participant"]["id"];
       }
       const nickname = user["participant"]["username"];
