@@ -37,6 +37,7 @@ input {
   display: grid;
   grid-template-columns: 200px 1fr 200px;
   grid-template-rows: 500px 300px;
+  row-gap: 10px;
   column-gap: 10px;
 }
 
@@ -87,7 +88,7 @@ input {
   grid-row: 2;
 }
 
-#button-wrap, #quit-btn {
+/* #button-wrap, #quit-btn {
   margin: 0 auto;
 }
 
@@ -102,6 +103,17 @@ input {
 #quit-btn > button:hover {
     cursor: pointer;
     color: red
+} */
+
+.btn-grid {
+  grid-column: 3;
+  grid-row: 2;
+  display: grid;
+
+  grid-template-columns: fr fr;
+  grid-template-rows: 60px 60px;
+  padding: 3px;
+  text-align: center;
 }
 
 .chat {
@@ -109,6 +121,33 @@ input {
   grid-column: 2;
   grid-row: 2;
   margin: 10px auto;
+}
+
+#button-wrap {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+#invite-wrap {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+#quit-wrap {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.btns-module .btn {
+  border: #383838 solid 3px;
+  color: #383838;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+#start {
+  background-color: #383838;
+  color: #ebebeb;
 }
 
 .chat-component {
@@ -165,8 +204,9 @@ input {
   padding: 40px;
 }
 
-.quiz-title, #title{
-  font-size: 1.3rem
+.quiz-title,
+#title {
+  font-size: 1.3rem;
 }
 
 .quiz-content {
