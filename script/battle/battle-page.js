@@ -81,6 +81,10 @@ const payload = token.split(".")[1];
 const decodedPayload = JSON.parse(atob(payload));
 const userId = decodedPayload["user_id"];
 
+const startBtn = document.getElementById("start");
+let start_game = false;
+let quiz_answer;
+
 document.getElementById("chat-message-input").focus();
 document.getElementById("chat-message-input").onkeyup = function (e) {
   if (e.key === 13 || e.key === "Enter") {
