@@ -1,5 +1,5 @@
 import { getRoomDetailApi, checkAnonymous, socket } from "/script/api.js";
-import { BACK_WEBSOCKET_URL } from "/script/conf.js";
+import { BACK_WEBSOCKET_URL, BACK_BASE_URL } from "/script/conf.js";
 
 checkAnonymous();
 
@@ -29,23 +29,25 @@ socket.onopen = function(e) {
   );
 }
 
+
 socket.onmessage = function (e) {
   const data = JSON.parse(e.data);
+
     if (data.message) {
       document.getElementById("chat-log").value += data.message + "\n";
-    } else if (data.type == "start_game") {
-      console.log(data)
+    } else if (data.type === "start_game") {
       start_game = true
       startBtn.style = "display: none;";
-    } else if (data.type == "quiz") {
+    } else if (data.type === "send_quiz") {
       const quiz = data.quiz
       console.log(quiz)
+      showQuiz(quiz);
 
-      quiz_answer = quiz["dict_word"]["word"]
-      const message = document.getElementById("chat-message-input").value;
-      if (quiz_answer == message){
-        console.log("정답!")
-      }
+      // quiz_answer = quiz["dict_word"]["word"]
+      // const message = document.getElementById("chat-message-input").value;
+      // if (quiz_answer === message){
+      //   console.log("정답!")
+      // }
       // chatSocket.send(
       //   JSON.stringify({
       //     roomData: roomData,
@@ -54,6 +56,8 @@ socket.onmessage = function (e) {
       // );
     }
 };
+
+
 
 const base64Url = access.split(".")[1];
 const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
@@ -84,7 +88,7 @@ const userId = decodedPayload["user_id"];
 
 const startBtn = document.getElementById("start")
 let start_game = false
-let quiz_answer
+let quiz_answer;
 
 // const chatSocket = new WebSocket(
 //   "ws://" +
@@ -134,6 +138,7 @@ function sendMessage() {
       message: message,
     })
   );
+  correctQuiz();
   messageInputDom.value = "";
 }
 
@@ -144,6 +149,27 @@ function gameStart() {
       message: "start game"
     })
   )
+}
+
+function showQuiz(quiz) {
+  const quizTitle = document.getElementById("title");
+  quizTitle.innerText = quiz["content"]
+  for (let i=1; i<=quiz["dict_word"]["examples"].length; i++) {
+    const exampleInner = document.getElementById(`examples-${i}`)
+    exampleInner.innerText = `${i}: ${quiz["dict_word"]["examples"][i-1]}`
+  }
+}
+
+function correctQuiz() {
+  const userInput = document.getElementById("chat-message-input").value;
+  if (userInput === quiz_answer) {
+    socket.send(
+      JSON.stringify({
+        type: "correct_answer",
+        message: "정답"
+      })
+    )
+  }
 }
 
 /* 웹소켓 관련 end */
@@ -171,7 +197,7 @@ getRoomDetailApi(roomName).then(({ response, responseJson }) => {
       let userBox = document.getElementById(`user-box-${i}`);
       let img;
       if (user["participant"]["image"]) {
-        img = user["participant"]["image"];
+        img = `${BACK_BASE_URL}${user["participant"]["image"]}`;
       } else {
         img = "/img/page1-img.jpg";
       }
@@ -182,7 +208,7 @@ getRoomDetailApi(roomName).then(({ response, responseJson }) => {
         hostUser = user["participant"]["id"];
       }
       const nickname = user["participant"]["username"];
-      const username = document.getElementById("username");
+      const username = document.getElementById(`username-${i}`);
       username.innerText = nickname;
       username.addEventListener("click", function () {
         window.location.replace(
