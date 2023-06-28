@@ -394,10 +394,13 @@ export async function checkLoginUser() {
 export let socket
 const token = localStorage.getItem("access");
 if (token){
-  socket = new WebSocket(`ws://${BACK_WEBSOCKET_URL}/ws/notification/?token=${token}`);
+  socket = new WebSocket(`ws://${BACK_WEBSOCKET_URL}/ws/battle/?token=${token}`);
 }
 
-socket.onmessage = function (e) {
-  const notification = JSON.parse(e.data)
-  document.getElementById("notification-list").innerHTML += `<li>${notification}</li>`
+if (socket){
+  socket.onmessage = function (e) {
+    const notification = JSON.parse(e.data)
+    console.log(notification)
+    document.getElementById("notification-list").innerHTML += `<li>${notification}</li>`
+  }
 }
