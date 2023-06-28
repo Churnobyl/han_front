@@ -3,8 +3,6 @@ import { sendQuizResultApi } from "./api.js";
 import { sendQuizReportApi } from "./api.js";
 import { FRONT_BASE_URL } from "./conf.js";
 
-document.getElementById("answer-button").addEventListener("click", confirmQuiz);
-document.getElementById("result-button").addEventListener("click", goResult);
 document
   .getElementById("report-button")
   .addEventListener("click", reportModalOpen);
@@ -38,6 +36,9 @@ const xpText = document.getElementById("xp-text");
 
 const answerBtn = document.getElementById("answer-button");
 const resultBtn = document.getElementById("result-button");
+
+answerBtn.addEventListener("click", confirmQuiz);
+resultBtn.addEventListener("click", goResult);
 
 document.addEventListener("keyup", (e) => {
   if (checkCrosswordNow === false && (e.key === 13 || e.key === "Enter")) {
@@ -97,6 +98,10 @@ function showQuiz() {
   ) {
     Crossword();
     checkCrosswordNow = true;
+
+    if (checkCrosswordNow) {
+      answerBtn.style.display = "none";
+    }
   }
 }
 
