@@ -14,7 +14,12 @@ const roomName = urlParams.get("room");
 const access = localStorage.getItem("access");
 
 socket.onopen = function (e) {
+socket.onopen = function (e) {
   socket.send(
+    JSON.stringify({
+      type: "join_room",
+      room: roomName,
+    })
     JSON.stringify({
       type: "join_room",
       room: roomName,
@@ -25,7 +30,12 @@ socket.onopen = function (e) {
       type: "chat_message",
       message: "접속했습니다.",
     })
+    JSON.stringify({
+      type: "chat_message",
+      message: "접속했습니다.",
+    })
   );
+};
 };
 
 socket.onmessage = function (e) {
@@ -143,6 +153,8 @@ getRoomDetailApi(roomName).then(({ response, responseJson }) => {
       if (user["participant"]["image"]) {
         img = user["participant"]["image"];
       } else {
+        const randomPick = Math.floor(Math.random() * 5 + 1);
+        img = `/img/user-profile/${randomPick}.png`;
         const randomPick = Math.floor(Math.random() * 5 + 1);
         img = `/img/user-profile/${randomPick}.png`;
       }
