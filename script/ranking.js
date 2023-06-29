@@ -19,9 +19,11 @@ const idxWrap = document.querySelector(".idx-wrap")
 let rankingData;
 let page = 0;
 let isFetching;
-let waiting
+let query
 
-document.getElementById("battle-rank").addEventListener("click", getBattle)
+document.getElementById("battle-rank").addEventListener("click", function(){
+  getRanking(null, null, query="?type=battle");
+})
 document.getElementById("exp-rank").addEventListener("click", function(){
   getRanking();
 })
@@ -30,34 +32,21 @@ window.onload = function () {
   getRanking();
 };
 
-function getBattle() {
-  ranks.forEach(rank => {
-    rank.style = "display: none;"
-  });
-  leftArrow.style = "display: none;"
-  rightArrow.style = "display: none;"
-  if (!document.getElementById("waiting")) {
-    idxWrap.insertAdjacentHTML("afterend", `<div id="waiting">준비중입니다.</div>`);
-    waiting = document.getElementById("waiting");
-  }
-}
-
-async function getRanking(link, e) {
+async function getRanking(link, e, query) {
   // 호출 중일 경우에 추가로 호출 못하게
   if (isFetching) {
     return;
   }
   isFetching = true;
-  
-  if (waiting) {
-    setTimeout(() => {
-      waiting.parentNode.removeChild(waiting);
-    }, 0);
-  }
 
   //   버튼을 통해 들어왔을 경우 & 아닐 경우
   if (!link) {
-    rankingData = await getRankingApi();
+    if (!query) {
+      rankingData = await getRankingApi()
+    }
+    else {
+      rankingData = await getRankingApi(null, query)
+    }
   } else {
     rankingData = await getRankingApi(link);
     if (e === "p") {
@@ -96,6 +85,7 @@ async function getRanking(link, e) {
     let rank = parentElement.querySelector(".rank");
     let user = parentElement.querySelector(".user");
     let levelXp = parentElement.querySelector(".level-xp");
+    let battle = parentElement.querySelector(".battle");
 
     let result = rankingData["results"][i];
     if (result) {
@@ -106,6 +96,7 @@ async function getRanking(link, e) {
         window.location.href = `${FRONT_BASE_URL}/html/mypage.html?id=${result["player"]["id"]}`;
       });
       levelXp.innerText = `${result["level"]} (${result["experiment"]})`;
+      battle.innerText = result["battlepoint"]
       if (result["player"]["id"] == userId) {
         parentElement.style.backgroundColor = "wheat";
       } else {
