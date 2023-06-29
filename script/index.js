@@ -47,8 +47,8 @@ function slidingPage() {
 
 function loadClickComponent() {
   // 컴포넌트 클릭 이벤트 부여
-  document.getElementById("menuStart").addEventListener("click", goLogin);
-  document.getElementById("mainStart").addEventListener("click", goLogin);
+  document.getElementById("menuStart").addEventListener("click", goQuiz);
+  document.getElementById("mainStart").addEventListener("click", goQuiz);
   document.getElementById("menuLogin").addEventListener("click", goLogin);
   document.querySelector(".logo").addEventListener("click", goHome);
   document.getElementById("menuHome").addEventListener("click", goHomePage);
