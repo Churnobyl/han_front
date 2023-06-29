@@ -4,9 +4,7 @@ import { BACK_WEBSOCKET_URL, BACK_BASE_URL } from "/script/conf.js";
 checkAnonymous();
 
 // 버튼 이벤트리스너 모음
-document.getElementById("quit-btn").addEventListener("click", function () {
-  window.location.replace("/html/battle/lobby.html");
-});
+document.getElementById("quit-btn").addEventListener("click", roomQuit);
 document.getElementById("start").addEventListener("click", gameStart);
 document.getElementById("invite").addEventListener("click", inviteModal);
 document.getElementById("invite-button").addEventListener("click", inviteBtn);
@@ -50,6 +48,11 @@ socket.onmessage = function (e) {
   } else if (data.method === "end_quiz") {
     resultQuiz();
   }
+
+  if (data.method === "room_check") {
+    showUser(data.message);
+  }
+
 };
 
 const payload = access.split(".")[1];
@@ -142,6 +145,17 @@ function resultQuiz() {
   );
 }
 
+function roomQuit() {
+  socket.send(
+    JSON.stringify({
+      type: "leave_room",
+      message: "나갔습니다.",
+    })
+  )
+
+  window.location.replace("/html/battle/lobby.html");
+}
+
 /* 웹소켓 관련 end */
 
 // 초대 관련
@@ -217,3 +231,45 @@ getRoomDetailApi(roomName).then(({ response, responseJson }) => {
     alert("웹소켓 연결에 실패했습니다.");
   }
 });
+
+function showUser(users) {
+  // 방 참가자 초기화
+  for (let j=1; j<=4; j++) {
+    const userName = document.getElementById(`username-${j}`)
+    const userBox = document.getElementById(`user-box-${j}`)
+    userName.innerText = ""
+    userBox.querySelector(".profile-container img").src = ""
+    document.getElementById(`userimage-${j}`).src = "";
+  }
+
+
+  // 방 참가자 보여주기
+  for (let j=1; j<=users.length; j++) {
+    const joinUser = users[j-1]["participant"]
+    
+    
+    
+    const userName = document.getElementById(`username-${j}`)
+    const userBox = document.getElementById(`user-box-${j}`)
+    userName.innerText = joinUser["username"]
+    if (joinUser["image"] !== null) {
+      userBox.querySelector(".profile-container img").src = `${BACK_BASE_URL}${joinUser["image"]}`
+    } else {
+      const randomPick = Math.floor(Math.random() * 5 + 1);
+      userBox.querySelector(".profile-container img").src = `/img/user-profile/${randomPick}.png`;
+    }
+    if (users[j-1]["is_host"]) {
+      document.getElementById(`userimage-${j}`).src = "/img/fake/crown.png";
+    } else {
+      if (joinUser["wear_achievement"] !== -1) {
+        joinUser["achieve"].forEach(achieve => {
+          if (achieve["id"]===joinUser["wear_achievement"]) {
+            console.log(achieve)
+            document.getElementById(`userimage-${j}`).src = `/${achieve["image_url"]}`
+          }
+        })
+      }
+    }
+  }
+}
+
