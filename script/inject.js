@@ -157,7 +157,9 @@ function loadComponent() {
   }
   document.getElementById("menuStart").addEventListener("click", goStart);
   document.getElementById("menuLogin").addEventListener("click", goLogin);
-  document.getElementById("notification-button").addEventListener("click", notificationDropdownOpen);
+  document
+    .getElementById("notification-button")
+    .addEventListener("click", notificationDropdownOpen);
 }
 
 function goHome() {
@@ -202,7 +204,6 @@ async function websocketLoading() {
       )
     ) {
       /* 웹소켓 관련 */
-      const urlParams = new URLSearchParams(window.location.search);
       const base64Url = access.split(".")[1];
       const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
       const jsonPayloadString = decodeURIComponent(
@@ -214,7 +215,6 @@ async function websocketLoading() {
           .join("")
       );
       const jsonPayload = JSON.parse(jsonPayloadString);
-      const getUsername = jsonPayload.username;
 
       const token = localStorage.getItem("access");
 
@@ -235,6 +235,7 @@ async function websocketLoading() {
 
       chatSocket.onclose = function (e) {
         console.error("Chat socket closed unexpectedly");
+        setTimeout(websocketLoading, 1000);
       };
 
       chatSocket.onopen = () => {
