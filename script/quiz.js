@@ -31,6 +31,8 @@ let activeInput = null;
 let activeLabel = null;
 let activeCellId = null;
 
+const token = localStorage.getItem("access");
+
 const xpBar = document.getElementById("xp-bar-now");
 const xpText = document.getElementById("xp-text");
 
@@ -696,7 +698,9 @@ function nextStep() {
   if (quizIndex == quizzes.length) {
     answerBtn.style.display = "none";
     resultBtn.style.display = "block";
-
+    if (!token) {
+      resultBtn.innerText = "회원 가입하고 더 즐기기"
+    }
     finishQuiz();
   } else {
     showQuiz();
@@ -707,12 +711,17 @@ function nextStep() {
 }
 
 async function finishQuiz() {
-  await sendQuizResultApi(quizzes);
-  localStorage.setItem("correctCount", correctCount);
+  if (token) {
+    await sendQuizResultApi(quizzes);
+    localStorage.setItem("correctCount", correctCount);
+  }
 }
 
 function goResult() {
-  window.location.replace("/html/quiz_result.html");
+  if (token) {
+    window.location.replace("/html/quiz_result.html");
+  }
+  window.location.replace("/html/signup.html");
 }
 
 function reportModalOpen() {
