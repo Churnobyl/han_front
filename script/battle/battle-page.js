@@ -33,7 +33,7 @@ socket.onopen = function (e) {
 
 socket.onmessage = function (e) {
   const data = JSON.parse(e.data);
-    if (data.message) {
+    if (data.method === "chat_message") {
       var chatLog = document.getElementById("chat-log")
       chatLog.value += data.message + "\n";
       chatLog.scrollTop = chatLog.scrollHeight;
@@ -48,39 +48,9 @@ socket.onmessage = function (e) {
     } else if (data.method === "end_quiz") {
       resultQuiz();
     }
-    // chatSocket.send(
-    //   JSON.stringify({
-    //     roomData: roomData,
-    //     message: message,
-    //   })
-    // );
   }
-};
-
-const base64Url = access.split(".")[1];
-const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-const jsonPayloadString = decodeURIComponent(
-  atob(base64)
-    .split("")
-    .map(function (c) {
-      return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-    })
-    .join("")
-);
-const jsonPayload = JSON.parse(jsonPayloadString);
-const getUsername = jsonPayload.username;
-const roomData = {
-  host: getUsername,
-  roomName: roomName,
-};
-//  + "/?token=" + access
-const token = localStorage.getItem("access");
-
-const nowPage = window.location.pathname;
-const pageSplit = nowPage.split("/");
-const pageName = pageSplit[pageSplit.length - 1].split(".")[0];
-
-const payload = token.split(".")[1];
+  
+const payload = access.split(".")[1];
 const decodedPayload = JSON.parse(atob(payload));
 const userId = decodedPayload["user_id"];
 
