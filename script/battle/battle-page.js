@@ -35,23 +35,23 @@ socket.onopen = function (e) {
 
 socket.onmessage = function (e) {
   const data = JSON.parse(e.data);
-    if (data.method === "chat_message") {
-      var chatLog = document.getElementById("chat-log")
-      chatLog.value += data.message + "\n";
-      chatLog.scrollTop = chatLog.scrollHeight;
-    } else if (data.method === "send_quiz") {
-      quiz = data.quiz;
-      showQuiz();
-    }
-    
-    if (data.method === "next_quiz") {
-      quiz_count++;
-      setTimeout(showQuiz, 3000);
-    } else if (data.method === "end_quiz") {
-      resultQuiz();
-    }
+  if (data.method === "chat_message") {
+    var chatLog = document.getElementById("chat-log");
+    chatLog.value += data.message + "\n";
+    chatLog.scrollTop = chatLog.scrollHeight;
+  } else if (data.method === "send_quiz") {
+    quiz = data.quiz;
+    showQuiz();
   }
-  
+
+  if (data.method === "next_quiz") {
+    quiz_count++;
+    setTimeout(showQuiz, 3000);
+  } else if (data.method === "end_quiz") {
+    resultQuiz();
+  }
+};
+
 const payload = access.split(".")[1];
 const decodedPayload = JSON.parse(atob(payload));
 const userId = decodedPayload["user_id"];
@@ -59,7 +59,7 @@ const userId = decodedPayload["user_id"];
 const startBtn = document.getElementById("start");
 let start_game = false;
 let quiz_answer;
-let quiz_count=0;
+let quiz_count = 0;
 
 document.getElementById("chat-message-input").focus();
 document.getElementById("chat-message-input").onkeyup = function (e) {
@@ -85,7 +85,7 @@ function sendMessage() {
 }
 
 function gameStart() {
-  start_game = true
+  start_game = true;
   startBtn.style = "display: none;";
   socket.send(
     JSON.stringify({
@@ -96,12 +96,12 @@ function gameStart() {
 }
 
 function showQuiz() {
-  const nowQuiz = quiz[quiz_count]["dict_word"]
-  quiz_answer = nowQuiz["word"]
-  console.log(quiz_answer)
-  for (let i=1; i<=nowQuiz["examples"].length; i++) {
-    const example = document.getElementById(`examples-${i}`)
-    example.innerText = `${i}: ${nowQuiz["examples"][i-1]}`
+  const nowQuiz = quiz[quiz_count]["dict_word"];
+  quiz_answer = nowQuiz["word"];
+  console.log(quiz_answer);
+  for (let i = 1; i <= nowQuiz["examples"].length; i++) {
+    const example = document.getElementById(`examples-${i}`);
+    example.innerText = `${i}: ${nowQuiz["examples"][i - 1]}`;
   }
   const quizAnswer = document.getElementById("answer");
   quizAnswer.innerText = "";
@@ -112,24 +112,23 @@ function correctQuiz() {
   if (userInput === quiz_answer) {
     const answer = document.getElementById("answer");
     answer.innerText = quiz_answer;
-    if (quiz.length === quiz_count+1) {
+    if (quiz.length === quiz_count + 1) {
       socket.send(
         JSON.stringify({
-          type:"correct_answer",
+          type: "correct_answer",
           message: "퀴즈 끝",
-          end: true
+          end: true,
         })
-      )
-      start_game = true
+      );
+      start_game = true;
       startBtn.style = "display: inline-block;";
     } else {
       socket.send(
         JSON.stringify({
           type: "correct_answer",
-          message: "정답"
+          message: "정답",
         })
-      )
-
+      );
     }
   }
 }
@@ -138,9 +137,9 @@ function resultQuiz() {
   socket.send(
     JSON.stringify({
       type: "result",
-      message: "결과"
+      message: "결과",
     })
-  )
+  );
 }
 
 /* 웹소켓 관련 end */
@@ -161,10 +160,10 @@ async function inviteBtn() {
   socket.send(
     JSON.stringify({
       type: "invitation",
-      receiver: inviteUserId
+      receiver: inviteUserId,
     })
-  )
-  alert("초대를 보냈습니다.")
+  );
+  alert("초대를 보냈습니다.");
 }
 
 // 방 정보 가져오기
