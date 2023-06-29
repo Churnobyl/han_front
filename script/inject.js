@@ -178,7 +178,7 @@ function goLogin() {
 
 function goStart() {
   // 시작
-  window.location.href = "/html/signup.html";
+  window.location.href = "/html/quiz.html";
 }
 
 function goLogout() {

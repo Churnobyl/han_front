@@ -429,6 +429,12 @@ if (socket) {
 
       notificationDrop.append(notification);
     });
+    const notificationDot = document.getElementById("notification-dot");
+    if (notification["message"].length != 0) {
+      notificationDot.style.visibility = "visible";
+    } else {
+      notificationDot.style.visibility = "hidden";
+    }
   };
 }
 
