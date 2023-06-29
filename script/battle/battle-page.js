@@ -9,6 +9,8 @@ document.getElementById("quit-btn").addEventListener("click", function () {
 });
 document.getElementById("start").addEventListener("click", gameStart);
 document.getElementById("invite").addEventListener("click", inviteModal);
+document.getElementById("invite-button").addEventListener("click", inviteBtn);
+let modal = document.querySelector(".modal");
 
 /* 웹소켓 관련 */
 const urlParams = new URLSearchParams(window.location.search);
@@ -143,7 +145,27 @@ function resultQuiz() {
 
 /* 웹소켓 관련 end */
 
-function inviteModal() {}
+// 초대 관련
+function inviteModal() {
+  modal.classList.toggle("show");
+}
+
+modal.addEventListener("click", (event) => {
+  if (event.target === modal) {
+    modal.classList.toggle("show");
+  }
+});
+
+async function inviteBtn() {
+  const inviteUserId = document.getElementById("invite-user-id").value;
+  socket.send(
+    JSON.stringify({
+      type: "invitation",
+      receiver: inviteUserId
+    })
+  )
+  alert("초대를 보냈습니다.")
+}
 
 // 방 정보 가져오기
 getRoomDetailApi(roomName).then(({ response, responseJson }) => {
