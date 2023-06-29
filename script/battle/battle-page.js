@@ -9,6 +9,8 @@ document.getElementById("quit-btn").addEventListener("click", function () {
 });
 document.getElementById("start").addEventListener("click", gameStart);
 document.getElementById("invite").addEventListener("click", inviteModal);
+document.getElementById("invite-button").addEventListener("click", inviteBtn);
+let modal = document.querySelector(".modal");
 
 /* 웹소켓 관련 */
 const urlParams = new URLSearchParams(window.location.search);
@@ -33,7 +35,7 @@ socket.onopen = function (e) {
 
 socket.onmessage = function (e) {
   const data = JSON.parse(e.data);
-    if (data.message) {
+    if (data.method === "chat_message") {
       var chatLog = document.getElementById("chat-log")
       chatLog.value += data.message + "\n";
       chatLog.scrollTop = chatLog.scrollHeight;
@@ -48,39 +50,9 @@ socket.onmessage = function (e) {
     } else if (data.method === "end_quiz") {
       resultQuiz();
     }
-    // chatSocket.send(
-    //   JSON.stringify({
-    //     roomData: roomData,
-    //     message: message,
-    //   })
-    // );
   }
-};
-
-const base64Url = access.split(".")[1];
-const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-const jsonPayloadString = decodeURIComponent(
-  atob(base64)
-    .split("")
-    .map(function (c) {
-      return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-    })
-    .join("")
-);
-const jsonPayload = JSON.parse(jsonPayloadString);
-const getUsername = jsonPayload.username;
-const roomData = {
-  host: getUsername,
-  roomName: roomName,
-};
-//  + "/?token=" + access
-const token = localStorage.getItem("access");
-
-const nowPage = window.location.pathname;
-const pageSplit = nowPage.split("/");
-const pageName = pageSplit[pageSplit.length - 1].split(".")[0];
-
-const payload = token.split(".")[1];
+  
+const payload = access.split(".")[1];
 const decodedPayload = JSON.parse(atob(payload));
 const userId = decodedPayload["user_id"];
 
@@ -173,7 +145,27 @@ function resultQuiz() {
 
 /* 웹소켓 관련 end */
 
-function inviteModal() {}
+// 초대 관련
+function inviteModal() {
+  modal.classList.toggle("show");
+}
+
+modal.addEventListener("click", (event) => {
+  if (event.target === modal) {
+    modal.classList.toggle("show");
+  }
+});
+
+async function inviteBtn() {
+  const inviteUserId = document.getElementById("invite-user-id").value;
+  socket.send(
+    JSON.stringify({
+      type: "invitation",
+      receiver: inviteUserId
+    })
+  )
+  alert("초대를 보냈습니다.")
+}
 
 // 방 정보 가져오기
 getRoomDetailApi(roomName).then(({ response, responseJson }) => {
