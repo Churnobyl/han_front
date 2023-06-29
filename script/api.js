@@ -334,16 +334,19 @@ export async function editPasswordApi(data) {
   }
 }
 
-export async function getRankingApi(data) {
-  if (!data) {
-    const response = await fetch(`${BACK_BASE_URL}/users/ranking`);
-    const responseJson = await response.json();
-    return responseJson;
+export async function getRankingApi(link, type) {
+  let response
+  if (!link) {
+    if (!type) {
+      response = await fetch(`${BACK_BASE_URL}/users/ranking`);
+    } else {
+      response = await fetch(`${BACK_BASE_URL}/users/ranking/${type}`);
+    }
   } else {
-    const response = await fetch(data);
-    const responseJson = await response.json();
-    return responseJson;
+    response = await fetch(link);
   }
+  const responseJson = await response.json();
+  return responseJson;
 }
 
 export async function followApi(id) {

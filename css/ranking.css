@@ -47,23 +47,28 @@ h1 {
 
 .rank,
 .user,
-.level-xp {
+.level-xp,
+.battle {
   display: inline-block;
   padding: 15px;
 }
 
 .rank {
-  width: 20%;
+  width: 18%;
 }
 
 .user {
-  width: 55%;
+  width: 40%;
   cursor: pointer;
 }
 
 .level-xp {
   width: 20%;
 }
+
+.battle {
+  width: 18%
+} 
 
 .idx-wrap,
 .user-wrap {
@@ -78,13 +83,15 @@ h1 {
 
 .idx-wrap .rank,
 .idx-wrap .user,
-.idx-wrap .level-xp {
+.idx-wrap .level-xp,
+.idx-wrap .battle {
   font-size: 1.4rem;
 }
 
 .user-wrap .rank,
 .user-wrap .user,
-.user-wrap .level-xp {
+.user-wrap .level-xp,
+.user-wrap .battle {
   font-size: 1.2rem;
 }
 
