@@ -72,3 +72,7 @@ input {
   width: 35px;
   outline: none;
 }
+
+.social-signup-btn > a > img {
+  cursor: pointer;
+}
