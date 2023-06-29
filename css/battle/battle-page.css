@@ -201,7 +201,7 @@ input {
 }
 
 .main-component {
-  padding: 40px;
+  padding: 20px;
 }
 
 .quiz-title,
@@ -223,7 +223,13 @@ input {
 
 .quiz-answer {
   text-align: center;
-  margin-top: 30px;
+  margin-top: 15px;
+  font-size: 2rem;
+}
+
+.quiz-hint {
+  text-align: center;
+  margin-top: 15px;
   font-size: 2rem;
 }
 
@@ -231,7 +237,6 @@ input {
   font-size: 2rem;
   color: rgb(153, 0, 0);
 }
-
 
 .modal {
   position: absolute;

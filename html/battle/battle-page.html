@@ -63,8 +63,12 @@
                 <div class="main-component">
                   <div class="quiz-title">문제 : <span id="title">다음 칸에 들어갈 단어로 옳은 것은?</span></div>
                   <div class="quiz-content">
+                    <div id="explains">
+                      [뜻]
+                      <h1 id="explains-text"></h1>
+                    </div>
                     <div id="examples">
-                      [보기]
+                      [예문]
                       <h2 id="examples-1"></h2>
                       <h2 id="examples-2"></h2>
                       <h2 id="examples-3"></h2>
@@ -72,7 +76,8 @@
                       <h2 id="examples-5"></h2>
                     </div>
                   </div>
-                  <div class="quiz-answer">정답 : <span id="answer">일반인</span></div>
+                  <div class="quiz-answer" id="quizAnswer"></div>
+                  <div class="quiz-hint" id="quizHint"></div>
                 </div>
               </div>
               <div class="grid-item">

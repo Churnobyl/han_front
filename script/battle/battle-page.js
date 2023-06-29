@@ -101,20 +101,31 @@ function gameStart() {
 function showQuiz() {
   const nowQuiz = quiz[quiz_count]["dict_word"];
   quiz_answer = nowQuiz["word"];
-  console.log(quiz_answer);
   for (let i = 1; i <= nowQuiz["examples"].length; i++) {
+    const explain = document.getElementById("explains-text");
+    explain.innerText = `${quiz[quiz_count]["content"]}`;
     const example = document.getElementById(`examples-${i}`);
     example.innerText = `${i}: ${nowQuiz["examples"][i - 1]}`;
   }
-  const quizAnswer = document.getElementById("answer");
-  quizAnswer.innerText = "";
+  const quizAnswer = document.getElementById("quizAnswer");
+  const handleHint = document.getElementById("quizHint");
+  quizAnswer.innerHTML = "";
+  handleHint.innerHTML = "";
+
+  function showHint() {
+    handleHint.innerHTML = `힌트: <span id="hint">${nowQuiz["hint"]}</span>`;
+  }
+  // 5초 후에 힌트 공개
+  setTimeout(showHint, 5000);
+
+  // 25초 후에 정답자 없으면 다음 문제로
 }
 
 function correctQuiz() {
   const userInput = document.getElementById("chat-message-input").value;
   if (userInput === quiz_answer) {
-    const answer = document.getElementById("answer");
-    answer.innerText = quiz_answer;
+    const answer = document.getElementById("quizAnswer");
+    answer.innerHTML = `정답 : <span id="answer">${quiz_answer}</span>`;
     if (quiz.length === quiz_count + 1) {
       socket.send(
         JSON.stringify({
