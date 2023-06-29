@@ -1,6 +1,50 @@
-import { getRoomApi, checkAnonymous } from "/script/api.js";
+import { getRoomApi, checkAnonymous, socket } from "/script/api.js";
 
 checkAnonymous();
+
+socket.onmessage = function (e) {
+  const data = JSON.parse(e.data);
+  console.log(e.data);
+  if (data.method === "lobby_room_add" || data.method === "lobby_room_delete") {
+    document.getElementById("room-data").innerHTML = "";
+    for (let d of data.message) {
+      const check_private = d.is_private ? '<img src="/img/private.png">' : "";
+      document.getElementById(
+        "room-data"
+      ).innerHTML += `<tr data-roomId=${d.id}>
+                    <td class="tg-0lax">${d.id}</td>
+                    <td class="tg-0lax">${d.btl_title} ${check_private}</span></td>
+                    <td class="tg-0lax">${d.btl_category}</td>
+                    <td class="tg-0lax">1 / ${d.max_users}</td>
+                    <td class="tg-0lax">${d.host_user}</td>
+                  </tr>`;
+    }
+  } else if (data.method === "lobby_room_updated") {
+    console.log(data);
+    document.getElementById("room-data").innerHTML = "";
+    for (let d of data.message) {
+      // 추후에 업데이트 시 일부 요소만 바꾸는 식으로 수정해야 함
+      const check_private = d.is_private ? '<img src="/img/private.png">' : "";
+      document.getElementById(
+        "room-data"
+      ).innerHTML += `<tr data-roomId=${d.id}>
+                    <td class="tg-0lax">${d.id}</td>
+                    <td class="tg-0lax">${d.btl_title} ${check_private}</span></td>
+                    <td class="tg-0lax">${d.btl_category}</td>
+                    <td class="tg-0lax">${d.participants} / ${d.max_users}</td>
+                    <td class="tg-0lax">${d.host_user}</td>
+                  </tr>`;
+
+      if (d.btl_start === true) {
+        const updated_room = document.querySelector(`[data-roomid="${d.id}"]`);
+        console.log(updated_room);
+        updated_room.classList.add("started-game");
+      }
+    }
+  }
+
+  handleRoomClick(data.message);
+};
 
 window.onload = () => {
   // 방 정보 가져오기
@@ -21,6 +65,14 @@ window.onload = () => {
                         <td class="tg-0lax">${data.participants} / ${data.max_users}</td>
                         <td class="tg-0lax">${data.host_user}</td>
                       </tr>`;
+
+          if (data.btl_start === true) {
+            const updated_room = document.querySelector(
+              `[data-roomid="${data.id}"]`
+            );
+            console.log(updated_room);
+            updated_room.classList.add("started-game");
+          }
         }
       } else {
         console.error(responseJson);
@@ -45,6 +97,7 @@ function handleRoomClick(data) {
   const roomNumbers = document.querySelectorAll("[data-roomId]");
   for (let number of roomNumbers) {
     const roomNum = number.getAttribute("data-roomId");
+
     number.addEventListener("click", () => {
       checkPossibleRoom(data, roomNum);
     });
@@ -55,7 +108,9 @@ function checkPossibleRoom(data, roomNum) {
   // 참가 가능한 방인지 체크
   for (let d of data) {
     if (String(d.id) === roomNum) {
-      if (d.max_users > d.participants) {
+      if (d.btl_start) {
+        alert("이미 시작한 방입니다.");
+      } else if (d.max_users > d.participants) {
         if (d.is_private) {
           handlePasswordModal(roomNum, d.room_password);
         } else {
