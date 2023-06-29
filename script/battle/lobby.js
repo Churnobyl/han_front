@@ -4,7 +4,6 @@ checkAnonymous();
 
 socket.onmessage = function (e) {
   const data = JSON.parse(e.data);
-  console.log(e.data);
   if (data.method === "lobby_room_add" || data.method === "lobby_room_delete") {
     document.getElementById("room-data").innerHTML = "";
     for (let d of data.message) {
@@ -20,7 +19,6 @@ socket.onmessage = function (e) {
                   </tr>`;
     }
   } else if (data.method === "lobby_room_updated") {
-    console.log(data);
     document.getElementById("room-data").innerHTML = "";
     for (let d of data.message) {
       // 추후에 업데이트 시 일부 요소만 바꾸는 식으로 수정해야 함
@@ -37,7 +35,6 @@ socket.onmessage = function (e) {
 
       if (d.btl_start === true) {
         const updated_room = document.querySelector(`[data-roomid="${d.id}"]`);
-        console.log(updated_room);
         updated_room.classList.add("started-game");
       }
     }
@@ -70,7 +67,6 @@ window.onload = () => {
             const updated_room = document.querySelector(
               `[data-roomid="${data.id}"]`
             );
-            console.log(updated_room);
             updated_room.classList.add("started-game");
           }
         }
