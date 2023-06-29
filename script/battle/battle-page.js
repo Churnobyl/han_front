@@ -52,7 +52,6 @@ socket.onmessage = function (e) {
   if (data.method === "room_check") {
     showUser(data.message);
   }
-
 };
 
 const payload = access.split(".")[1];
@@ -112,11 +111,25 @@ function showQuiz() {
   quizAnswer.innerHTML = "";
   handleHint.innerHTML = "";
 
+  function showHintCount() {
+    let hintCount = 5;
+
+    const countdown = setInterval(() => {
+      hintCount -= 1;
+      handleHint.innerHTML = `힌트: <span id="hint">${hintCount}</span>`;
+
+      if (hintCount === 0) {
+        clearInterval(countdown);
+        showHint();
+      }
+    }, 1000);
+  }
+
   function showHint() {
     handleHint.innerHTML = `힌트: <span id="hint">${nowQuiz["hint"]}</span>`;
   }
-  // 5초 후에 힌트 공개
-  setTimeout(showHint, 5000);
+  // 10초 후에 힌트 공개
+  setTimeout(showHintCount, 5000);
 
   // 25초 후에 정답자 없으면 다음 문제로
 }
@@ -162,7 +175,7 @@ function roomQuit() {
       type: "leave_room",
       message: "나갔습니다.",
     })
-  )
+  );
 
   window.location.replace("/html/battle/lobby.html");
 }
@@ -245,42 +258,43 @@ getRoomDetailApi(roomName).then(({ response, responseJson }) => {
 
 function showUser(users) {
   // 방 참가자 초기화
-  for (let j=1; j<=4; j++) {
-    const userName = document.getElementById(`username-${j}`)
-    const userBox = document.getElementById(`user-box-${j}`)
-    userName.innerText = ""
-    userBox.querySelector(".profile-container img").src = ""
+  for (let j = 1; j <= 4; j++) {
+    const userName = document.getElementById(`username-${j}`);
+    const userBox = document.getElementById(`user-box-${j}`);
+    userName.innerText = "";
+    userBox.querySelector(".profile-container img").src = "";
     document.getElementById(`userimage-${j}`).src = "";
   }
 
-
   // 방 참가자 보여주기
-  for (let j=1; j<=users.length; j++) {
-    const joinUser = users[j-1]["participant"]
-    
-    
-    
-    const userName = document.getElementById(`username-${j}`)
-    const userBox = document.getElementById(`user-box-${j}`)
-    userName.innerText = joinUser["username"]
+  for (let j = 1; j <= users.length; j++) {
+    const joinUser = users[j - 1]["participant"];
+
+    const userName = document.getElementById(`username-${j}`);
+    const userBox = document.getElementById(`user-box-${j}`);
+    userName.innerText = joinUser["username"];
     if (joinUser["image"] !== null) {
-      userBox.querySelector(".profile-container img").src = `${BACK_BASE_URL}${joinUser["image"]}`
+      userBox.querySelector(
+        ".profile-container img"
+      ).src = `${BACK_BASE_URL}${joinUser["image"]}`;
     } else {
       const randomPick = Math.floor(Math.random() * 5 + 1);
-      userBox.querySelector(".profile-container img").src = `/img/user-profile/${randomPick}.png`;
+      userBox.querySelector(
+        ".profile-container img"
+      ).src = `/img/user-profile/${randomPick}.png`;
     }
-    if (users[j-1]["is_host"]) {
+    if (users[j - 1]["is_host"]) {
       document.getElementById(`userimage-${j}`).src = "/img/fake/crown.png";
     } else {
       if (joinUser["wear_achievement"] !== -1) {
-        joinUser["achieve"].forEach(achieve => {
-          if (achieve["id"]===joinUser["wear_achievement"]) {
-            console.log(achieve)
-            document.getElementById(`userimage-${j}`).src = `/${achieve["image_url"]}`
+        joinUser["achieve"].forEach((achieve) => {
+          if (achieve["id"] === joinUser["wear_achievement"]) {
+            document.getElementById(
+              `userimage-${j}`
+            ).src = `/${achieve["image_url"]}`;
           }
-        })
+        });
       }
     }
   }
 }
-
