@@ -19,7 +19,7 @@ window.onload = async function () {
   if (checkCount) {
     // 정답 개수
     const quizResult = document.getElementById("quiz-result");
-    quizResult.innerText = `전체 문제 중 🎉${correctCount}개🎉를 맞췄어요!`;
+    quizResult.innerText = `전체 문제 중 🎉${correctCount}개🎉를 맞혔어요!`;
 
     // 결과 메세지
     const resultMsg = document.getElementById("quiz-text");
