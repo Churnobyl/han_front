@@ -11,11 +11,6 @@ if (token) {
   userId = decodedPayload["user_id"];
 }
 
-const leftArrow = document.getElementById("left-btn");
-const rightArrow = document.getElementById("right-btn");
-const ranks = document.querySelectorAll(".user-wrap");
-const idxWrap = document.querySelector(".idx-wrap");
-
 let rankingData;
 let page = 0;
 let isFetching;
@@ -43,7 +38,6 @@ async function getRanking(link, e, query) {
   if (!link) {
     if (!query) {
       rankingData = await getRankingApi();
-      console.log(rankingData);
     } else {
       rankingData = await getRankingApi(null, query);
     }
@@ -55,6 +49,11 @@ async function getRanking(link, e, query) {
       page += 10;
     }
   }
+
+  const leftArrow = document.getElementById("left-btn");
+  const rightArrow = document.getElementById("right-btn");
+  const ranks = document.querySelectorAll(".user-wrap");
+  const idxWrap = document.querySelector(".idx-wrap");
 
   //   받아온 데이터에서 previous, next 가 존재할 경우
   if (!rankingData["links"]["previous"]) {
