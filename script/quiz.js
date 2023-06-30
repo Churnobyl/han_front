@@ -720,8 +720,9 @@ async function finishQuiz() {
 function goResult() {
   if (token) {
     window.location.replace("/html/quiz_result.html");
+  } else {
+    window.location.replace("/html/signup.html");
   }
-  window.location.replace("/html/signup.html");
 }
 
 function reportModalOpen() {
