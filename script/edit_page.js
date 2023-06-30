@@ -37,7 +37,7 @@ window.onload = async function loadProfile() {
   if (responseJson["칭호"] === "null") {
     wearAchieve.innerText = "착용 칭호가 없습니다.";
   } else {
-    wearAchieve.innerText = responseJson["칭호"]["title"];
+    wearAchieve.innerHTML = `<img src=/${responseJson["칭호"]["image_url"]}>${responseJson["칭호"]["title"]}`;
   }
 
   //칭호 보여주기
@@ -46,7 +46,7 @@ window.onload = async function loadProfile() {
     const achieveLabel = document.createElement("label");
     achieveLabel.setAttribute("class", "achieve-show");
     const achieveSpan = document.createElement("span");
-    achieveSpan.innerText = achieve["title"];
+    achieveSpan.innerHTML = `<img src=/${achieve["image_url"]}>${achieve["title"]}`;
     const achieveP = document.createElement("p");
     achieveP.innerText = achieve["comment"];
     if (responseJson["유저"]["wear_achievement"] === achieve["id"]) {

@@ -39,6 +39,13 @@
     font-size: 1.2rem;
 }
 
+.achieve-show img {
+    width: 25px;
+    height: auto;
+    vertical-align: middle;
+    margin-right: 4px;
+}
+
 .drawal-btn {
     margin-left: 12px;
     color: rgb(250, 150, 150);
