@@ -190,7 +190,7 @@ function roomQuit() {
     })
   );
 
-  window.location.replace("/html/battle/lobby.html");
+  window.location.href = "/html/battle/lobby.html";
 }
 
 function forcedLeave() {
