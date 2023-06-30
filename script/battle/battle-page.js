@@ -162,8 +162,8 @@ function correctQuiz() {
         })
       );
       start_game = false;
-      if (userId != hostUser) {
-        startBtn.style = "display: none;";
+      if (userId == hostUser) {
+        startBtn.style = "display: revert;";
       }
     } else {
       socket.send(
