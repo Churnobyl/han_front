@@ -4,7 +4,7 @@ import { BACK_WEBSOCKET_URL, BACK_BASE_URL } from "/script/conf.js";
 checkAnonymous();
 
 // 버튼 이벤트리스너 모음
-document.getElementById("quit-btn").addEventListener("click", roomQuit);
+document.getElementById("quit").addEventListener("click", roomQuit);
 document.getElementById("start").addEventListener("click", gameStart);
 document.getElementById("invite").addEventListener("click", inviteModal);
 document.getElementById("invite-button").addEventListener("click", inviteBtn);
@@ -39,6 +39,7 @@ socket.onmessage = function (e) {
     chatLog.scrollTop = chatLog.scrollHeight;
   } else if (data.method === "send_quiz") {
     quiz = data.quiz;
+    startBtn.style = "display: none;";
     showQuiz();
   }
 
@@ -51,6 +52,19 @@ socket.onmessage = function (e) {
 
   if (data.method === "room_check") {
     showUser(data.message);
+  }
+
+  if (data.method === "leave_host") {
+    forcedLeave();
+  }
+
+  if (data.method === "reject_leave") {
+    rejectLeave();
+  }
+
+  if (data.method === "accept_leave") {
+    console.log(data);
+    // acceptLeave();
   }
 };
 
@@ -88,7 +102,6 @@ function sendMessage() {
 
 function gameStart() {
   start_game = true;
-  startBtn.style = "display: none;";
   socket.send(
     JSON.stringify({
       type: "start_game",
@@ -177,6 +190,26 @@ function roomQuit() {
     })
   );
 
+  window.location.replace("/html/battle/lobby.html");
+}
+
+function forcedLeave() {
+  alert("방장이 나갔습니다. 방을 나갑니다.");
+  setTimeout(() => {
+    window.location.replace("/html/battle/lobby.html"), 4000;
+  });
+}
+
+function rejectLeave() {
+  socket.send(
+    JSON.stringify({
+      type: "chat_message",
+      message: "게임이 진행중일 때는 나갈 수 없습니다.",
+    })
+  );
+}
+
+function acceptLeave() {
   window.location.replace("/html/battle/lobby.html");
 }
 
