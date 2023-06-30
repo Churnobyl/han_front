@@ -120,7 +120,16 @@ socket.onmessage = function (e) {
     quiz_count++;
     setTimeout(showQuiz, 3000);
   } else if (data.method === "end_quiz") {
+    quiz_count = 0;
     resultQuiz();
+    const explain = document.getElementById("explains-text");
+    const example = document.getElementById(`examples-${i}`);
+    const quizAnswer = document.getElementById("quizAnswer");
+    const handleHint = document.getElementById("quizHint");
+    explain.innerText = "";
+    example.innerText = "";
+    quizAnswer.innerHTML = "";
+    handleHint.innerHTML = "";
   }
 
   if (data.method === "room_check") {
