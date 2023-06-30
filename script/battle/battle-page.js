@@ -71,6 +71,7 @@ socket.onmessage = function (e) {
 const payload = access.split(".")[1];
 const decodedPayload = JSON.parse(atob(payload));
 const userId = decodedPayload["user_id"];
+let hostUser;
 
 const startBtn = document.getElementById("start");
 let start_game = false;
@@ -160,8 +161,10 @@ function correctQuiz() {
           end: true,
         })
       );
-      start_game = true;
-      startBtn.style = "display: inline-block;";
+      start_game = false;
+      if (userId != hostUser) {
+        startBtn.style = "display: none;";
+      }
     } else {
       socket.send(
         JSON.stringify({
@@ -255,7 +258,6 @@ getRoomDetailApi(roomName).then(({ response, responseJson }) => {
       userBox.style = "visibility: hidden;";
     }
     let i = 1;
-    let hostUser;
     onUsers.forEach((user) => {
       let userBox = document.getElementById(`user-box-${i}`);
       let img;
