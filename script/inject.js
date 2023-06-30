@@ -157,9 +157,12 @@ function loadComponent() {
   }
   document.getElementById("menuStart").addEventListener("click", goStart);
   document.getElementById("menuLogin").addEventListener("click", goLogin);
-  document
-    .getElementById("notification-button")
-    .addEventListener("click", notificationDropdownOpen);
+  const access = localStorage.getItem("access");
+  if (access) {
+    document
+      .getElementById("notification-button")
+      .addEventListener("click", notificationDropdownOpen);
+  }
 }
 
 function goHome() {
