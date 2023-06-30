@@ -3,18 +3,91 @@ import { BACK_WEBSOCKET_URL, BACK_BASE_URL } from "/script/conf.js";
 
 checkAnonymous();
 
-// 버튼 이벤트리스너 모음
-document.getElementById("quit").addEventListener("click", roomQuit);
-document.getElementById("start").addEventListener("click", gameStart);
-document.getElementById("invite").addEventListener("click", inviteModal);
-document.getElementById("invite-button").addEventListener("click", inviteBtn);
-let modal = document.querySelector(".modal");
-
 /* 웹소켓 관련 */
 const urlParams = new URLSearchParams(window.location.search);
 const roomName = urlParams.get("room");
 const access = localStorage.getItem("access");
 let quiz;
+let modal;
+let startBtn;
+
+const payload = access.split(".")[1];
+const decodedPayload = JSON.parse(atob(payload));
+const userId = decodedPayload["user_id"];
+let hostUser;
+
+let start_game = false;
+let quiz_answer;
+let quiz_count = 0;
+
+// 방 정보 가져오기
+getRoomDetailApi(roomName)
+  .then(({ response, responseJson }) => {
+    if (response.status === 200) {
+      // 방 정보
+      document.getElementById("roomId").innerText = `[ ${responseJson["id"]} ]`;
+      document.getElementById("roomName").innerText = responseJson["btl_title"];
+      document.getElementById("roomHost").innerText = responseJson["host_user"];
+      document.getElementById("roomCategory").innerText =
+        responseJson["btl_category"];
+
+      // 유저 정보
+      const onUsers = responseJson["participant_list"];
+      const maxUsers = responseJson["max_users"];
+      for (let i = maxUsers + 1; i <= 4; i++) {
+        let userBox = document.getElementById(`user-box-${i}`);
+        userBox.style = "visibility: hidden;";
+      }
+      let i = 1;
+      onUsers.forEach((user) => {
+        let userBox = document.getElementById(`user-box-${i}`);
+        let img;
+        if (user["participant"]["image"]) {
+          img = `${BACK_BASE_URL}${user["participant"]["image"]}`;
+        } else {
+          const randomPick = Math.floor(Math.random() * 5 + 1);
+          img = `/img/user-profile/${randomPick}.png`;
+        }
+        userBox.querySelector(".profile-container img").src = img;
+        const isHost = user["is_host"];
+        if (isHost) {
+          document.querySelector(".achievement").src = "/img/fake/crown.png";
+          hostUser = user["participant"]["id"];
+        }
+        const nickname = user["participant"]["username"];
+        const username = document.getElementById(`username-${i}`);
+        username.innerText = nickname;
+        username.addEventListener("click", function () {
+          window.location.replace(
+            `/html/mypage.html?id=${user["participant"]["id"]}`
+          );
+        });
+        i++;
+      });
+      if (userId != hostUser) {
+        document.getElementById("start").style = "display: none;";
+      }
+    } else {
+      alert("웹소켓 연결에 실패했습니다.");
+    }
+  })
+  .then(() => {
+    // 버튼 이벤트리스너 모음
+    modal = document.querySelector(".modal");
+    startBtn = document.getElementById("start");
+    document.getElementById("quit").addEventListener("click", roomQuit);
+    document.getElementById("start").addEventListener("click", gameStart);
+    document.getElementById("invite").addEventListener("click", inviteModal);
+    document
+      .getElementById("invite-button")
+      .addEventListener("click", inviteBtn);
+
+    modal.addEventListener("click", (event) => {
+      if (event.target === modal) {
+        modal.classList.toggle("show");
+      }
+    });
+  });
 
 socket.onopen = function (e) {
   socket.send(
@@ -67,16 +140,6 @@ socket.onmessage = function (e) {
     // acceptLeave();
   }
 };
-
-const payload = access.split(".")[1];
-const decodedPayload = JSON.parse(atob(payload));
-const userId = decodedPayload["user_id"];
-let hostUser;
-
-const startBtn = document.getElementById("start");
-let start_game = false;
-let quiz_answer;
-let quiz_count = 0;
 
 document.getElementById("chat-message-input").focus();
 document.getElementById("chat-message-input").onkeyup = function (e) {
@@ -223,12 +286,6 @@ function inviteModal() {
   modal.classList.toggle("show");
 }
 
-modal.addEventListener("click", (event) => {
-  if (event.target === modal) {
-    modal.classList.toggle("show");
-  }
-});
-
 async function inviteBtn() {
   const inviteUserId = document.getElementById("invite-user-id").value;
   socket.send(
@@ -239,57 +296,6 @@ async function inviteBtn() {
   );
   alert("초대를 보냈습니다.");
 }
-
-// 방 정보 가져오기
-getRoomDetailApi(roomName).then(({ response, responseJson }) => {
-  if (response.status === 200) {
-    // 방 정보
-    document.getElementById("roomId").innerText = `[ ${responseJson["id"]} ]`;
-    document.getElementById("roomName").innerText = responseJson["btl_title"];
-    document.getElementById("roomHost").innerText = responseJson["host_user"];
-    document.getElementById("roomCategory").innerText =
-      responseJson["btl_category"];
-
-    // 유저 정보
-    const onUsers = responseJson["participant_list"];
-    const maxUsers = responseJson["max_users"];
-    for (let i = maxUsers + 1; i <= 4; i++) {
-      let userBox = document.getElementById(`user-box-${i}`);
-      userBox.style = "visibility: hidden;";
-    }
-    let i = 1;
-    onUsers.forEach((user) => {
-      let userBox = document.getElementById(`user-box-${i}`);
-      let img;
-      if (user["participant"]["image"]) {
-        img = `${BACK_BASE_URL}${user["participant"]["image"]}`;
-      } else {
-        const randomPick = Math.floor(Math.random() * 5 + 1);
-        img = `/img/user-profile/${randomPick}.png`;
-      }
-      userBox.querySelector(".profile-container img").src = img;
-      const isHost = user["is_host"];
-      if (isHost) {
-        document.querySelector(".achievement").src = "/img/fake/crown.png";
-        hostUser = user["participant"]["id"];
-      }
-      const nickname = user["participant"]["username"];
-      const username = document.getElementById(`username-${i}`);
-      username.innerText = nickname;
-      username.addEventListener("click", function () {
-        window.location.replace(
-          `/html/mypage.html?id=${user["participant"]["id"]}`
-        );
-      });
-      i++;
-    });
-    if (userId != hostUser) {
-      startBtn.style = "display: none;";
-    }
-  } else {
-    alert("웹소켓 연결에 실패했습니다.");
-  }
-});
 
 function showUser(users) {
   // 방 참가자 초기화
