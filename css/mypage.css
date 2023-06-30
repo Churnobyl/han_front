@@ -102,6 +102,13 @@ a:hover {
     font-size: 1.3rem;
 }
 
+.achieve-title img {
+    width: 25px;
+    height: auto;
+    vertical-align: middle;
+    margin-right: 4px;
+}
+
 .achieve-wear { 
     width: 250px;
     padding: 8px;
