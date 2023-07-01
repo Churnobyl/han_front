@@ -16,25 +16,26 @@ let page = 0;
 let isFetching;
 let query;
 
-document.getElementById("battle-rank").addEventListener("click", function () {
-  getRanking(null, null, (query = "?type=battle"));
-});
-document.getElementById("exp-rank").addEventListener("click", function () {
-  getRanking();
-});
-
 window.onload = function () {
-  getRanking();
+  getRanking().then(addButtons);
+  document.getElementById("battle-rank").addEventListener("click", function () {
+    page = 0;
+    getRanking(null, null, (query = "?type=battle")).then(addButtons);
+  });
+  
+  document.getElementById("exp-rank").addEventListener("click", function () {
+    page = 0;
+    getRanking().then(addButtons);
+  });
+  
 };
 
 async function getRanking(link, e, query) {
-  // 호출 중일 경우에 추가로 호출 못하게
   if (isFetching) {
     return;
   }
   isFetching = true;
 
-  //   버튼을 통해 들어왔을 경우 & 아닐 경우
   if (!link) {
     if (!query) {
       rankingData = await getRankingApi();
@@ -53,16 +54,14 @@ async function getRanking(link, e, query) {
   const leftArrow = document.getElementById("left-btn");
   const rightArrow = document.getElementById("right-btn");
   const ranks = document.querySelectorAll(".user-wrap");
-  const idxWrap = document.querySelector(".idx-wrap");
 
-  //   받아온 데이터에서 previous, next 가 존재할 경우
   if (!rankingData["links"]["previous"]) {
     leftArrow.style.display = "none";
   } else {
     leftArrow.style.display = "block";
     leftArrow.onclick = function () {
       let link = rankingData["links"]["previous"];
-      getRanking(link, "p");
+      getRanking(link, "p").then(addButtons);
     };
   }
   if (!rankingData["links"]["next"]) {
@@ -71,13 +70,12 @@ async function getRanking(link, e, query) {
     rightArrow.style.display = "block";
     rightArrow.onclick = function () {
       let link = rankingData["links"]["next"];
-      getRanking(link, "n");
+      getRanking(link, "n").then(addButtons);
     };
   }
   ranks.forEach((rank) => {
     rank.style = "display: block;";
   });
-  //   랭킹 순위 순서대로 띄워주기
   for (var i = 0; i <= 9; i++) {
     let parentElement = document.getElementById("rank-" + i);
 
@@ -105,6 +103,24 @@ async function getRanking(link, e, query) {
       parentElement.style.display = "none";
     }
   }
-  // 호출 끝나고 다 보여준 뒤에 false로 바꿈
   isFetching = false;
+}
+
+function addButtons() {
+  const leftArrow = document.getElementById("left-btn");
+  const rightArrow = document.getElementById("right-btn");
+
+  if (!leftArrow.onclick && !rightArrow.onclick) {
+    leftArrow.style.display = "none";
+    leftArrow.onclick = function () {
+      let link = rankingData["links"]["previous"];
+      getRanking(link, "p").then(addButtons);
+    };
+
+    rightArrow.style.display = "none";
+    rightArrow.onclick = function () {
+      let link = rankingData["links"]["next"];
+      getRanking(link, "n").then(addButtons);
+    };
+  }
 }
