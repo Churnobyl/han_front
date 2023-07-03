@@ -411,7 +411,7 @@ if (socket) {
     const notificationDrop = document.getElementById("notification-list");
     notification["message"].forEach((element) => {
       const notification = document.createElement("li");
-      notification.innerText = `${element.sender}의 겨루기 초대 `;
+      notification.innerText = `${element.sender}님의 겨루기 초대! `;
 
       const accept = document.createElement("a");
       accept.innerText = "수락";

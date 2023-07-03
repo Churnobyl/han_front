@@ -72,7 +72,7 @@ async function injectNotification() {
   // 알림창 삽입
   const notificationHtml = await fetch("/html/notification.html");
   let data = await notificationHtml.text();
-  document.querySelector(".main").innerHTML += data;
+  document.querySelector(".component-wrap").innerHTML += data;
 }
 
 // 네비바, 푸터, 알림창 전부 불러온 다음에 이벤트리스너 부착
@@ -103,7 +103,7 @@ function loadComponent() {
   const access = localStorage.getItem("access");
   if (access) {
     document
-      .getElementById("notification-button")
+      .querySelector(".component-wrap")
       .addEventListener("click", notificationDropdownOpen);
   }
 }
