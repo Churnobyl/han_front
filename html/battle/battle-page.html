@@ -1,147 +1,164 @@
 <!DOCTYPE html>
 <html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/reset.css" />
+    <link rel="stylesheet" href="/css/default.css" />
+    <link rel="stylesheet" href="/css/battle/battle-page.css" />
+    <title>한 | 한글 퀴즈 서비스</title>
+    <link rel="icon" href="/img/favicon.ico" />
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/css/reset.css">
-  <link rel="stylesheet" href="/css/default.css">
-  <link rel="stylesheet" href="/css/battle/battle-page.css">
-  <title>한 | 한글 퀴즈 서비스</title>
-  <link rel="icon" href="/img/favicon.ico">
-</head>
-
-<body>
-  <div class="wrap">
-    <div class="container">
-      <div class="nav" role="header">
-        <!-- 네비게이션 삽입 위치 -->
-      </div>
-      <div class="main" role="main">
-        <div class="container">
-          <div class="battle-container">
-            <div class="main-grid">
-              <div class="grid-item">
-                <div class="left-user-table">
-                  <div class="left-user" id="user-box-1">
-                    <div class="profile-container">
-                      <img id="profile-image">
-                    </div>
-                    <div class="profile-info">
-                      <div class="username-container">
-                        <span class="user-achieve"><img class="achievement" id="userimage-1"></span>
-                        <span id="username-1"></span>
+  <body>
+    <div class="wrap">
+      <div class="container">
+        <div class="nav" role="header">
+          <!-- 네비게이션 삽입 위치 -->
+        </div>
+        <div class="main" role="main">
+          <div class="container">
+            <div class="battle-container">
+              <div class="main-grid">
+                <div class="grid-item">
+                  <div class="left-user-table">
+                    <div class="left-user" id="user-box-1">
+                      <div class="profile-container">
+                        <img id="profile-image" />
+                      </div>
+                      <div class="profile-info">
+                        <div class="username-container">
+                          <span class="user-achieve"
+                            ><img class="achievement" id="userimage-1"
+                          /></span>
+                          <span id="username-1"></span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="left-user" id="user-box-3">
-                    <div class="profile-container">
-                      <img id="profile-image">
-                    </div>
-                    <div class="profile-info">
-                      <div class="username-container">
-                        <span class="user-achieve"><img class="achievement" id="userimage-3"></span>
-                        <span id="username-3"></span>
+                    <div class="left-user" id="user-box-3">
+                      <div class="profile-container">
+                        <img id="profile-image" />
+                      </div>
+                      <div class="profile-info">
+                        <div class="username-container">
+                          <span class="user-achieve"
+                            ><img class="achievement" id="userimage-3"
+                          /></span>
+                          <span id="username-3"></span>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="grid-item" id="main-box">
-                <div class="room-info">
-                  <div class="room-title-container">
-                    <span id="roomId"></span>
-                    <span id="roomName"></span>
+                <div class="grid-item" id="main-box">
+                  <div class="room-info">
+                    <div class="room-title-container">
+                      <span id="roomId"></span>
+                      <span id="roomName"></span>
+                    </div>
+                    <div class="room-info-container">
+                      <span id="roomHost"></span>
+                      <span id="roomCategory"></span>
+                    </div>
                   </div>
-                  <div class="room-info-container">
-                    <span id="roomHost"></span>
-                    <span id="roomCategory"></span>
+                  <div class="main-component">
+                    <div class="quiz-title">
+                      문제 :
+                      <span id="title">다음 칸에 들어갈 단어로 옳은 것은?</span>
+                    </div>
+                    <div class="quiz-content">
+                      <div id="explains">
+                        [뜻]
+                        <h1 id="explains-text"></h1>
+                      </div>
+                      <div id="examples">
+                        [예문]
+                        <h2 id="examples-1"></h2>
+                        <h2 id="examples-2"></h2>
+                        <h2 id="examples-3"></h2>
+                        <h2 id="examples-4"></h2>
+                        <h2 id="examples-5"></h2>
+                      </div>
+                    </div>
+                    <div class="quiz-answer" id="quizAnswer"></div>
+                    <div class="quiz-hint" id="quizHint"></div>
                   </div>
                 </div>
-                <div class="main-component">
-                  <div class="quiz-title">문제 : <span id="title">다음 칸에 들어갈 단어로 옳은 것은?</span></div>
-                  <div class="quiz-content">
-                    <div id="explains">
-                      [뜻]
-                      <h1 id="explains-text"></h1>
+                <div class="grid-item">
+                  <div class="right-user-table">
+                    <div class="right-user" id="user-box-2">
+                      <div class="profile-container">
+                        <img id="profile-image" />
+                      </div>
+                      <div class="profile-info">
+                        <div class="username-container">
+                          <span class="user-achieve"
+                            ><img class="achievement" id="userimage-2"
+                          /></span>
+                          <span id="username-2"></span>
+                        </div>
+                      </div>
                     </div>
-                    <div id="examples">
-                      [예문]
-                      <h2 id="examples-1"></h2>
-                      <h2 id="examples-2"></h2>
-                      <h2 id="examples-3"></h2>
-                      <h2 id="examples-4"></h2>
-                      <h2 id="examples-5"></h2>
-                    </div>
-                  </div>
-                  <div class="quiz-answer" id="quizAnswer"></div>
-                  <div class="quiz-hint" id="quizHint"></div>
-                </div>
-              </div>
-              <div class="grid-item">
-                <div class="right-user-table">
-                  <div class="right-user" id="user-box-2">
-                    <div class="profile-container">
-                      <img id="profile-image">
-                    </div>
-                    <div class="profile-info">
-                      <div class="username-container">
-                        <span class="user-achieve"><img class="achievement" id="userimage-2"></span>
-                        <span id="username-2"></span>
+                    <div class="right-user" id="user-box-4">
+                      <div class="profile-container">
+                        <img id="profile-image" />
+                      </div>
+                      <div class="profile-info">
+                        <div class="username-container">
+                          <span class="user-achieve"
+                            ><img class="achievement" id="userimage-4"
+                          /></span>
+                          <span id="username-4"></span>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <div class="right-user" id="user-box-4">
-                    <div class="profile-container">
-                      <img id="profile-image">
-                    </div>
-                    <div class="profile-info">
-                      <div class="username-container">
-                        <span class="user-achieve"><img class="achievement" id="userimage-4"></span>
-                        <span id="username-4"></span>
-                      </div>
-                    </div>
+                </div>
+                <div class="chat">
+                  <div class="chat-component">
+                    <textarea id="chat-log" readonly></textarea><br />
+                    <input id="chat-message-input" type="text" /><br />
+                    <input
+                      id="chat-message-submit"
+                      type="button"
+                      value="보내기"
+                    />
                   </div>
                 </div>
-              </div>
-              <div class="chat">
-                <div class="chat-component">
-                  <textarea id="chat-log" readonly></textarea><br>
-                  <input id="chat-message-input" type="text"><br>
-                  <input id="chat-message-submit" type="button" value="보내기">
-                </div>
-              </div>
-              <div class="btn-grid">
-                <div class="btns-module" id="button-wrap">
-                  <button class="btn" id="start">시작하기</button>
-                </div>
-                <div class="btns-module" id="invite-wrap">
-                  <button class="btn" id="invite">초대하기</button>
-                </div>
-                <div class="btns-module" id="quit-btn">
-                  <button class="btn" id="quit">나가기</button>
+                <div class="btn-grid">
+                  <div class="btns-module" id="button-wrap">
+                    <button class="btn" id="start">시작하기</button>
+                  </div>
+                  <div class="btns-module" id="invite-wrap">
+                    <button class="btn" id="invite">초대하기</button>
+                  </div>
+                  <div class="btns-module" id="quit-btn">
+                    <button class="btn" id="quit">나가기</button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="modal">
-            <div class="modal_body">
-              유저 초대하기 (유저 이메일 입력)
-              <input id="invite-user-id" type="text">
-              <button id="invite-button">초대</button>
+            <div class="modal">
+              <div class="modal_body">
+                <div id="modal-title">📧 유저 초대하기 (이메일 입력)</div>
+                <div id="modal-explain">
+                  친구의 경우 이름을 클릭해서 초대 가능합니다.
+                </div>
+                <div class="friend-btn-wrap"></div>
+                <input id="invite-user-id" type="text" />
+                <button id="invite-button">초대</button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="footer" role="footer">
-        <!-- 푸터 삽입 위치 -->
+        <div class="footer" role="footer">
+          <!-- 푸터 삽입 위치 -->
+        </div>
       </div>
     </div>
-  </div>
 
-  <script src="/script/inject.js"></script>
-  <script type="module" src="/script/battle/battle-page.js"></script>
-</body>
-
+    <script src="/script/inject.js"></script>
+    <script type="module" src="/script/battle/battle-page.js"></script>
+  </body>
 </html>
