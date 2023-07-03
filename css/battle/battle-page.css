@@ -133,8 +133,8 @@ input {
   grid-row: 1;
 }
 
-#quit-wrap {
-  grid-column: 1;
+#quit-btn {
+  grid-column: 2;
   grid-row: 2;
 }
 
@@ -230,7 +230,7 @@ input {
 .quiz-hint {
   text-align: center;
   margin-top: 15px;
-  font-size: 2rem;
+  font-size: 1.8rem;
 }
 
 #answer {

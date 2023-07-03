@@ -1,101 +1,199 @@
 import { getRoomDetailApi, checkAnonymous, socket } from "/script/api.js";
 import { BACK_WEBSOCKET_URL, BACK_BASE_URL } from "/script/conf.js";
 
-checkAnonymous();
+/* 게임 정보 전역 변수 초기화 */
+const gameState = {
+  roomName: null, // 쿼리스트링 room = ? 방 정보 얻을 때 사용
+  access: null, // 엑세스 토큰
+  userId: null, // 엑세스 토큰 안에서 얻은 userId 정보
+  hostUser: null, // 이 방에서 방장
+  startGame: false, // 프론트 게임 진행 여부
+  quiz: null, // 게임 시작 시 받는 전체 퀴즈 정보
+  quiz_answer: null, // 퀴즈 정답
+  nowQuiz: null, // 현재 퀴즈 정보
+  nowHintIndexes: null, // 제공된 힌트 인덱스들
+  quizCount: null, // 현재 퀴즈 넘버
+  countdown: null, // 힌트 카운트다운
+  showHintTimeout: null, // 힌트 대기 카운트다운
+};
 
-/* 웹소켓 관련 */
-const urlParams = new URLSearchParams(window.location.search);
-const roomName = urlParams.get("room");
-const access = localStorage.getItem("access");
-let quiz;
-let modal;
-let startBtn;
+/* 선택자 정보 초기화 */
+const selector = {
+  handleHint: null, // 힌트 보여주는 부분
+  modal: null, // 모달창
+  startBtn: null, // 시작 버튼
+};
 
-const payload = access.split(".")[1];
-const decodedPayload = JSON.parse(atob(payload));
-const userId = decodedPayload["user_id"];
-let hostUser;
+/* 시스템 초기화 */
+const init = async () => {
+  checkAnonymous(); // 로그인 하지 않았을 경우 메인으로 돌려보냄
 
-let start_game = false;
-let quiz_answer;
-let quiz_count = 0;
+  gameState.roomName = new URLSearchParams(window.location.search).get("room");
+  gameState.access = localStorage.getItem("access");
+  gameState.userId = getUser(gameState.access);
 
-// 방 정보 가져오기
-getRoomDetailApi(roomName)
-  .then(({ response, responseJson }) => {
+  try {
+    const roomInfo = await getRoomDetailApi(gameState.roomName); // 방 정보 fetch
+    await handleRoomInfo(roomInfo); // 방 정보 필요한 부분에 핸들링
+    addEventListeners();
+    handleChat();
+  } catch (err) {
+    console.error("방 정보를 불러오는데 실패했습니다: ", err);
+  }
+};
+
+/* 엑세스 토큰에서 user id 뽑아내는 함수 */
+function getUser(accessToken) {
+  const payload = accessToken.split(".")[1];
+  const decodedPayload = JSON.parse(atob(payload));
+  return decodedPayload["user_id"];
+}
+
+/* 받아온 정보를 각 함수에 뿌려주는 핸들링 함수 */
+function handleRoomInfo({ response, responseJson }) {
+  return new Promise((resolve, reject) => {
     if (response.status === 200) {
-      // 방 정보
-      document.getElementById("roomId").innerText = `[ ${responseJson["id"]} ]`;
-      document.getElementById("roomName").innerText = responseJson["btl_title"];
-      document.getElementById("roomHost").innerText = responseJson["host_user"];
-      document.getElementById("roomCategory").innerText =
-        responseJson["btl_category"];
-
-      // 유저 정보
-      const onUsers = responseJson["participant_list"];
-      const maxUsers = responseJson["max_users"];
-      for (let i = maxUsers + 1; i <= 4; i++) {
-        let userBox = document.getElementById(`user-box-${i}`);
-        userBox.style = "visibility: hidden;";
-      }
-      let i = 1;
-      onUsers.forEach((user) => {
-        let userBox = document.getElementById(`user-box-${i}`);
-        let img;
-        if (user["participant"]["image"]) {
-          img = `${BACK_BASE_URL}${user["participant"]["image"]}`;
-        } else {
-          const randomPick = Math.floor(Math.random() * 5 + 1);
-          img = `/img/user-profile/${randomPick}.png`;
-        }
-        userBox.querySelector(".profile-container img").src = img;
-        const isHost = user["is_host"];
-        if (isHost) {
-          document.querySelector(".achievement").src = "/img/fake/crown.png";
-          hostUser = user["participant"]["id"];
-        }
-        const nickname = user["participant"]["username"];
-        const username = document.getElementById(`username-${i}`);
-        username.innerText = nickname;
-        username.addEventListener("click", function () {
-          window.location.replace(
-            `/html/mypage.html?id=${user["participant"]["id"]}`
-          );
-        });
-        i++;
-      });
-      if (userId != hostUser) {
-        document.getElementById("start").style = "display: none;";
-      }
+      // 각 함수 실행
+      injectRoomInfo(responseJson);
+      injectUsers(responseJson);
+      resolve();
     } else {
-      alert("웹소켓 연결에 실패했습니다.");
+      reject("서버에 문제가 있습니다.");
     }
-  })
-  .then(() => {
-    // 버튼 이벤트리스너 모음
-    modal = document.querySelector(".modal");
-    startBtn = document.getElementById("start");
-    document.getElementById("quit").addEventListener("click", roomQuit);
-    document.getElementById("start").addEventListener("click", gameStart);
-    document.getElementById("invite").addEventListener("click", inviteModal);
-    document
-      .getElementById("invite-button")
-      .addEventListener("click", inviteBtn);
+  });
+}
 
-    modal.addEventListener("click", (event) => {
-      if (event.target === modal) {
-        modal.classList.toggle("show");
+/* 모든 정보를 불러온 후 이벤트리스너를 붙이는 함수 */
+function addEventListeners() {
+  selector.modal = document.querySelector(".modal");
+  selector.startBtn = document.getElementById("start");
+  document.getElementById("quit").addEventListener("click", roomQuit);
+  document.getElementById("start").addEventListener("click", gameStart);
+  document.getElementById("invite").addEventListener("click", inviteModal);
+  document.getElementById("invite-button").addEventListener("click", inviteBtn);
+
+  // 엔터 입력했을 경우
+  document
+    .getElementById("invite-user-id")
+    .addEventListener("keypress", (e) => {
+      if (e.key === "Enter" || e.key === 13) {
+        inviteBtn();
       }
     });
+
+  selector.modal.addEventListener("click", (event) => {
+    if (event.target === selector.modal) {
+      selector.modal.classList.toggle("show");
+    }
+  });
+}
+
+/* 방 정보 실행 */
+function injectRoomInfo(data) {
+  // 방 아이디
+  document.getElementById("roomId").innerText = `[ ${data["id"]} ]`;
+  // 방 제목
+  document.getElementById("roomName").innerText = data["btl_title"];
+  // 방장
+  document.getElementById("roomHost").innerText = data["host_user"];
+  // 방 카테고리
+  document.getElementById("roomCategory").innerText = data["btl_category"];
+}
+
+/* 유저 정보 추가하는 함수 */
+function injectUsers(data) {
+  initUsers();
+
+  const onUsers = data["participant_list"];
+  const maxUsers = data["max_users"];
+
+  hideUnusedUserBoxes(maxUsers);
+
+  onUsers.forEach((user, i) => {
+    updateUserBox(user, i + 1);
+    // 유저가 방장일 경우 전역변수에 방장 정보 추가
+    if (user["is_host"] === true) {
+      gameState.hostUser = user["participant"]["id"];
+    }
   });
 
+  // 유저가 방장이 아닐 경우 start버튼 숨기기
+  if (gameState.userId !== gameState.hostUser) {
+    document.getElementById("start").style = "display: none;";
+  }
+}
+
+function initUsers() {
+  for (let j = 1; j <= 4; j++) {
+    const userName = document.getElementById(`username-${j}`);
+    const userBox = document.getElementById(`user-box-${j}`);
+    userName.innerText = "";
+    userBox.querySelector(".profile-container img").src = "";
+    document.getElementById(`userimage-${j}`).src = "";
+  }
+}
+
+/* 현재 유저 수 이상의 박스는 숨기는 함수 */
+function hideUnusedUserBoxes(maxUser) {
+  for (let i = maxUser + 1; i <= 4; i++) {
+    let userBox = document.getElementById(`user-box-${i}`);
+    userBox.style = "visibility: hidden;";
+  }
+}
+
+/* 유저 정보 DOM요소 업데이트 함수 */
+function updateUserBox(user, index) {
+  let userBox = document.getElementById(`user-box-${index}`);
+  let userImage;
+
+  // 유저 설정 이미지 있는지 여부에 따라 이미지 다르게 보여주기
+  if (user["participant"]["image"]) {
+    userImage = `${BACK_BASE_URL}${user["participant"]["image"]}`;
+  } else {
+    const randomPick = Math.floor(Math.random() * 5 + 1);
+    userImage = `/img/user-profile/${randomPick}.png`;
+  }
+  userBox.querySelector(`#user-box-${index} .profile-container img`).src =
+    userImage;
+
+  // 유저 이름 보여주기
+  const userName = document.getElementById(`username-${index}`);
+  userName.innerText = user["participant"]["username"];
+  userName.addEventListener("click", () => {
+    window.location.href = `/html/mypage.html?id=${user["participant"]["id"]}`;
+  });
+
+  // 유저 칭호 보여주기
+  if (user["is_host"]) {
+    document.getElementById(`userimage-${index}`).src = "/img/fake/crown.png";
+  } else {
+    if (user["participant"]["wear_achievement"] !== -1) {
+      user["participant"]["achieve"].foreach((achieve) => {
+        if (achieve["id"] === user["participant"]["wear_achievement"]) {
+          document.getElementById(
+            `userimage-${index}`
+          ).src = `/${achieve["image_url"]}`;
+        }
+      });
+    }
+  }
+}
+
+init();
+
+/**
+ * 웹소켓 파트 시작
+ */
+
+/* 페이지 들어왔을 때 join_room 메세지 */
 socket.onopen = function (e) {
   socket.send(
     JSON.stringify({
       type: "join_room",
-      room: roomName,
+      room: gameState.roomName,
     })
   );
+
   socket.send(
     JSON.stringify({
       type: "chat_message",
@@ -104,159 +202,92 @@ socket.onopen = function (e) {
   );
 };
 
+/* 서버에서 받은 웹소켓 메세지에 따라 다른 함수 실행 */
 socket.onmessage = function (e) {
   const data = JSON.parse(e.data);
-  if (data.method === "chat_message") {
-    var chatLog = document.getElementById("chat-log");
-    chatLog.value += data.message + "\n";
-    chatLog.scrollTop = chatLog.scrollHeight;
-  } else if (data.method === "send_quiz") {
-    quiz = data.quiz;
-    startBtn.style = "display: none;";
-    showQuiz();
-  }
+  switch (data.method) {
+    case "chat_message":
+      chatMessage(data);
+      break;
 
-  if (data.method === "next_quiz") {
-    quiz_count++;
-    setTimeout(showQuiz, 3000);
-  } else if (data.method === "end_quiz") {
-    quiz_count = 0;
-    resultQuiz();
-    const explain = document.getElementById("explains-text");
-    const example = document.getElementById(`examples-${i}`);
-    const quizAnswer = document.getElementById("quizAnswer");
-    const handleHint = document.getElementById("quizHint");
-    explain.innerText = "";
-    example.innerText = "";
-    quizAnswer.innerHTML = "";
-    handleHint.innerHTML = "";
-  }
+    case "send_quiz":
+      gameState.quiz = data.quiz;
+      gameState.quizCount = 0;
+      selector.startBtn.style = "display: none;";
+      gameState.startGame = true;
+      showQuiz();
+      break;
 
-  if (data.method === "room_check") {
-    showUser(data.message);
-  }
+    case "next_quiz":
+      gameState.quizCount++;
+      stopHintCountdown();
+      setTimeout(showQuiz, 3000);
+      break;
 
-  if (data.method === "leave_host") {
-    forcedLeave();
-  }
+    case "end_quiz":
+      gameState.quizCount = 0;
+      resultQuiz();
+      const explain = document.getElementById("explains-text");
+      const quizAnswer = document.getElementById("quizAnswer");
+      const handleHint = document.getElementById("quizHint");
+      for (let i = 1; i < 6; i++) {
+        const example = document.getElementById(`examples-${i}`);
+        example.innerText = "";
+      }
+      explain.innerText = "";
+      quizAnswer.innerHTML = "";
+      handleHint.innerHTML = "";
 
-  if (data.method === "reject_leave") {
-    rejectLeave();
-  }
+      gameState.startGame = false;
+      if (gameState.userId === gameState.hostUser) {
+        selector.startBtn.style = "display: revert;";
+      }
+      break;
 
-  if (data.method === "accept_leave") {
-    console.log(data);
-    // acceptLeave();
+    case "room_check":
+      injectUsers(data.message);
+      break;
+
+    case "leave_host":
+      forcedLeave();
+      break;
+
+    case "reject_leave":
+      rejectLeave();
+      break;
+
+    case "accept_leave":
+      break;
+
+    case "notification":
+      break;
+
+    default:
+      console.error("웹소켓 통신에 문제가 발생했습니다.");
   }
 };
 
-document.getElementById("chat-message-input").focus();
-document.getElementById("chat-message-input").onkeyup = function (e) {
-  if (e.key === 13 || e.key === "Enter") {
-    sendMessage();
-  }
-};
-document.getElementById("chat-message-submit").onclick = function (e) {
-  sendMessage();
-};
-
-function sendMessage() {
-  const messageInputDom = document.getElementById("chat-message-input");
-  const message = messageInputDom.value;
-  socket.send(
-    JSON.stringify({
-      type: "chat_message",
-      message: message,
-    })
-  );
-  correctQuiz();
-  messageInputDom.value = "";
+/* 메세지를 채팅창에 보여주는 함수 */
+function chatMessage(data) {
+  let chatLog = document.getElementById("chat-log");
+  chatLog.value += data.message + "\n";
+  chatLog.scrollTop = chatLog.scrollHeight;
 }
 
+/* 게임 시작 버튼 눌렀을 때 실행하는 함수 */
 function gameStart() {
-  start_game = true;
-  socket.send(
-    JSON.stringify({
-      type: "start_game",
-      message: "start game",
-    })
-  );
-}
-
-function showQuiz() {
-  const nowQuiz = quiz[quiz_count]["dict_word"];
-  quiz_answer = nowQuiz["word"];
-  for (let i = 1; i <= nowQuiz["examples"].length; i++) {
-    const explain = document.getElementById("explains-text");
-    explain.innerText = `${quiz[quiz_count]["content"]}`;
-    const example = document.getElementById(`examples-${i}`);
-    example.innerText = `${i}: ${nowQuiz["examples"][i - 1]}`;
-  }
-  const quizAnswer = document.getElementById("quizAnswer");
-  const handleHint = document.getElementById("quizHint");
-  quizAnswer.innerHTML = "";
-  handleHint.innerHTML = "";
-
-  function showHintCount() {
-    let hintCount = 5;
-
-    const countdown = setInterval(() => {
-      hintCount -= 1;
-      handleHint.innerHTML = `힌트: <span id="hint">${hintCount}</span>`;
-
-      if (hintCount === 0) {
-        clearInterval(countdown);
-        showHint();
-      }
-    }, 1000);
-  }
-
-  function showHint() {
-    handleHint.innerHTML = `힌트: <span id="hint">${nowQuiz["hint"]}</span>`;
-  }
-  // 10초 후에 힌트 공개
-  setTimeout(showHintCount, 5000);
-
-  // 25초 후에 정답자 없으면 다음 문제로
-}
-
-function correctQuiz() {
-  const userInput = document.getElementById("chat-message-input").value;
-  if (userInput === quiz_answer) {
-    const answer = document.getElementById("quizAnswer");
-    answer.innerHTML = `정답 : <span id="answer">${quiz_answer}</span>`;
-    if (quiz.length === quiz_count + 1) {
-      socket.send(
-        JSON.stringify({
-          type: "correct_answer",
-          message: "퀴즈 끝",
-          end: true,
-        })
-      );
-      start_game = false;
-      if (userId == hostUser) {
-        startBtn.style = "display: revert;";
-      }
-    } else {
-      socket.send(
-        JSON.stringify({
-          type: "correct_answer",
-          message: "정답",
-        })
-      );
-    }
+  if (gameState.userId === gameState.hostUser) {
+    gameState.startGame = true;
+    socket.send(
+      JSON.stringify({
+        type: "start_game",
+        message: "start game",
+      })
+    );
   }
 }
 
-function resultQuiz() {
-  socket.send(
-    JSON.stringify({
-      type: "result",
-      message: "결과",
-    })
-  );
-}
-
+/* 방 나갔을 때 함수 */
 function roomQuit() {
   socket.send(
     JSON.stringify({
@@ -288,11 +319,161 @@ function acceptLeave() {
   window.location.replace("/html/battle/lobby.html");
 }
 
-/* 웹소켓 관련 end */
+function showQuiz() {
+  gameState.nowQuiz = gameState.quiz[gameState.quizCount]["dict_word"];
+  gameState.quiz_answer = gameState.nowQuiz["word"];
+  for (let i = 1; i <= gameState.nowQuiz["examples"].length; i++) {
+    const explain = document.getElementById("explains-text");
+    explain.innerText = `${gameState.quiz[gameState.quizCount]["content"]}`;
+    const example = document.getElementById(`examples-${i}`);
+    example.innerText = `${i}: ${gameState.nowQuiz["examples"][i - 1]}`;
+  }
+  const quizAnswer = document.getElementById("quizAnswer");
+  selector.handleHint = document.getElementById("quizHint");
+  quizAnswer.innerHTML = "";
+  selector.handleHint.innerHTML = "";
 
-// 초대 관련
+  gameState.showHintTimeout = setTimeout(showHintCount, 5000);
+}
+
+function showHintCount() {
+  let hintCount = 5;
+
+  if (gameState.countdown) {
+    clearInterval(gameState.countdown);
+  }
+  gameState.countdown = setInterval(() => {
+    hintCount -= 1;
+    selector.handleHint.innerHTML = `힌트: <span id="hint">${hintCount}</span>`;
+
+    if (hintCount === 0) {
+      clearInterval(gameState.countdown);
+      showHint();
+    }
+  }, 1000);
+}
+
+function showHint() {
+  let hint = gameState.nowQuiz["hint"];
+  let hintComponent = hint.split("");
+
+  selector.handleHint.innerHTML = `힌트: <span id="hint">${hint}</span>`;
+
+  let hintInterval = setInterval(() => {
+    const hintIndexes = [];
+
+    for (let i = 0; i < hintComponent.length; i++) {
+      if (hintComponent[i] === gameState.nowQuiz["hint"][i]) {
+        hintIndexes.push(i);
+      }
+    }
+
+    if (hintIndexes.length === 0) {
+      clearInterval(hintInterval);
+      return;
+    }
+
+    const randomReplaceIndex =
+      hintIndexes[Math.floor(Math.random() * hintIndexes.length)];
+
+    hintComponent[randomReplaceIndex] =
+      gameState.quiz_answer[randomReplaceIndex];
+
+    selector.handleHint.innerHTML = `힌트: <span id="hint">${hintComponent.join(
+      ""
+    )}</span>`;
+  }, 5000);
+}
+
+function stopHintCountdown() {
+  if (gameState.countdown) {
+    clearInterval(gameState.countdown);
+  }
+  if (gameState.showHintTimeout) {
+    clearTimeout(gameState.showHintTimeout);
+  }
+}
+
+function correctQuiz() {
+  const userInput = document.getElementById("chat-message-input").value;
+  if (userInput === gameState.quiz_answer) {
+    const answer = document.getElementById("quizAnswer");
+    answer.innerHTML = `정답 : <span id="answer">${gameState.quiz_answer}</span>`;
+    if (gameState.quiz.length === gameState.quizCount + 1) {
+      socket.send(
+        JSON.stringify({
+          type: "correct_answer",
+          message: "퀴즈 끝",
+          end: true,
+        })
+      );
+    } else {
+      socket.send(
+        JSON.stringify({
+          type: "correct_answer",
+          message: "정답",
+        })
+      );
+    }
+  }
+}
+
+function resultQuiz() {
+  socket.send(
+    JSON.stringify({
+      type: "result",
+      message: "결과",
+    })
+  );
+}
+
+/**
+ * 채팅 관련 함수
+ */
+
+/* 채팅 입력 관련 함수 핸들링 */
+function handleChat() {
+  document.getElementById("chat-message-input").focus();
+  const chatInputDom = document.getElementById("chat-message-input");
+
+  // 엔터 입력했을 경우
+  chatInputDom.addEventListener("keypress", (e) => {
+    if (e.key === "Enter" || e.key === 13) {
+      sendMessage();
+    }
+  });
+
+  // 보내기 버튼 클릭했을 경우
+  const chatSubmitDom = document.getElementById("chat-message-submit");
+
+  chatSubmitDom.addEventListener("click", () => {
+    sendMessage();
+  });
+}
+
+function sendMessage() {
+  const messageInputDom = document.getElementById("chat-message-input");
+  const message = messageInputDom.value;
+
+  socket.send(
+    JSON.stringify({
+      type: "chat_message",
+      message: message,
+    })
+  );
+  if (gameState.startGame) {
+    correctQuiz();
+  }
+
+  messageInputDom.value = "";
+}
+
+/**
+ * 초대 시작
+ */
+
 function inviteModal() {
-  modal.classList.toggle("show");
+  selector.modal.classList.toggle("show");
 }
 
 async function inviteBtn() {
@@ -304,47 +485,4 @@ async function inviteBtn() {
     })
   );
   alert("초대를 보냈습니다.");
-}
-
-function showUser(users) {
-  // 방 참가자 초기화
-  for (let j = 1; j <= 4; j++) {
-    const userName = document.getElementById(`username-${j}`);
-    const userBox = document.getElementById(`user-box-${j}`);
-    userName.innerText = "";
-    userBox.querySelector(".profile-container img").src = "";
-    document.getElementById(`userimage-${j}`).src = "";
-  }
-
-  // 방 참가자 보여주기
-  for (let j = 1; j <= users.length; j++) {
-    const joinUser = users[j - 1]["participant"];
-
-    const userName = document.getElementById(`username-${j}`);
-    const userBox = document.getElementById(`user-box-${j}`);
-    userName.innerText = joinUser["username"];
-    if (joinUser["image"] !== null) {
-      userBox.querySelector(
-        ".profile-container img"
-      ).src = `${BACK_BASE_URL}${joinUser["image"]}`;
-    } else {
-      const randomPick = Math.floor(Math.random() * 5 + 1);
-      userBox.querySelector(
-        ".profile-container img"
-      ).src = `/img/user-profile/${randomPick}.png`;
-    }
-    if (users[j - 1]["is_host"]) {
-      document.getElementById(`userimage-${j}`).src = "/img/fake/crown.png";
-    } else {
-      if (joinUser["wear_achievement"] !== -1) {
-        joinUser["achieve"].forEach((achieve) => {
-          if (achieve["id"] === joinUser["wear_achievement"]) {
-            document.getElementById(
-              `userimage-${j}`
-            ).src = `/${achieve["image_url"]}`;
-          }
-        });
-      }
-    }
-  }
 }
