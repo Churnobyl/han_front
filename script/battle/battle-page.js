@@ -321,7 +321,6 @@ function acceptLeave() {
 
 function showQuiz() {
   gameState.nowQuiz = gameState.quiz[gameState.quizCount]["dict_word"];
-  console.log(gameState.nowQuiz);
   gameState.quiz_answer = gameState.nowQuiz["word"];
   for (let i = 1; i <= gameState.nowQuiz["examples"].length; i++) {
     const explain = document.getElementById("explains-text");

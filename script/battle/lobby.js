@@ -101,7 +101,6 @@ function handleRoomClick(data) {
 }
 
 function checkPossibleRoom(data, roomNum) {
-  console.log(data);
   // 참가 가능한 방인지 체크
   for (let d of data) {
     if (String(d.id) === roomNum) {
