@@ -16,6 +16,7 @@ const gameState = {
   countdown: null, // 힌트 카운트다운
   showHintTimeout: null, // 힌트 대기 카운트다운
   lastChats: {},
+  userFriend: null, // 유저 친구 목록
 };
 
 /* 선택자 정보 초기화 */
@@ -122,6 +123,15 @@ function injectUsers(data) {
   if (gameState.userId !== gameState.hostUser) {
     document.getElementById("start").style = "display: none;";
   }
+}
+
+function injectFriends(data) {
+  console.log(data);
+  data["participant_list"].forEach((user) => {
+    if (gameState.userId == user["participant"]["id"]) {
+      gameState.userFriend = user["participant"]["followings"];
+    }
+  });
 }
 
 function initUsers() {
@@ -249,6 +259,7 @@ socket.onmessage = function (e) {
 
     case "room_check":
       injectUsers(data.message);
+      injectFriends(data.message);
       break;
 
     case "leave_host":
@@ -532,12 +543,32 @@ function sendMessage() {
  * 초대 시작
  */
 
-function inviteModal() {
+async function inviteModal() {
   selector.modal.classList.toggle("show");
+  const myFriends = Object.values(gameState.userFriend);
+  const btnBox = document.querySelector(".friend-btn-wrap");
+  btnBox.innerHTML = "";
+  for (let i = 0; i < myFriends.length; i++) {
+    console.log(myFriends[i]["username"]);
+    btnBox.insertAdjacentHTML(
+      "beforeend",
+      `<button id=friend-${i}>✔ ${myFriends[i]["username"]}</button>`
+    );
+    document
+      .getElementById(`friend-${i}`)
+      .addEventListener("click", function () {
+        inviteBtn(myFriends[i]["email"]);
+      });
+  }
 }
 
-async function inviteBtn() {
-  const inviteUserId = document.getElementById("invite-user-id").value;
+async function inviteBtn(email) {
+  let inviteUserId;
+  if (email) {
+    inviteUserId = email;
+  } else {
+    inviteUserId = document.getElementById("invite-user-id").value;
+  }
   socket.send(
     JSON.stringify({
       type: "invitation",
