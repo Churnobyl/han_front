@@ -335,7 +335,7 @@ export async function editPasswordApi(data) {
 }
 
 export async function getRankingApi(link, type) {
-  let response
+  let response;
   if (!link) {
     if (!type) {
       response = await fetch(`${BACK_BASE_URL}/users/ranking`);
@@ -419,6 +419,8 @@ if (socket) {
       accept.setAttribute("data-room", element.room);
       accept.addEventListener("click", acceptInvitation);
       notification.append(accept);
+
+      notification.append("/");
 
       const reject = document.createElement("a");
       reject.innerText = "거절";

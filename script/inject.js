@@ -79,74 +79,17 @@ async function injectNotification() {
 Promise.all([injectNavbar(), injectFooter(), injectNotification()])
   .then(() => loadComponent())
   .then(() => {
-    const font = new FontFace(
-      "LINESeedKR-Bd",
-      "url(https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/LINESeedKR-Bd.woff2)",
-      {
-        style: "normal",
-        weight: "400",
-      }
-    );
+    const allSurveyBtns = document.querySelectorAll(".menu-survey");
 
-    font.load().then((loadedFont) => {
-      document.fonts.add(loadedFont);
-      setTimeout(initializeCapture, 500);
-    });
-
-    function initializeCapture() {
-      const allSurveyBtns = document.querySelectorAll(".menu-survey");
-      const canvasBoundary = document.querySelector("html");
-
-      for (const btn of allSurveyBtns) {
-        btn.addEventListener("click", () => {
-          captureScreen(canvasBoundary);
-        });
-      }
-    }
-
-    const nowPage = window.location.pathname;
-    const pageSplit = nowPage.split("/");
-    const pageName =
-      pageSplit[pageSplit.length - 1].split(".")[0] === ""
-        ? "index"
-        : pageSplit[pageSplit.length - 1].split(".")[0];
-    const nowTime = new Date();
-
-    function captureScreen(canvasBoundary) {
-      html2canvas(canvasBoundary, {
-        scale: 1,
-        allowTaint: true,
-        useCORS: true,
-        foreignObjectRendering: true,
-      })
-        .then((canvas) => {
-          saveAs(
-            canvas.toDataURL("image/jpeg"),
-            `${pageName}_${nowTime.getTime()}.jpg`
-          );
-        })
-        .then(
-          window.open(
-            "https://docs.google.com/forms/d/e/1FAIpQLSeGKaUdU2awd6gkbd9Oqu4CN2VkXUNIhk2QnTXz1zGMFycPIQ/viewform?vc=0&c=0&w=1&flr=0",
-            "_blank"
-          )
+    for (const btn of allSurveyBtns) {
+      btn.addEventListener("click", () => {
+        window.open(
+          "https://docs.google.com/forms/d/e/1FAIpQLSeGKaUdU2awd6gkbd9Oqu4CN2VkXUNIhk2QnTXz1zGMFycPIQ/viewform?vc=0&c=0&w=1&flr=0",
+          "_blank"
         );
+      });
     }
-
-    function saveAs(uri, filename) {
-      let link = document.createElement("a");
-      if (typeof link.download === "string") {
-        link.href = uri;
-        link.download = filename;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      } else {
-        window.open(uri);
-      }
-    }
-  })
-  .then(() => {});
+  });
 
 function loadComponent() {
   // 각 컴포넌트에 이벤트리스너 부착
