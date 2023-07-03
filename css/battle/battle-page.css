@@ -72,6 +72,7 @@ input {
   padding: 10px;
   border-radius: 5px;
   box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.2);
+  position: relative;
 }
 
 .left-user:nth-child(1) {
@@ -272,4 +273,18 @@ input {
 .modal_body > button {
   cursor: pointer;
   font-size: 1.3rem;
+}
+
+.bubble {
+  position: absolute;
+  display: inline-block;
+  background-color: #ebebeb;
+  border-radius: 5px;
+  border: #383838 solid 4px;
+  padding: 5px;
+  max-width: 400px;
+  word-wrap: normal;
+  word-break: keep-all;
+  opacity: 0;
+  transition: opacity 0.5s;
 }
