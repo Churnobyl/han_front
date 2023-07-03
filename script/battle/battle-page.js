@@ -15,6 +15,7 @@ const gameState = {
   quizCount: null, // 현재 퀴즈 넘버
   countdown: null, // 힌트 카운트다운
   showHintTimeout: null, // 힌트 대기 카운트다운
+  lastChats: {},
 };
 
 /* 선택자 정보 초기화 */
@@ -146,6 +147,9 @@ function updateUserBox(user, index) {
   let userBox = document.getElementById(`user-box-${index}`);
   let userImage;
 
+  // 박스에 유저 아이디 붙여주기
+  userBox.setAttribute("data-id", user["participant"]["id"]);
+
   // 유저 설정 이미지 있는지 여부에 따라 이미지 다르게 보여주기
   if (user["participant"]["image"]) {
     userImage = `${BACK_BASE_URL}${user["participant"]["image"]}`;
@@ -220,7 +224,6 @@ socket.onmessage = function (e) {
 
     case "next_quiz":
       gameState.quizCount++;
-      stopHintCountdown();
       setTimeout(showQuiz, 3000);
       break;
 
@@ -272,6 +275,60 @@ function chatMessage(data) {
   let chatLog = document.getElementById("chat-log");
   chatLog.value += data.message + "\n";
   chatLog.scrollTop = chatLog.scrollHeight;
+
+  // 버블링 메세지
+  if (data.user) {
+    chatBubbling(data.user, data.message);
+  }
+}
+
+/* 메세지를 버블로 보여주는 함수 */
+function chatBubbling(userId, message) {
+  const boxSelect = document.querySelector(`[data-id="${userId}"]`);
+
+  // 이전 말풍선 제거
+  if (boxSelect) {
+    if (gameState.lastChats[userId]) {
+      gameState.lastChats[userId].style.opacity = 0;
+      boxSelect.removeChild(gameState.lastChats[userId]);
+    }
+
+    // 새로운 말풍선 생성
+    const newBubble = document.createElement("div");
+    newBubble.classList.add("bubble");
+    newBubble.textContent = message;
+
+    // 말풍선 위치 지정
+    newBubble.style.top = "30px";
+    if (boxSelect.id === "user-box-1" || boxSelect.id === "user-box-3") {
+      newBubble.style.left = `${boxSelect.offsetWidth + 5}px`;
+    } else {
+      newBubble.style.right = `${boxSelect.offsetWidth + 5}px`;
+    }
+
+    // 말풍선 넣기
+    boxSelect.appendChild(newBubble);
+
+    // 말풍선 저장
+    gameState.lastChats[userId] = newBubble;
+
+    // 말풍선 opacity적용
+    setTimeout(() => {
+      newBubble.style.opacity = 1;
+      setTimeout(() => {
+        newBubble.style.opacity = 0;
+
+        setTimeout(() => {
+          if (boxSelect.contains(newBubble)) {
+            boxSelect.removeChild(newBubble);
+          }
+          delete gameState.lastChats[userId];
+        }, 50); // 0.05초 세팅
+      }, 3000);
+    }, 50);
+  } else {
+    console.warn(`${gameState.userId}의 유저 정보 없음`);
+  }
 }
 
 /* 게임 시작 버튼 눌렀을 때 실행하는 함수 */
@@ -324,7 +381,9 @@ function showQuiz() {
   gameState.quiz_answer = gameState.nowQuiz["word"];
   for (let i = 1; i <= gameState.nowQuiz["examples"].length; i++) {
     const explain = document.getElementById("explains-text");
-    explain.innerText = `${gameState.quiz[gameState.quizCount]["content"]}`;
+    explain.innerText = `${gameState.quiz[gameState.quizCount]["content"]} (${
+      gameState.quiz_answer.length
+    }글자)`;
     const example = document.getElementById(`examples-${i}`);
     example.innerText = `${i}: ${gameState.nowQuiz["examples"][i - 1]}`;
   }
@@ -395,6 +454,7 @@ function stopHintCountdown() {
 }
 
 function correctQuiz() {
+  stopHintCountdown();
   const userInput = document.getElementById("chat-message-input").value;
   if (userInput === gameState.quiz_answer) {
     const answer = document.getElementById("quizAnswer");
