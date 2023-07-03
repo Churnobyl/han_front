@@ -214,6 +214,11 @@ socket.onmessage = function (e) {
       chatMessage(data);
       break;
 
+    case "chat_message_correct_answer":
+      gameState.nowQuiz["solved"] = true;
+      chatMessage(data);
+      break;
+
     case "send_quiz":
       gameState.quiz = data.quiz;
       gameState.quizCount = 0;
@@ -521,7 +526,7 @@ function sendMessage() {
       message: message,
     })
   );
-  if (gameState.startGame) {
+  if (gameState.startGame && !(gameState.nowQuiz.hasOwnProperty("solved"))) {
     correctQuiz();
   }
 
