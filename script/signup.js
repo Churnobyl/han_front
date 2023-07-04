@@ -24,6 +24,8 @@ function handleSignup() {
 
   if (password !== password2) {
     alert("비밀번호가 일치하지 않습니다.");
+  } else if (email==="" && password==="" && username==="" && password2==="") {
+    alert("정보를 모두 입력해주세요.")
   } else {
     const signupData = {
       email: email,
