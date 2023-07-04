@@ -126,7 +126,6 @@ function injectUsers(data) {
 }
 
 function injectFriends(data) {
-  console.log(data);
   data["participant_list"].forEach((user) => {
     if (gameState.userId == user["participant"]["id"]) {
       gameState.userFriend = user["participant"]["followings"];
@@ -537,7 +536,7 @@ function sendMessage() {
       message: message,
     })
   );
-  if (gameState.startGame && !(gameState.nowQuiz.hasOwnProperty("solved"))) {
+  if (gameState.startGame && !gameState.nowQuiz.hasOwnProperty("solved")) {
     correctQuiz();
   }
 
@@ -554,7 +553,6 @@ async function inviteModal() {
   const btnBox = document.querySelector(".friend-btn-wrap");
   btnBox.innerHTML = "";
   for (let i = 0; i < myFriends.length; i++) {
-    console.log(myFriends[i]["username"]);
     btnBox.insertAdjacentHTML(
       "beforeend",
       `<button id=friend-${i}>✔ ${myFriends[i]["username"]}</button>`
