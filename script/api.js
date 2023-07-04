@@ -52,19 +52,21 @@ export async function loginApi(data) {
 
 export async function getQuizApi(type) {
   // 퀴즈 가져오기 api
-  let response;
   let responseJson;
+  let link;
+  const token = localStorage.getItem("access");
   if (!type) {
-    response = await fetch(`${BACK_BASE_URL}/DB/gen/`);
+    link = `${BACK_BASE_URL}/DB/gen/`;
   } else {
-    response = await fetch(`${BACK_BASE_URL}/DB/gen/?type=${type}`);
+    link = `${BACK_BASE_URL}/DB/gen/?type=${type}`;
   }
+  const headers = token ? { Authorization: `Bearer ${token}` } : {};
+  const response = await fetch(link, { headers });
   if (response.status === 200) {
     responseJson = await response.json();
   } else if (response.status === 500) {
     window.location.reload();
   }
-
   return responseJson;
 }
 
