@@ -76,8 +76,11 @@ async function injectNotification() {
 }
 
 // 네비바, 푸터, 알림창 전부 불러온 다음에 이벤트리스너 부착
-Promise.all([injectNavbar(), injectFooter(), injectNotification()])
-  .then(() => loadComponent())
+Promise.all([injectNavbar(), injectFooter()])
+  .then(() => {
+    loadComponent();
+    injectNotification();
+  })
   .then(() => {
     const allSurveyBtns = document.querySelectorAll(".menu-survey");
 
