@@ -141,6 +141,9 @@ function initUsers() {
     userName.innerText = "";
     userBox.querySelector(".profile-container img").src = "";
     document.getElementById(`userimage-${j}`).src = "";
+    if (userBox.querySelector(".user-info")) {
+      userBox.querySelector(".user-info").innerHTML = "";
+    }
   }
 }
 
@@ -173,9 +176,9 @@ function updateUserBox(user, index) {
   // 유저 이름 보여주기
   const userName = document.getElementById(`username-${index}`);
   userName.innerText = user["participant"]["username"];
-  userName.addEventListener("click", () => {
-    window.location.href = `/html/mypage.html?id=${user["participant"]["id"]}`;
-  });
+  // userName.addEventListener("click", () => {
+  //   window.location.href = `/html/mypage.html?id=${user["participant"]["id"]}`;
+  // });
 
   // 유저 칭호 보여주기
   if (user["is_host"]) {
@@ -191,6 +194,22 @@ function updateUserBox(user, index) {
       });
     }
   }
+
+  // 유저 정보 기입
+  let infoDiv = userBox.querySelector(".user-info");
+
+  if (!infoDiv) {
+    infoDiv = document.createElement("div");
+    infoDiv.className = "user-info";
+
+    userBox.appendChild(infoDiv);
+  } else {
+    infoDiv.innerHTML = "";
+  }
+
+  const battlePoint = document.createElement("span");
+  battlePoint.textContent = `배틀포인트: ${user["participant"]["user_info"]["battlepoint"]}`;
+  infoDiv.appendChild(battlePoint);
 }
 
 init();
