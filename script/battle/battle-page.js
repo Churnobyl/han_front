@@ -15,7 +15,8 @@ const gameState = {
   quizCount: null, // 현재 퀴즈 넘버
   countdown: null, // 힌트 카운트다운
   showHintTimeout: null, // 힌트 대기 카운트다운
-  lastChats: {},
+  hintInterval: null, // 지속적으로 제공되는 힌트 카운트 다운
+  lastChats: {}, // 각 유저 마지막 채팅 저장
   userFriend: null, // 유저 친구 목록
 };
 
@@ -224,7 +225,15 @@ socket.onmessage = function (e) {
       break;
 
     case "chat_message_correct_answer":
+      stopHintCountdown();
       gameState.nowQuiz["solved"] = true;
+      const answer = document.getElementById("quizAnswer");
+      answer.innerHTML = `정답 : <span id="answer">${gameState.quiz_answer}</span>`;
+      if (data.correct_user) {
+        document.getElementById(
+          "quizHint"
+        ).innerHTML = `${data.correct_user}님 정답!`;
+      }
       chatMessage(data);
       break;
 
@@ -392,6 +401,8 @@ function acceptLeave() {
 }
 
 function showQuiz() {
+  stopHintCountdown();
+
   gameState.nowQuiz = gameState.quiz[gameState.quizCount]["dict_word"];
   gameState.quiz_answer = gameState.nowQuiz["word"];
   for (let i = 1; i <= gameState.nowQuiz["examples"].length; i++) {
@@ -433,7 +444,7 @@ function showHint() {
 
   selector.handleHint.innerHTML = `힌트: <span id="hint">${hint}</span>`;
 
-  let hintInterval = setInterval(() => {
+  gameState.hintInterval = setInterval(() => {
     const hintIndexes = [];
 
     for (let i = 0; i < hintComponent.length; i++) {
@@ -443,7 +454,7 @@ function showHint() {
     }
 
     if (hintIndexes.length === 0) {
-      clearInterval(hintInterval);
+      clearInterval(gameState.hintInterval);
       return;
     }
 
@@ -466,14 +477,15 @@ function stopHintCountdown() {
   if (gameState.showHintTimeout) {
     clearTimeout(gameState.showHintTimeout);
   }
+
+  if (gameState.hintInterval) {
+    clearInterval(gameState.hintInterval);
+  }
 }
 
 function correctQuiz() {
-  stopHintCountdown();
   const userInput = document.getElementById("chat-message-input").value;
   if (userInput === gameState.quiz_answer) {
-    const answer = document.getElementById("quizAnswer");
-    answer.innerHTML = `정답 : <span id="answer">${gameState.quiz_answer}</span>`;
     if (gameState.quiz.length === gameState.quizCount + 1) {
       socket.send(
         JSON.stringify({
