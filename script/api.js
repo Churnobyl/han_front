@@ -157,8 +157,10 @@ export async function googleLogin(search) {
     setCookie("access_token", responseJsonGoogle.access, 1);
 
     window.location.href = `${FRONT_BASE_URL}/html/home.html`;
-  } else {
+  } else if (responseGoogle.status === 400) {
     alert(responseJsonGoogle.message);
+  } else {
+    alert("구글 소셜 로그인에 실패했습니다.");
   }
   return { response, responseJson };
 }
@@ -195,8 +197,10 @@ export async function kakaoLogin(search) {
     setCookie("access_token", responseJsonKakao.access, 1);
 
     window.location.href = `${FRONT_BASE_URL}/html/home.html`;
-  } else {
+  } else if (responseKakao.status === 400) {
     alert(responseJsonKakao.message);
+  } else {
+    alert("카카오 소셜 로그인에 실패했습니다.");
   }
   return { response, responseJson };
 }
@@ -233,8 +237,10 @@ export async function naverLogin(search) {
     setCookie("access_token", responseJsonNaver.access, 1);
 
     window.location.href = `${FRONT_BASE_URL}/html/home.html`;
+  } else if (responseNaver.status === 400) {
+    alert(responseJsonNaver.message)
   } else {
-    alert(responseJsonNaver.message);
+    alert("네이버 소셜 로그인에 실패했습니다.");
   }
   return { response, responseJson };
 }
