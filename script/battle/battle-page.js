@@ -185,7 +185,7 @@ function updateUserBox(user, index) {
     document.getElementById(`userimage-${index}`).src = "/img/fake/crown.png";
   } else {
     if (user["participant"]["wear_achievement"] !== -1) {
-      user["participant"]["achieve"].foreach((achieve) => {
+      user["participant"]["achieve"].forEach((achieve) => {
         if (achieve["id"] === user["participant"]["wear_achievement"]) {
           document.getElementById(
             `userimage-${index}`
