@@ -1,115 +1,113 @@
 <!DOCTYPE html>
 <html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/reset.css" />
+    <link rel="stylesheet" href="/css/default.css" />
+    <link rel="stylesheet" href="/css/ranking.css" />
+    <title>한 | 한글 퀴즈 서비스</title>
+    <link rel="icon" href="/img/favicon.ico" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="/css/reset.css" />
-  <link rel="stylesheet" href="/css/default.css" />
-  <link rel="stylesheet" href="/css/ranking.css" />
-  <title>한 | 한글 퀴즈 서비스</title>
-  <link rel="icon" href="/img/favicon.ico" />
-</head>
-
-<body>
-  <div class="wrap">
-    <div class="container">
-      <div class="nav" role="header">
-        <!-- 네비게이션 삽입 위치 -->
-      </div>
-      <div class="main" role="main">
-        <div class="container">
-          <div class="ranking-wrap">
-            <div class="ranking-title">
-              <h1>🏆 회원 순위 🏆</h1>
-            </div>
-            <div class="ranking-btn-wrap">
-              <div id="battle-rank">겨루기 순</div>
-              <div id="exp-rank">경험치 순</div>
-            </div>
-            <div class="ranking-content">
-              <div class="idx-wrap">
-                <div class="rank">순위</div>
-                <div class="user">회원</div>
-                <div class="level-xp">레벨 (경험치)</div>
-                <div class="battle">겨루기 점수</div>
+  <body>
+    <div class="wrap">
+      <div class="container">
+        <div class="nav" role="header">
+          <!-- 네비게이션 삽입 위치 -->
+        </div>
+        <div class="main" role="main">
+          <div class="container">
+            <div class="ranking-wrap">
+              <div class="ranking-title">
+                <h1>🏆 회원 순위 🏆</h1>
               </div>
-              <div class="user-wrap" id="rank-0">
-                <div class="rank"></div>
-                <div class="user"></div>
-                <div class="level-xp"></div>
-                <div class="battle"></div>
+              <div class="ranking-btn-wrap">
+                <div id="battle-rank">겨루기 순</div>
+                <div id="exp-rank">경험치 순</div>
               </div>
-              <div class="user-wrap" id="rank-1">
-                <div class="rank"></div>
-                <div class="user"></div>
-                <div class="level-xp"></div>
-                <div class="battle"></div>
+              <div class="ranking-content">
+                <div class="idx-wrap">
+                  <div class="rank">순위</div>
+                  <div class="user">회원</div>
+                  <div class="level-xp">레벨 (경험치)</div>
+                  <div class="battle">겨루기 점수</div>
+                </div>
+                <div class="user-wrap" id="rank-0">
+                  <div class="rank"></div>
+                  <div class="user"></div>
+                  <div class="level-xp"></div>
+                  <div class="battle"></div>
+                </div>
+                <div class="user-wrap" id="rank-1">
+                  <div class="rank"></div>
+                  <div class="user"></div>
+                  <div class="level-xp"></div>
+                  <div class="battle"></div>
+                </div>
+                <div class="user-wrap" id="rank-2">
+                  <div class="rank"></div>
+                  <div class="user"></div>
+                  <div class="level-xp"></div>
+                  <div class="battle"></div>
+                </div>
+                <div class="user-wrap" id="rank-3">
+                  <div class="rank"></div>
+                  <div class="user"></div>
+                  <div class="level-xp"></div>
+                  <div class="battle"></div>
+                </div>
+                <div class="user-wrap" id="rank-4">
+                  <div class="rank"></div>
+                  <div class="user"></div>
+                  <div class="level-xp"></div>
+                  <div class="battle"></div>
+                </div>
+                <div class="user-wrap" id="rank-5">
+                  <div class="rank"></div>
+                  <div class="user"></div>
+                  <div class="level-xp"></div>
+                  <div class="battle"></div>
+                </div>
+                <div class="user-wrap" id="rank-6">
+                  <div class="rank"></div>
+                  <div class="user"></div>
+                  <div class="level-xp"></div>
+                  <div class="battle"></div>
+                </div>
+                <div class="user-wrap" id="rank-7">
+                  <div class="rank"></div>
+                  <div class="user"></div>
+                  <div class="level-xp"></div>
+                  <div class="battle"></div>
+                </div>
+                <div class="user-wrap" id="rank-8">
+                  <div class="rank"></div>
+                  <div class="user"></div>
+                  <div class="level-xp"></div>
+                  <div class="battle"></div>
+                </div>
+                <div class="user-wrap" id="rank-9">
+                  <div class="rank"></div>
+                  <div class="user"></div>
+                  <div class="level-xp"></div>
+                  <div class="battle"></div>
+                </div>
               </div>
-              <div class="user-wrap" id="rank-2">
-                <div class="rank"></div>
-                <div class="user"></div>
-                <div class="level-xp"></div>
-                <div class="battle"></div>
+              <div class="btn-wrap">
+                <div id="left-btn"></div>
+                <div id="right-btn"></div>
               </div>
-              <div class="user-wrap" id="rank-3">
-                <div class="rank"></div>
-                <div class="user"></div>
-                <div class="level-xp"></div>
-                <div class="battle"></div>
-              </div>
-              <div class="user-wrap" id="rank-4">
-                <div class="rank"></div>
-                <div class="user"></div>
-                <div class="level-xp"></div>
-                <div class="battle"></div>
-              </div>
-              <div class="user-wrap" id="rank-5">
-                <div class="rank"></div>
-                <div class="user"></div>
-                <div class="level-xp"></div>
-                <div class="battle"></div>
-              </div>
-              <div class="user-wrap" id="rank-6">
-                <div class="rank"></div>
-                <div class="user"></div>
-                <div class="level-xp"></div>
-                <div class="battle"></div>
-              </div>
-              <div class="user-wrap" id="rank-7">
-                <div class="rank"></div>
-                <div class="user"></div>
-                <div class="level-xp"></div>
-                <div class="battle"></div>
-              </div>
-              <div class="user-wrap" id="rank-8">
-                <div class="rank"></div>
-                <div class="user"></div>
-                <div class="level-xp"></div>
-                <div class="battle"></div>
-              </div>
-              <div class="user-wrap" id="rank-9">
-                <div class="rank"></div>
-                <div class="user"></div>
-                <div class="level-xp"></div>
-                <div class="battle"></div>
-              </div>
-            </div>
-            <div class="btn-wrap">
-              <div id="left-btn"></div>
-              <div id="right-btn"></div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="footer" role="footer">
-        <!-- 푸터 삽입 위치 -->
+        <div class="footer" role="footer">
+          <!-- 푸터 삽입 위치 -->
+        </div>
       </div>
     </div>
-  </div>
-  <script src="/script/inject.js"></script>
-  <script type="module" src="/script/ranking.js"></script>
-</body>
-
+    <script src="/script/inject.js"></script>
+    <script type="module" src="/script/ranking.js"></script>
+  </body>
 </html>

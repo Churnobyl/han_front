@@ -55,14 +55,10 @@ window.onload = async function () {
     window.location.replace(`${FRONT_BASE_URL}/html/home.html`);
   }
 
-  document.getElementById("my-page").addEventListener("click", goMyPage);
-  document.getElementById("home").addEventListener("click", goHome);
+  document.getElementById("my-page").addEventListener("click", function () {
+    window.location.href = `${FRONT_BASE_URL}/html/mypage.html?id=${userId}`;
+  });
+  document.getElementById("home").addEventListener("click", function () {
+    window.location.href = `${FRONT_BASE_URL}/html/home.html`;
+  });
 };
-
-function goMyPage() {
-  window.location.href = `${FRONT_BASE_URL}/html/mypage.html?id=${userId}`;
-}
-
-function goHome() {
-  window.location.href = `${FRONT_BASE_URL}/html/home.html`;
-}
