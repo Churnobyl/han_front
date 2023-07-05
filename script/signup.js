@@ -24,8 +24,13 @@ function handleSignup() {
 
   if (password !== password2) {
     alert("비밀번호가 일치하지 않습니다.");
-  } else if (email==="" && password==="" && username==="" && password2==="") {
-    alert("정보를 모두 입력해주세요.")
+  } else if (
+    email === "" ||
+    password === "" ||
+    username === "" ||
+    password2 === ""
+  ) {
+    alert("정보를 모두 입력해주세요.");
   } else {
     const signupData = {
       email: email,
@@ -46,24 +51,19 @@ function handleSignup() {
   }
 }
 
+// 회원가입 버튼 이벤트 리스너 추가
 document
   .getElementById("btnGoogleSignup")
-  .addEventListener("click", handleGoogleSignup);
+  .addEventListener("click", function () {
+    window.location.href = BACK_BASE_URL + "/users/google/login/";
+  });
 document
   .getElementById("btnKakaoSignup")
-  .addEventListener("click", handleKakaoSignup);
+  .addEventListener("click", function () {
+    window.location.href = BACK_BASE_URL + "/users/kakao/login/";
+  });
 document
   .getElementById("btnNaverSignup")
-  .addEventListener("click", handleNaverSignup);
-
-function handleGoogleSignup() {
-  window.location.href = BACK_BASE_URL + "/users/google/login/";
-}
-
-function handleKakaoSignup() {
-  window.location.href = BACK_BASE_URL + "/users/kakao/login/";
-}
-
-function handleNaverSignup() {
-  window.location.href = BACK_BASE_URL + "/users/naver/login/";
-}
+  .addEventListener("click", function () {
+    window.location.href = BACK_BASE_URL + "/users/naver/login/";
+  });

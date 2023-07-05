@@ -240,7 +240,7 @@ export async function naverLogin(search) {
 
     window.location.href = `${FRONT_BASE_URL}/html/home.html`;
   } else if (responseNaver.status === 400) {
-    alert(responseJsonNaver.message)
+    alert(responseJsonNaver.message);
   } else {
     alert("네이버 소셜 로그인에 실패했습니다.");
   }
@@ -469,4 +469,38 @@ async function rejectInvitation(e) {
     })
   );
   window.location.reload();
+}
+
+export async function getUserProfile(id) {
+  const response = await fetch(`${BACK_BASE_URL}/users/${id}/`, {
+    method: "GET",
+  });
+  if (response.status == 200) {
+    const responseJson = await response.json();
+    return responseJson;
+  } else {
+    alert("유저 정보 로딩에 실패했습니다.");
+  }
+}
+
+export async function editUserProfile(id, data) {
+  const response = await fetch(`${BACK_BASE_URL}/users/${id}/`, {
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("access"),
+      "content-type": "application/json",
+    },
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
+
+  if (response.status === 200) {
+    alert("프로필이 수정되었습니다.");
+    window.location.href = `${FRONT_BASE_URL}/html/mypage.html?id=${id}`;
+  } else if (response.status === 400) {
+    alert("오류가 발생했습니다.");
+    window.location.href = `${FRONT_BASE_URL}/html/mypage.html?id=${id}`;
+  } else {
+    alert("잘못된 접근입니다.");
+    window.location.replace(`${FRONT_BASE_URL}/html/home.html`);
+  }
 }

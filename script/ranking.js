@@ -22,20 +22,21 @@ window.onload = function () {
     page = 0;
     getRanking(null, null, (query = "?type=battle")).then(addButtons);
   });
-  
+
   document.getElementById("exp-rank").addEventListener("click", function () {
     page = 0;
     getRanking().then(addButtons);
   });
-  
 };
 
 async function getRanking(link, e, query) {
+  // 이미 fetch 요청 보낸 상태인지 확인
   if (isFetching) {
     return;
   }
   isFetching = true;
 
+  // 함수 인자 값 확인
   if (!link) {
     if (!query) {
       rankingData = await getRankingApi();
@@ -55,6 +56,7 @@ async function getRanking(link, e, query) {
   const rightArrow = document.getElementById("right-btn");
   const ranks = document.querySelectorAll(".user-wrap");
 
+  // 랭킹 좌우버튼
   if (!rankingData["links"]["previous"]) {
     leftArrow.style.display = "none";
   } else {
@@ -73,6 +75,8 @@ async function getRanking(link, e, query) {
       getRanking(link, "n").then(addButtons);
     };
   }
+
+  // 랭킹 정보 불러오기
   ranks.forEach((rank) => {
     rank.style = "display: block;";
   });
@@ -103,9 +107,12 @@ async function getRanking(link, e, query) {
       parentElement.style.display = "none";
     }
   }
+
+  // 모든 작업이 끝나면 다시 fetch 가능하게 false 처리
   isFetching = false;
 }
 
+// 랭킹 좌우 왔다갔다 하는 버튼 함수
 function addButtons() {
   const leftArrow = document.getElementById("left-btn");
   const rightArrow = document.getElementById("right-btn");

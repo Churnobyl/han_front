@@ -68,7 +68,9 @@ async function homePage() {
       friendP.appendChild(friendA);
       userFriend.appendChild(friendP);
     });
-    myPageBtn.addEventListener("click", handleMoveMyPage);
+    myPageBtn.addEventListener("click", function () {
+      window.location.href = `${FRONT_BASE_URL}/html/mypage.html?id=${jsonPayload["user_id"]}`;
+    });
   } else {
     // 비로그인 시 마이페이지 버튼 숨기기
     myPageBtn.style = "display: none;";
@@ -76,7 +78,3 @@ async function homePage() {
 }
 
 homePage();
-
-function handleMoveMyPage() {
-  window.location.href = `${FRONT_BASE_URL}/html/mypage.html?id=${jsonPayload["user_id"]}`;
-}

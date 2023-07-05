@@ -1,5 +1,5 @@
 import { getRoomDetailApi, checkAnonymous, socket } from "/script/api.js";
-import { BACK_WEBSOCKET_URL, BACK_BASE_URL } from "/script/conf.js";
+import { BACK_BASE_URL } from "/script/conf.js";
 
 /* 게임 정보 전역 변수 초기화 */
 const gameState = {

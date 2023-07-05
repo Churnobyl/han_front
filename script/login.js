@@ -1,5 +1,5 @@
 import { loginApi, checkLoginUser } from "./api.js";
-import { FRONT_BASE_URL, BACK_BASE_URL } from "./conf.js";
+import { BACK_BASE_URL } from "./conf.js";
 
 checkLoginUser();
 
@@ -30,22 +30,12 @@ function handleLogin() {
 
 document
   .getElementById("btnGoogleLogin")
-  .addEventListener("click", handleGoogleLogin);
-document
-  .getElementById("btnKakaoLogin")
-  .addEventListener("click", handleKakaoLogin);
-document
-  .getElementById("btnNaverLogin")
-  .addEventListener("click", handleNaverLogin);
-
-function handleGoogleLogin() {
-  window.location.href = BACK_BASE_URL + "/users/google/login/";
-}
-
-function handleKakaoLogin() {
+  .addEventListener("click", function () {
+    window.location.href = BACK_BASE_URL + "/users/google/login/";
+  });
+document.getElementById("btnKakaoLogin").addEventListener("click", function () {
   window.location.href = BACK_BASE_URL + "/users/kakao/login/";
-}
-
-function handleNaverLogin() {
+});
+document.getElementById("btnNaverLogin").addEventListener("click", function () {
   window.location.href = BACK_BASE_URL + "/users/naver/login/";
-}
+});
