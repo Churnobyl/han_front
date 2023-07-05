@@ -28,26 +28,13 @@ export async function loginApi(data) {
   if (response.status === 200) {
     localStorage.setItem("access", responseJson.access);
     localStorage.setItem("refresh", responseJson.refresh);
-
-    // // 쿠키 저장
-    // function setCookie(name, value, days) {
-    //   const expirationDate = new Date();
-    //   expirationDate.setDate(expirationDate.getDate() + days);
-    //   const cookieValue = `${name}=${value}; expires=${expirationDate.toUTCString()}; path=/`;
-    //   document.cookie = cookieValue;
-    // }
-
     sessionStorage.setItem("session_data", responseJson.session_data);
-
-    // setCookie("access_token", responseJson.access, 1);
 
     window.location.href = `${FRONT_BASE_URL}/html/home.html`;
   } else {
     document.getElementById("password").value = "";
     alert("회원정보가 일치하지 않습니다.");
   }
-
-  // return { response, responseJson };
 }
 
 export async function getQuizApi(type) {

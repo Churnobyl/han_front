@@ -27,10 +27,6 @@ let quizzesCrossword;
 
 let checkCrosswordNow = false;
 
-let activeInput = null;
-let activeLabel = null;
-let activeCellId = null;
-
 const token = localStorage.getItem("access");
 
 const xpBar = document.getElementById("xp-bar-now");
@@ -699,7 +695,7 @@ function nextStep() {
     answerBtn.style.display = "none";
     resultBtn.style.display = "block";
     if (!token) {
-      resultBtn.innerText = "회원 가입하고 더 즐기기"
+      resultBtn.innerText = "회원 가입하고 더 즐기기";
     }
     finishQuiz();
   } else {
